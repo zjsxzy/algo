@@ -3,7 +3,7 @@
   */
 vector<pair<int, int> > graph[maxn];
 int dfn[maxn], low[maxn], tag[maxn];
-bool visit[maxn];
+bool visit[maxm];
 
 void Tarjan(int u, int dep) {
     dfn[u] = low[u] = dep;

@@ -1,128 +1,110 @@
+#define maxn 50010
+#define maxq 75010
 #define th(x) this->x = x
-int rmq[2 * maxn];
-struct ST {
-	int mm[2 * maxn];
-	int best[20][2 * maxn];
-
-	void init(int n) {
-		int i, j, a, b;
-		mm[0] = -1;
-		for (i = 1; i <= n; i++) {
-			mm[i] = ((i & (i - 1)) == 0 ? mm[i - 1] + 1 : mm[i - 1]);
-			best[0][i] = i;
-		}
-		for (i = 1; i <= mm[n]; i++) {
-			for (j = 1; j <= n + 1 - (1 << i); j++) {
-				a = best[i - 1][j];
-				b = best[i - 1][j + (1 << (i - 1))];
-				best[i][j] = rmq[a] < rmq[b] ? a : b;
-			}
-		}
+//ã€è¿·ä½ å¹¶æŸ¥é›†ã€‘
+int p[maxn];
+void make() {
+	memset(p, 255, sizeof(p));
+}
+int find(int x) {
+	int px, i;
+	for(px = x; p[px] != -1; px = p[px]);
+	while(x != px) {
+		i = p[x];
+		p[x] = px;
+		x = i;
 	}
-
-	int query(int a, int b) {
-		if (a >  b) swap(a, b);
-		int t;
-		t = mm[b - a + 1];
-		a = best[t][a];
-		b = best[t][b - (1 << t) + 1];
-		return rmq[a] < rmq[b] ? a : b;
-	}
-};
+	return px;
+}
+void unio(int x, int y) {	//è®©xæˆä¸ºyçš„çˆ¶äº², æ–­è¨€ä¸ä¼šå‡ºçŽ°å†²çªæƒ…å†µ
+	p[find(y)] = find(x);
+}
+//ä¸‹é¢æ˜¯Tarjanå¼€å§‹
 struct Nod {
 	int b, nxt;
 	void init(int b, int nxt) {
-		th(b); th(nxt);
+		th(b);	th(nxt);
 	}
 };
-/**
-	lca×ª»¯ÎªrmqÎÊÌâ
-	×¢Òâ: 
-		1.maxnÎª×î´ó½ÚµãÊý, STµÄÊý×éºÍF¡¢bufÒªÉèÖÃÎª2*maxn!!!!!
-		2.STÀàÎª1¿ªÊ¼£¬´ËÀàÒÀÈ»Îª0¿ªÊ¼!
-		3.FÊÇÅ·À­ÐòÁÐ,rmqÊÇÉî¶ÈÐòÁÐ,PÄ³µãÔÚÅ·À­ÐòÁÐÖÐµÚÒ»´Î³öÏÖµÄÎ»ÖÃ
-*/
-struct LCA2RMQ {
-	int n;							//½Úµã¸öÊý
-	Nod buf[2*maxn]; int len; int E[maxn];	//Tree	×ÊÔ´
-	int V[2*maxn], route[maxn];				//Â·¾¶µÄÈ¨£¬¸ùµ½Ä³µãµÄÂ·¾¶ºÍ
-	bool vis[maxn];						//0Ã»ÓÐ·ÃÎÊ£¬Ò¼ÕýÔÚ·ÃÎÊ
+struct Tarjan {
+	int n;
+	Nod bufT[2*maxn];	int lenT;	int ET[maxn];	//Tree	èµ„æº
+	Nod bufQ[2*maxq];	int lenQ;	int EQ[maxn];	//Query	è¯¢é—®
 	
-	ST st;							//Spare-Table...
-	int F[2*maxn], P[maxn], cnt;	//½éÉÜÈçÉÏ,cntÎª¼ÆÊýÆ÷,levÎªdfsÊ±²ãÊý(¼õÉÙµÝ¹éÕ»´óÐ¡)
+	int V[2*maxn], route[maxn];					//è·¯å¾„çš„æƒï¼Œæ ¹åˆ°æŸç‚¹çš„è·¯å¾„å’Œ
+	
+	int ans[maxq];							//ä¿å­˜æœ€åŽçš„ç»“æžœï¼ŒæŒ‰ç…§è¾“å…¥é¡ºåºä¿å­˜
+	char vis[maxn];							//0æ²¡æœ‰è®¿é—®ï¼Œ1æ­£åœ¨è®¿é—®ï¼Œ2è®¿é—®è¿‡
 	
 	void init(int n) {
 		th(n);
-		len = 0;
-		memset(E, 255, sizeof(E));
+		lenT = 0;	memset(ET, 255, sizeof(ET));
+		lenQ = 0;	memset(EQ, 255, sizeof(EQ));
 	}
-	
 	void addEdge(int a, int b, int v) {
-		buf[len].init(b, E[a]); V[len] = v; E[a] = len ++;
-		buf[len].init(a, E[b]);	V[len] = v;	E[b] = len ++;
+		bufT[lenT].init(b, ET[a]);	V[lenT]=v;	ET[a] = lenT ++;
+		bufT[lenT].init(a, ET[b]);	V[lenT]=v;	ET[b] = lenT ++;
 	}
-	
-	int query(int a, int b) {				//´«ÈëÁ½¸ö½Úµã£¬·µ»ØËûÃÇlca½Úµã±àºÅ
-		return F[st.query(P[a], P[b])];
+	void addQuery(int a, int b) {
+		bufQ[lenQ].init(b, EQ[a]);				EQ[a] = lenQ ++;
+		bufQ[lenQ].init(a, EQ[b]);				EQ[b] = lenQ ++;
 	}
-	
-	//1.¡¾µÝ¹é°æ¡¿
-	void dfs(int a, int lev) {
-		vis[a] = 1;		
-		++cnt;
-		F[cnt] = a;
-		rmq[cnt] = lev;
-		P[a] = cnt;
-		for(int i = E[a]; i != -1; i = buf[i].nxt) {
-			if(vis[buf[i].b]) continue;
-			route[buf[i].b] = route[a] + V[i];
-			dfs(buf[i].b, lev + 1);
-			++cnt;
-			F[cnt] = a;
-			rmq[cnt] = lev;
+	//1.ã€é€’å½’ç‰ˆã€‘
+	void dfs(int a) {
+		vis[a] = 1;
+		
+		for(int i = ET[a]; i != -1; i = bufT[i].nxt) {
+			if(vis[bufT[i].b])	continue;
+			route[bufT[i].b] = route[a] + V[i];	//update route!
+			dfs(bufT[i].b);
+			unio(a, bufT[i].b);
+		}
+		vis[a] = 2;
+		for(int i = EQ[a]; i != -1; i = bufQ[i].nxt) {
+			if(vis[bufQ[i].b] == 2) {
+				ans[i/2] = find(bufQ[i].b);		// i/2 is the real order!
+			}
 		}
 	}
 	void solve(int root) {
+		route[root] = 0;						//update route!
+		make();
 		memset(vis, 0, sizeof(vis));
-		route[root] = cnt = 0;
-		dfs(root, 0);
-		st.init(2 * n - 1);
+		dfs(root);
 	}
+	//2.ã€éžé€’å½’ç‰ˆã€‘
 	
-	//2.¡¾·ÇµÝ¹é°æ¡¿
 	/*void solve(int root) {
 		static Nod stk[maxn];
+		make();
 		memset(vis, 0, sizeof(vis));
+		vis[root] = 1;
 		
-		stk[0].init(root, E[root]);
-		int len = Ò¼;
-		int lev = 0;
-		cnt = 0;
-		route[root] = 0;										//update route!
+		stk[0].init(root, ET[root]);
+		int len = 1;
+		route[root] = 0;						//update route!
 		
-		while(Ò¼) {
-			Nod & cur = stk[len-Ò¼];
-//here, b means current Nod, nxt means nxt's pointer(as buf.nxt)!
-			if(false == vis[cur.b]) {
-				vis[cur.b] = Ò¼;
-				F[++ cnt] = cur.b;
-				rmq[cnt] = lev;
-				P[cur.b] = cnt;
-			} else if(cur.nxt == -Ò¼) {
+		while(1) {
+			Nod & cur = stk[len-1];//here, b means current Nod, nxt means nxt's pointer(as buf.nxt)!
+			if(cur.nxt == -1) {
+				vis[cur.b] = 2;
+				for(int i = EQ[cur.b]; i != -1; i = bufQ[i].nxt) {
+					if(vis[bufQ[i].b] == 2) {
+						ans[i/2] = find(bufQ[i].b);
+					}
+				}
 				if(--len == 0)	break;
-				F[++ cnt] = stk[len-Ò¼].b;
-				rmq[cnt] = -- lev;
+				unio(stk[len-1].b, cur.b);	//stk[stkLen-1].b = cur's father!
 			} else {
 				int & i = cur.nxt;
-				if(!vis[buf[i].b]) {
-					route[buf[i].b] = route[cur.b] + V[i];		
-//update route!
-					lev ++;
-					stk[len ++].init(buf[i].b, E[buf[i].b]);
+				if(!vis[bufT[i].b]) {
+					vis[bufT[i].b] = 1;
+					route[bufT[i].b] = route[cur.b] + V[i];//update route!
+					stk[len ++].init(bufT[i].b, ET[bufT[i].b]);
 				}
-				i = buf[i].nxt;
+				i = bufT[i].nxt;
 			}
 		}
-		st.init(2 * n - 1);
-		}*/
-} lca;
+	}*/
+} tar;
+

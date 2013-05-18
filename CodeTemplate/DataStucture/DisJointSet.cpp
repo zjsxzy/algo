@@ -1,8 +1,8 @@
 struct DisJointSet{
 	int rank[maxn], parent[maxn];
 
-	DisJointSet() {
-		for (int i = 0; i < maxn; i++) {
+	void init(int n) {
+		for (int i = 0; i < n; i++) {
 			rank[i] = 0;
 			parent[i] = i;
 		} 
@@ -27,6 +27,13 @@ struct DisJointSet{
 		else {
 			parent[x] = y;
 		}
+	}
+
+	int count(int n) {
+		int ret = 0;
+		for (int i = 0; i < n; i++)
+			ret += Find(i) == i;
+		return ret;
 	}
 };
 

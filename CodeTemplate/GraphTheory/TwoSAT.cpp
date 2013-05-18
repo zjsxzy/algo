@@ -1,8 +1,13 @@
+/*
+ * x&y=1 <-> x->y', y->x'
+ * x|y=1 <-> x'->y, y'->x
+ */
+#define MAXN 1005
 struct Graph {
 	int n, depth, size;
-	int dfn[555], low[555], id[555];
-	bool vis[555];
-	vector<int> adj[555];
+	int dfn[MAXN], low[MAXN], id[MAXN];
+	bool vis[MAXN];
+	vector<int> adj[MAXN];
 	stack<int> S;
 
 	void init(int n) {

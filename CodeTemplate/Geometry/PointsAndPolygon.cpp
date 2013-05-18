@@ -20,6 +20,9 @@ struct Point {
 	Point operator * (double d) const {
 		return Point(x*d, y*d);
 	}
+	/*double operator * (const Point &b) const {
+		return x * b.y - y * b.x;
+	}*/
 	bool operator == (const Point & p) const {
 		return sig(x-p.x)==0 && sig(y-p.y)==0;
 	}

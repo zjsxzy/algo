@@ -1,19 +1,3 @@
-#include <map>
-#include <set>
-#include <list>
-#include <cmath>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <vector>
-#include <cstdio>
-#include <string>
-#include <sstream>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-#include <algorithm>
-using namespace std;
 #define th(x) this->x = x
 const int MAXN = 222;
 const int MAXM = 10 * MAXN;
@@ -78,10 +62,12 @@ struct SAP
 		return ans;
 	}
 }sap;
-//Poj1637
+/*
+ Poj1637
+ 求混合图欧拉回路
+ */
 int main()
 {
-//	freopen("a", "r", stdin);
 	int Test;
 	scanf("%d", &Test);
 	while (Test--)
