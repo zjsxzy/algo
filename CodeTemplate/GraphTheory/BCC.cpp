@@ -1,3 +1,89 @@
+struct BCC {
+// Observation 1: An internal vertex u of the DFS tree (other than the root) is an articulation point 
+// if and only there exists a subtree rooted at a child of u such that there is no back edge from any vertex in this subtree to a proper ancestor of u.
+// Observation 3: The root of the DFS is an articulation point if and only if it has two or more children.
+    #define WHITE 0
+    #define GRAY 1
+    int n, Time, cntChild, nBcc;
+    int color[maxn], dfn[maxn], low[maxn], pred[maxn];
+    int id[maxn], tot[maxn];
+    vector<int> adj[maxn];
+    set<int> ArtPt;
+    set<pair<int, int> > ArtEd;
+
+    void init(int n) {
+        this->n = n;
+        for (int i = 0; i < n; i++)
+            adj[i].clear();
+    }
+
+    void addEdge(int u, int v) {
+        adj[u].PB(v);
+        adj[v].PB(u);
+    }
+
+    void dfs(int u) {
+        color[u] = GRAY;
+        low[u] = dfn[u] = ++Time;
+        for (int i = 0; i < adj[u].size(); i++) {
+            int v = adj[u][i];
+            if (color[v] == WHITE) {                // (u,v) is a tree edge
+                pred[v] = u;
+                dfs(v);
+                low[u] = min(low[u], low[v]);       // update Low[u]
+                if (low[v] > dfn[u]) {
+                    ArtEd.insert(MP(u, v));
+                    ArtEd.insert(MP(v, u));
+                }
+                if (pred[u] == -1) {                // root: apply Observation 3
+                    cntChild++;
+                    if (cntChild == 2) {
+                        ArtPt.insert(u);
+                    }
+                } else if (low[v] >= dfn[u]) {      // internal node: apply Observation 1
+                    ArtPt.insert(u);
+                }
+            } else if (pred[u] != v) {              // (u,v) is a back edge
+                low[u] = min(low[u], dfn[v]);       // update Low[u]
+            }
+        }
+    }
+
+    void solve() {
+        nBcc = 0;
+        Time = 0;
+        cntChild = 0;
+        memset(pred, -1, sizeof(pred));
+        memset(color, 0, sizeof(color));
+        memset(id, -1, sizeof(id));
+        memset(tot, 0, sizeof(tot));
+        ArtPt.clear();
+        ArtEd.clear();
+        for (int i = 0; i < n; i++)
+            if (color[i] == WHITE) dfs(i);
+
+        for (int i = 0; i < n; i++) {
+            if (id[i] == -1) {
+                id[i] = nBcc;
+                queue<int> q;
+                q.push(i);
+                while (!q.empty()) {
+                    int u = q.front(); q.pop();
+                    tot[nBcc]++;
+                    for (int j = 0; j < adj[u].size(); j++) {
+                        int v = adj[u][j];
+                        if (id[v] == -1 && ArtEd.find(MP(u, v)) == ArtEd.end()) {
+                            id[v] = nBcc;
+                            q.push(v);
+                        }
+                    }
+                }
+                nBcc++;
+            }
+        }
+    }
+} bcc;
+
 /**
  * 求解双连通分支！两点之间可以有重边，这样的话会将两点设为一个连通分支里面，但还是要甚用重边！
  * 所点后的树不会有重边！！
