@@ -18,4 +18,5 @@ using namespace std;
 #define MP make_pair
 #define SZ(v) ((int)(v).size())
 #define abs(x) ((x) > 0 ? (x) : -(x))
+#define FOREACH(e,x) for(__typeof(x.begin()) e=x.begin();e!=x.end();++e)
 typedef long long LL;
