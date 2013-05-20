@@ -21,41 +21,27 @@ using namespace std;
 #define FOREACH(e,x) for(__typeof(x.begin()) e=x.begin();e!=x.end();++e)
 typedef long long LL;
 
-bool check(LL p, LL q, LL a) {
-	return p / q == a;
+int n;
+vector<LL> a;
+bool check(LL p, LL q, int i) {
+	if (i == n) return q == 0;
+	if (q == 0) return false;
+	if (p / q < a[i]) {
+		return false;
+	}
+	return check(q, p - a[i] * q, i + 1);
 }
 
 int main(int argc, char const *argv[])
 {
 	LL p, q;
 	cin >> p >> q;
-	int n;
 	cin >> n;
-	vector<int> a(n);
+	a.resize(n);
 	for (int i = 0; i < n; i++)
 		cin >> a[i];
 
-	for (int i = 0; i < n; i++) {
-		if (q == 0) {
-			cout << "NO" << endl;
-			return 0;
-		}
-		if (i == n - 2 && a[i + 1] == 1) {
-			if (p / q != a[i] + 1) {
-				cout << "NO" << endl;
-				return 0;
-			}
-		} else if (!check(p, q, a[i])) {
-			cout << "NO" << endl;
-			return 0;
-		}
-		if (a[i] * q < 0) {
-			cout << "NO" << endl;
-			return 0;
-		}
-		p -= a[i] * q;
-		swap(p, q);
-	}
-	cout << "YES" << endl;
+	if (check(p, q, 0)) cout << "YES" << endl;
+	else cout << "NO" << endl;
 	return 0;
 }
