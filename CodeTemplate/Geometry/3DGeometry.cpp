@@ -201,6 +201,87 @@ bool inTriangle(const Point & o, const Point & a, const Point & b, const Point &
 int onSeg(const Point & o, const Point & a, const Point & b) {
 	return sig(dot(o, a, b));
 }
+//判断某个点是否在某个平面上的凸四边形内（很容易把下面的代码改为多边形），fa为该面的法向量
+bool inRec(const Point &o, const Point &fa) {
+	Point p[5] = {ps[0], ps[1], ps[2], ps[3], ps[0]};
+	int temp = sig(dot(cross(p[0], p[1], o), fa));
+	for (int i = 1; i < 4; i++) {
+		if (temp != sig(dot(cross(p[i], p[i + 1], o), fa))) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/*
+UVALive 4973	求空间中两线段的距离，输出距离的平方，分数表示
+LL gcd(LL a, LL b) {
+	return b == 0 ? a : gcd(b, a % b);
+}
+struct Frac {
+	LL x, y;
+	Frac() {}
+	Frac(LL _x, LL _y) {
+		LL g = gcd(_x, _y);
+		x = _x / g; y = _y / g;
+	}
+	void output() {
+		printf("%lld %lld\n", x, y);
+	}
+	bool operator < (const Frac &pt) const {
+		return x * pt.y < y * pt.x;
+	}
+};
+
+Point p1, p2, p3, p4;
+Point v;
+
+Frac get_min(Frac a, Frac b, Frac c, Frac d) {
+	Frac ret = a;
+	if (b < ret) ret = b;
+	if (c < ret) ret = c;
+	if (d < ret) ret = d;
+	return ret;
+}
+
+bool check() {
+	LL v1 = dot(cross(p3 - p4, v), p1 - p3);
+	LL v2 = dot(cross(p3 - p4, v), p2 - p3);
+	if (v1 * v2 >= 0) return false;
+
+	v1 = dot(cross(p1 - p2, v), p3 - p1);
+	v2 = dot(cross(p1 - p2, v), p4 - p1);
+	if (v1 * v2 >= 0) return false;
+
+	return true;
+}
+
+Frac get_dis(const Point &o, const Point &a, const Point &b) {
+	if (dot(o - a, b - a) <= 0) return Frac(dis2(o, a), 1);
+	if (dot(o - b, a - b) <= 0) return Frac(dis2(o, b), 1);
+	return Frac(cross(o - a, b - a).len2(), dis2(a, b));
+}
+
+int main(int argc, char const *argv[])
+{
+	int Test;
+	scanf("%d", &Test);
+	while (Test--) {
+		p1.input(); p2.input(); p3.input(); p4.input();
+		v = cross(p1 - p2, p3 - p4);
+		if (check()) {
+			LL dot2 = dot(p3 - p1, v);
+			dot2 *= dot2;
+			Frac ret = Frac(dot2, v.len2());
+			ret.output();
+		} else {
+			Frac ret = get_min(get_dis(p1, p3, p4), get_dis(p2, p3, p4), get_dis(p3, p1, p2), get_dis(p4, p1, p2));
+			ret.output();
+		}
+	}
+	return 0;
+}
+*/
 
 /*
 //ural1754	金字塔内一点的最近距离
