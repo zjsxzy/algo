@@ -214,38 +214,6 @@ bool inRec(const Point &o, const Point &fa) {
 }
 
 /*
-//ural1754	金字塔内一点的最近距离
-double m, h, H;
-Point p0, p1, p2, p3, p4;
-int main() {
-	while(cin >> m >> h >> H) {
-		cin >> p0.x >> p0.y;	p0.z = h;
-		cin >> p1.x >> p1.y;	p1.z = 0;
-		cin >> p2.x >> p2.y;	p2.z = 0;
-		cin >> p3.x >> p3.y;	p3.z = 0;
-		cin >> p4.x >> p4.y;	p4.z = H;
-		
-		Face f1(p1, p2, p3);
-		Face f2(p1, p2, p4);
-		Face f3(p1, p3, p4);
-		Face f4(p2, p3, p4);
-		
-		double ans = 1E30;
-		ans = min(ans, dis(f1, p0));
-		ans = min(ans, dis(f2, p0));
-		ans = min(ans, dis(f3, p0));
-		ans = min(ans, dis(f4, p0));
-		
-		if(sig(ans + h - m) <= 0) {
-			cout << "YES" << endl;
-		} else {
-			cout << "NO" << endl;
-		}
-	}
-	return 0;
-}
-*/
-/*
 //poj-2852	两条直线公垂线的中点
 int main() {
 	double t;
