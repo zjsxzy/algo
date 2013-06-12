@@ -68,6 +68,12 @@ Point pointToLine(const Point & o, const Point & a, const Point & b) {
 	Point vec = cross(b-a, fa);	//vec为在oab平面上，且由o指向ab的一条向量
 	return o + vec.resize(fa.len()/dis(a,b));
 }
+//点到线段ab的距离
+double PointToSeg(const Point &o, const Point &a, const Point &b) {
+	if (sig(dot(o - a, b - a)) <= 0) return dis(o, a);
+	if (sig(dot(o - b, a - b)) <= 0) return dis(o, b);
+	return cross(o - a, b - a).len() / dis(a, b);
+}
 //判断三点共线
 bool sameLine(const Point & a, const Point & b, const Point & c) {
 	return sig(cross(a, b, c).len())==0;
