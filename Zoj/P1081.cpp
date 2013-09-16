@@ -69,44 +69,24 @@ double dot(Point o, Point a, Point b) {
 bool onSeg(Point p, Point a, Point b) {
 	return sig(cross(p, a, b))==0 && sig(dot(p, a, b))<=0;
 }
-double area(Point * p, int n) {
-	double res = 0;
-	p[n] = p[0];
-	for(int i = 0; i < n; i ++) {
-		res += p[i].x*p[i+1].y - p[i+1].x*p[i].y;
-	}
-	return res / 2;
-}
 
 Point ps[maxn];
 double ang[maxn];
 int n;
-void init() {
-	if(area(ps, n) < 0)	reverse(ps, ps+n);
-	rotate(ps, min_element(ps, ps+n), ps+n);
-	for(int i = 1; i < n; i ++) {
-		ang[i] = atan2(ps[i].y-ps[0].y, ps[i].x-ps[0].x);
-	}
-	ang[0] = -M_PI/2;
-}
-bool dcmp(double a, double b) {
-	return sig(a-b) < 0;
-}
-//0 外 2 内 1 边上
-int judge(Point p) {
-	if(onSeg(p, ps[0], ps[1]) || onSeg(p, ps[0], ps[n-1]))	return 1;
-	int idx = lower_bound(ang, ang+n, atan2(p.y-ps[0].y, p.x-ps[0].x), dcmp) - ang;
-	if(idx <= 1 || idx == n)	return 0;	//外面！
-	return 1 + sig(cross(ps[idx-1], ps[idx], p));
-}
-int inside_convex(Point * ps, int n, Point q) {
-	bool s[3] = {1, 1, 1};
+
+//判断点在一般多边形 外: 0 内: 1 边上: 2
+int inside_polygon(Point *ps, Point p) {
+	int num = 0;
 	ps[n] = ps[0];
-	for(int i = 0; i < n && (s[0] | s[2]); i ++) {
-		s[ 1+sig(cross(ps[i+1], q, ps[i])) ] = 0;
+	for (int i = 0; i < n; i++) {
+		if (onSeg(p, ps[i], ps[i + 1])) return 2;
+		int k = sig(cross(ps[i], ps[i + 1], p));
+		int d1 = sig(ps[i].y - p.y);
+		int d2 = sig(ps[i + 1].y - p.y);
+		if (k > 0 && d1 <= 0 && d2 > 0) num++;
+		if (k < 0 && d2 <= 0 && d1 > 0) num--;
 	}
-	if(s[0] | s[2])	return s[1]+1;	//里面或者边上
-	return 0;
+	return num != 0;
 }
 
 int main() {
@@ -119,11 +99,10 @@ int main() {
 		for (int i = 0; i < n; i++) {
 			scanf("%lf%lf", &ps[i].x, &ps[i].y);
 		}
-		//init();
 		while (m--) {
 			Point p;
 			scanf("%lf%lf", &p.x, &p.y);
-			if (inside_convex(ps, n, p) == 0) {
+			if (inside_polygon(ps, p) == 0) {
 				printf("Outside\n");	
 			} else {
 				printf("Within\n");
