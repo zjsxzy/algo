@@ -132,6 +132,20 @@ bool angle(Point a1, Point a2, Point b1, Point b2, Point & p, double & ang) {
 bool onSeg(Point p, Point a, Point b) {
 	return sig(cross(p, a, b))==0 && sig(dot(p, a, b))<=0;
 }
+//判断点在一般多边形 外: 0 内: 1 边上: 2 (线段为左开右闭, 即交点为左端点则不计算)
+int inside_polygon(Point *ps, Point p) {
+	int num = 0;
+	ps[n] = ps[0];
+	for (int i = 0; i < n; i++) {
+		if (onSeg(p, ps[i], ps[i + 1])) return 2;
+		int k = sig(cross(ps[i], ps[i + 1], p));
+		int d1 = sig(ps[i].y - p.y);
+		int d2 = sig(ps[i + 1].y - p.y);
+		if (k > 0 && d1 <= 0 && d2 > 0) num++;
+		if (k < 0 && d2 <= 0 && d1 > 0) num--;
+	}
+	return num != 0;
+}
 //---------上面是基本函数-----------
 //---------下面是新函数-----------
 //判断一个多边形是否是凸多边形，初始为瞬时针、逆时针均可！
