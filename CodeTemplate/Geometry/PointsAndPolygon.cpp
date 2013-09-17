@@ -74,6 +74,17 @@ double area(Point * p, int n) {
 	}
 	return res / 2;
 }
+Point massCenter(Point *ps, int n) {
+	Point ans = Point(0, 0);
+	double sum_area = area(ps, n);
+	if (sig(sum_area) == 0) return ans;
+	ps[n] = ps[0];
+	Point ori = Point(0, 0);
+	for (int i = 0; i < n; i++) {
+		ans = ans + (ps[i] + ps[i + 1]) * (ps[i].x * ps[i + 1].y - ps[i + 1].x * ps[i].y);
+	}
+	return Point(ans.x / sum_area / 6., ans.y / sum_area / 6.);
+}
 //在ax+by+c=0直线上找两个点p1、p2，并且使得向量(p1,p2)的左面为ax+by+c<0一面
 //返回ax+by+c是否为一直线，即a^2+b^2 != 0
 bool axis(double a, double b, double c, Point & p1, Point & p2) {
