@@ -63,6 +63,7 @@ struct hplane {
 hplane Planes[100010],Q[100010];
 Point Anss[100010];
 
+//半平面区域为s->t的左侧
 void add_hplane(Point s,Point t,int &cnt) {
 	Planes[cnt].s = s;
 	Planes[cnt].t = t;
