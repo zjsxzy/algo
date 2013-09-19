@@ -33,16 +33,12 @@ LL extend_gcd(LL a, LL b, LL &x, LL &y) {
 	}
 }
 
-int line_mod_equation(long long a, long long b, long long n) {
+LL line_mod_equation(long long a, long long b, long long n) {
 	long long x, y;
 	long long d = extend_gcd(a, n, x, y);
 	if (b % d == 0) {
-		x %= n; x += n; x %= n;
-		long long res = x * (b / d) % (n / d);
-		for (int i = 0; i < d; i++) {
-			long long tmp = (res + i * n / d) % n;
-			if (tmp >= 0) return tmp;
-		}
+		LL r = n / d;
+		return (x * (b / d) % r + r) % r;
 	}
 	return -1;
 }
