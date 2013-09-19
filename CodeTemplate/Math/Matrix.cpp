@@ -1,51 +1,65 @@
-const LL mod = 1000000007ll;
 struct Matrix {
 	int n, m;
-	LL mat[55][55];
-}F, A, I;
-LL n, m, k;
+	LL mat[maxn][maxm];
 
-//InitI can not be ignored!
-void initI()
-{
-	I.n = I.m = m;
-	memset(I.mat, 0, sizeof(I.mat));
-	for (int i = 0; i < m; i++)
-		I.mat[i][i] = 1;
-}
-
-Matrix operator+(Matrix a, Matrix b) {
-	Matrix c;
-	c.n = a.n; c.m = a.m;
-	for (int i = 0; i < a.n; i++)
-		for (int j = 0; j < a.m; j++) {
-			c.mat[i][j] = (a.mat[i][j] + b.mat[i][j]) % mod;
-		}
-	return c;
-}
-
-Matrix operator*(Matrix a, Matrix b) {
-	Matrix c;
-	c.n = a.n; c.m = b.m;
-	for (int i = 0; i < a.n; i++)
-		for (int j = 0; j < b.m; j++) {
-			c.mat[i][j] = 0;
-			for (int k = 0; k < a.m; k++) 
-				c.mat[i][j] = (c.mat[i][j] + a.mat[i][k] * b.mat[k][j]) % mod;
-		}
-	return c;
-}
-
-//Quickpow
-Matrix operator^(Matrix A, LL x) {
-	Matrix c;
-	c = I;
-	for (; x; x >>= 1) {
-		if (x & 1) c = c * A;
-		A = A * A;
+	void init() {
+		n = m = 0;
+		memset(mat, 0, sizeof(mat));
 	}
-	return c;
-}
+	Matrix operator + (const Matrix &b) const {
+		Matrix tmp;
+		tmp.n = n; tmp.m = m;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				tmp.mat[i][j] = mat[i][j] + b.mat[i][j];
+			}
+		}
+		return tmp;
+	}
+	Matrix operator - (const Matrix &b) const {
+		Matrix tmp;
+		tmp.n = n; tmp.m = m;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				tmp.mat[i][j] = mat[i][j] - b.mat[i][j];
+			}
+		}
+		return tmp;
+	}
+	Matrix operator * (const Matrix &b) const {
+		Matrix tmp;
+		tmp.init();
+		tmp.n = n; tmp.m = b.m;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < b.m; j++) {
+				for (int k = 0; k < m; k++) {
+					tmp.mat[i][j] = (tmp.mat[i][j] + mat[i][k] * b.mat[k][j]) % mod;
+				}
+			}
+		}
+		return tmp;
+	}
+	Matrix operator ^ (int x) {
+		Matrix res, p = *this;
+		res.init();
+		res.n = res.m = n;
+		for (int i = 0; i < n; i++)
+			res.mat[i][i] = 1;
+		for (; x; x >>= 1) {
+			if (x & 1) res = res * p;
+			p = p * p;
+		}
+		return res;
+	}
+	void output() {
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				cout << mat[i][j] << " ";
+			}
+			cout << endl;
+		}
+	}
+};
 
 //Calculating F+F^2+...+F^x
 Matrix Sum(int x) {
