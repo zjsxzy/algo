@@ -219,6 +219,53 @@ bool inRec(const Point &o, const Point &fa) {
 	return true;
 }
 
+/* 
+// Poj2913 空间中两线段的距离
+int main(int argc, char const *argv[])
+{
+	while (~scanf("%lf%lf%lf", &p1.x, &p1.y, &p1.z)) {
+		p2.input(); p3.input(); p4.input();
+		org.input();
+		scanf("%lf", &d);
+
+		if (sig(dis(org, p1) - d) > 0) {
+			p1 = org + (p1 - org).resize(d);
+		}
+
+		if (sig(dis(org, p2) - d) > 0) {
+			p2 = org + (p2 - org).resize(d);
+		}
+
+		double ret;
+		if (sameFace(p1, p2, p3, p4)) { // 共面
+			if (px(p1, p2, p3, p4)) { // 平行
+				ret = get_min(PointToSeg(p1, p3, p4), PointToSeg(p2, p3, p4), PointToSeg(p3, p1, p2), PointToSeg(p4, p1, p2));
+				printf("%.3f\n", ret);
+			} else { // 不平行
+				Point tp = intersect(p1, p2, p3, p4);
+				if (onSeg(tp, p1, p2) <= 0 && onSeg(tp, p3, p4) <= 0) { // 交点在线段上
+					ret = 0;
+					printf("%.3f\n", ret);
+				} else { // 交点不在线段上
+					ret = get_min(PointToSeg(p1, p3, p4), PointToSeg(p2, p3, p4), PointToSeg(p3, p1, p2), PointToSeg(p4, p1, p2));
+					printf("%.3f\n", ret);
+				}
+			}
+		} else { // 异面
+			Point t1, t2;
+			gc(p1, p2, p3, p4, t1, t2);
+			if (onSeg(t1, p1, p2) <= 0 && onSeg(t2, p3, p4) <= 0) { // 公垂线交点在线段上
+				ret = dis(p1, p2, p3, p4);
+				printf("%.3f\n", ret);
+			} else { // 公垂线交点不在线段上
+				ret = get_min(PointToSeg(p1, p3, p4), PointToSeg(p2, p3, p4), PointToSeg(p3, p1, p2), PointToSeg(p4, p1, p2));
+				printf("%.3f\n", ret);
+			}
+		}
+	}
+	return 0;
+}
+*/
 /*
 //poj-2852	两条直线公垂线的中点
 int main() {
