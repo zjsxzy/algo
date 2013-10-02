@@ -1,146 +1,79 @@
-/*
- * AC_Automaton with pointers
- */
-#define MAXK 27
-struct Node {
-	Node *fail;
-	Node *next[MAXK];
-	int id;//The identity of the word in the input
-	int count;//The occurences of the word
-	Node() {
-		id = 0;
-		fail = NULL;
-		count = 0;
-		memset(next, 0, sizeof(next));
-	}
-};
-int cnt[1111];
-char keyWord[1111][55];
-char str[2000005];
-struct AC_Automaton {
-	Node *queue[50001];
-	Node *root;
+const int dict = 26;
+const int root = 0;
+const int maxn = 3000000;
+struct AC{
+	struct node {
+		int son[dict], fail, idx;
+	}tree[maxn];
+	bool vis[maxn];
+	bool apr[10010];
+	int cnt[10010];
+	int sz;
 
+	int initNode(int idx) {
+		memset(tree[idx].son, 0, sizeof(tree[idx]));
+		tree[idx].fail = tree[idx].idx = 0;
+		return idx;
+	}
 	void init() {
-		root = new Node();
+		sz = initNode(0);
+		memset(apr, 0, sizeof(apr));
+		memset(cnt, 0, sizeof(cnt));
 	}
-
-	//insert a word
-	void insert(char *str, int index) {
-		Node *p = root;
-		for (int i = 0; str[i]; i++) {
-			int index = str[i] - 'A';
-			if (p->next[index] == NULL)
-				p->next[index] = new Node();
-			p = p->next[index];
+	void insert(char *s, int idx) {
+		int cur = root;
+		while (*s) {
+			int t = *s - 'a';
+			if (!tree[cur].son[t]) {
+				tree[cur].son[t] = initNode(++sz);
+			}
+			cur = tree[cur].son[t];
+			s++;
 		}
-		p->count++;
-		p->id = index;
+		if (tree[cur].idx != 0) cnt[tree[cur].idx]++;
+		else tree[cur].idx = idx;
 	}
-
-	//Build fail pointer
+	queue<int> q;
 	void build() {
-		int head = 0, tail = 0;
-		root->fail = NULL;
-		queue[head++] = root;
-		while (head != tail) {
-			Node *temp = queue[tail++];
-			Node *p = NULL;
-			for (int i = 0; i < MAXK; i++) {
-				if (temp->next[i] != NULL) {
-					if (temp == root) temp->next[i]->fail = root;
-					else {
-						p = temp->fail;
-						while (p != NULL) {
-							if (p->next[i] != NULL) {
-								temp->next[i]->fail = p->next[i];
-								break;
-							}
-							p = p->fail;
-						}
-						if (p == NULL) temp->next[i]->fail = root;
-					}
-					queue[head++] = temp->next[i];
-				}
+		while (!q.empty()) q.pop();
+		for (int i = 0; i < dict; i++)
+			if (tree[root].son[i]) {
+				q.push(tree[root].son[i]);
 			}
-		}
-	}
-
-	void match(char *str) {
-		Node *p = root;
-		for (int i = 0; str[i]; i++) {
-			int index = str[i] - 'A';
-			//If match fails
-			if (index < 0 || index >= 26) {
-				p = root;
-				continue;
-			}
-			while (p->next[index] == NULL && p != root)
-				p = p->fail;
-			p = p->next[index];
-			p = (p == NULL) ? root : p;
-			Node *temp = p;
-			while (temp != root) {
-				cnt[temp->id]++;
-				temp = temp->fail;
-			}
-		}
-	}
-};
-
-/*
- * AC_Automaton with arrays, convenient for DP.
- */
-struct AC_Automaton {
-
-	int size;
-	int tag[MAXN];
-	int fail[MAXN];
-	int trie[MAXN][MAXK];
-
-	void init() {
-		tag[0] = 0;
-		fill(trie[0], trie[0] + 4, -1);
-		size = 1;
-	}
-
-	void insert(char *str, int t) {
-		int p = 0;
-		for (int i = 0; str[i]; i++) {
-			int index = ID(str[i]);
-			if (trie[p][index] == -1) {
-				tag[size] = 0;
-				fill(trie[size], trie[size] + MAXK, -1);
-				trie[p][index] = size++;
-			}
-			p = trie[p][index];
-		}
-		tag[p] |= t;
-	}
-
-	void build() {
-		queue<int> Q;
-		fail[0] = 0;
-		for (int i = 0; i < MAXK; i++) {
-			if (trie[0][i] != -1) {
-				fail[trie[0][i]] = 0;
-				Q.push(trie[0][i]);
-			} else {
-				trie[0][i] = 0;
-			}
-		}
-		while (!Q.empty()) {
-			int p = Q.front();
-			Q.pop();
-			tag[p] |= tag[fail[p]];
-			for (int i = 0; i < MAXK; i++) {
-				if (trie[p][i] != -1) {
-					fail[trie[p][i]] = trie[fail[p]][i];
-					Q.push(trie[p][i]);
+		while (!q.empty()) {
+			int cur = q.front(); q.pop();
+			int f = tree[cur].fail;
+			for (int i = 0; i < dict; i++) {
+				if (tree[cur].son[i]) {
+					int nxt = tree[cur].son[i];
+					tree[nxt].fail = tree[f].son[i];
+					q.push(nxt);
 				} else {
-					trie[p][i] = trie[fail[p]][i];
+					tree[cur].son[i] = tree[f].son[i];
 				}
 			}
 		}
 	}
-}AC;
+
+	// hdu 2222
+	int match(char *s) {
+		for (int i = 0; i <= sz; i++)
+			vis[i] = 0;
+		int cur = 0;
+		for (; *s; s++) {
+			cur = tree[cur].son[*s - 'a'];
+			for (int i = cur; i && !vis[i]; i = tree[i].fail) {
+				vis[i] = 1;
+				apr[tree[i].idx] = 1;
+			}
+		}
+		int ret = 0;
+		for (int i = 1; i <= 10010; i++) {
+			if (apr[i]) {
+				ret++;
+				ret += cnt[i];
+			}
+		}
+		return ret;
+	}
+}ac;
