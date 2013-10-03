@@ -4,6 +4,7 @@ const int maxn = 3000000;
 struct AC{
 	struct node {
 		int son[dict], fail, idx;
+		//int bad;
 	}tree[maxn];
 	bool vis[maxn];
 	bool apr[10010];
@@ -13,6 +14,7 @@ struct AC{
 	int initNode(int idx) {
 		memset(tree[idx].son, 0, sizeof(tree[idx]));
 		tree[idx].fail = tree[idx].idx = 0;
+		//tree[idx].bad = 0;
 		return idx;
 	}
 	void init() {
@@ -30,6 +32,7 @@ struct AC{
 			cur = tree[cur].son[t];
 			s++;
 		}
+		//tree[idx].bad = true;
 		if (tree[cur].idx != 0) cnt[tree[cur].idx]++;
 		else tree[cur].idx = idx;
 	}
@@ -47,6 +50,7 @@ struct AC{
 				if (tree[cur].son[i]) {
 					int nxt = tree[cur].son[i];
 					tree[nxt].fail = tree[f].son[i];
+					//tree[nxt].bad |= tree[tree[nxt].fail].bad;
 					q.push(nxt);
 				} else {
 					tree[cur].son[i] = tree[f].son[i];
