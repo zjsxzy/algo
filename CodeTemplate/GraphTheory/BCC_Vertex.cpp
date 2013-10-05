@@ -1,3 +1,53 @@
+const int maxV = 100005;
+const int maxE = 200005;
+struct BCC_vertex {
+	int n;
+	int to[maxE], prev[maxE];
+	int info[maxV], fa[maxV];
+	int dfn[maxV], low[maxV], stk[maxV];
+	vector<int> Block[maxV];
+	int cntB, top, Time, totE;
+
+	void init(int n) {
+		this->n = n;
+		totE = 0;
+		memset(info, -1, sizeof(info));
+	}
+	void addEdge(int u, int v) {
+		to[totE] = v; prev[totE] = info[u]; info[u] = totE++;
+	}
+	void dfs(int u) {
+		dfn[u] = low[u] = ++Time;
+		stk[++top] = u;
+		for (int i = info[u]; ~i; i = prev[i]) {
+			int v = to[i];	
+			if (dfn[v] == 0) {
+				int tmp = top;
+				fa[v] = u;
+				dfs(v);
+				low[u] = min(low[u], low[v]);
+				if (low[v] >= dfn[u]) {
+					Block[cntB].clear();
+					for (int k = tmp + 1; k <= top; k++) {
+						Block[cntB].push_back(stk[k]);
+					}
+					Block[cntB].push_back(u);
+					cntB++;
+					top = tmp;
+				}
+			} else if (fa[u] != v) {
+				low[u] = min(low[u], dfn[v]);
+			}
+		}
+	}
+	void BCC() {
+		Time = top = cntB = 0;
+		memset(dfn, 0, sizeof(dfn));
+		for (int i = 0; i < n; i++)
+			if (dfn[i] == 0) dfs(i);
+	}
+}g;
+
 //每个点双连通分量和割点分别作为树上的点，标记边的序号表示边所在的点双连通分量
 #define maxV 20005
 #define maxE 200005
