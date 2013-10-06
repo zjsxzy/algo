@@ -10,6 +10,7 @@ struct LeftistTree {
 		}
 	}
 
+	//x, y为要合并的两棵左偏树的编号，返回新的堆顶编号
 	int merge(int x, int y) {
 		if (!x) return y;
 		if (!y) return x;
@@ -29,14 +30,17 @@ struct LeftistTree {
 		return tot;
 	}
 
+	//向编号为x的左偏树中插入一个权值为y的节点
 	int insert(int x, int y) {
 		return merge(x, init(y));
 	}
 
+	//编号为x的左偏树的堆顶的权值
 	int top(int x) {
 		return v[x];
 	}
 
+	//删除编号为x的左偏树的堆顶
 	int pop(int x) {
 		return merge(l[x], r[x]);
 	}
