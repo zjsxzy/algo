@@ -84,7 +84,7 @@ struct AC{
 }ac;
 
 int N, M, K;
-int dp[2][1030][105];
+int dp[2][105][1030];
 void reset(int row) {
 	for (int i = 0; i <= ac.sz; i++) {
 		for (int j = 0; j < (1 << M); j++) {
