@@ -1,6 +1,8 @@
 struct Treap {
 	int root, treapCnt, key[maxNode], priority[maxNode], childs[maxNode][2], cnt[maxNode], size[maxNode];
 
+	bool flag;
+
 	Treap() {
 		root = 0;
 		treapCnt = 1;
@@ -43,6 +45,7 @@ struct Treap {
 	}
 
 	void __erase(int &x, int k) {
+		if (!flag) return;
 		if (key[x] == k) {
 			if (cnt[x] > 1) {
 				cnt[x]--;
@@ -56,6 +59,10 @@ struct Treap {
 				__erase(x, k);
 			}
 		} else {
+			if (childs[x][key[x] < k] == 0) {
+				flag = false;
+				return;
+			}
 			__erase(childs[x][key[x] < k], k);
 		}
 		update(x);
@@ -78,12 +85,14 @@ struct Treap {
 	}
 
 	//删除元素的值
-	void erase(int k) {
+	bool erase(int k) {
+		flag = true;
 		__erase(root, k);
+		return flag;
 	}
 
 	//返回treap中第K小元素
 	int getKth(int k) {
 		return __getKth(root, k);
 	}
-}treap;
+};
