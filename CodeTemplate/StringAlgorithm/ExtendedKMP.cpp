@@ -13,7 +13,7 @@ void ExtendedKMP(char a[], char b[], int M, int N, int nxt[], int ret[]) {
 			k = i;
 		}
 	}
-	for (j = 0; j < N && j < M && a[i] == b[j]; j++);
+	for (j = 0; j < N && j < M && a[j] == b[j]; j++);
 	ret[0] = j;
 	k = 0;
 	for (i = 1; i < N; i++) {
@@ -21,7 +21,7 @@ void ExtendedKMP(char a[], char b[], int M, int N, int nxt[], int ret[]) {
 		if (L < len - i) {
 			ret[i] = L;
 		} else {
-			for (j = max(0, len - i); j < M && i + j < N && a[i] == b[i + j]; j++);
+			for (j = max(0, len - i); j < M && i + j < N && a[j] == b[i + j]; j++);
 			ret[i] = j;
 			k = i;
 		}
