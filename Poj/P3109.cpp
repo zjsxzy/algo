@@ -73,7 +73,7 @@ int main() {
 		compress(xs, n, nx);
 		compress(ys, n, ny);
 		
-		for (int i = 0; i < ny; i++) {
+		for (int i = 1; i <= n; i++) {
 			ll[i] = n + 1;
 			rr[i] = -1;
 		}
@@ -84,31 +84,19 @@ int main() {
 		}
 		
 		sort(ps, ps + n);
-		LL res = n;
+		LL res = 0;
 		bit.init(n);
 		for (int i = 0; i < n; ) {
-			/*
-			if (ll[ps[i].second] == ps[i].first) {
-				tree.update(ps[i].second, 1, 0, ny, 1);
-			}
-			if (i > 0 && ps[i].first == ps[i - 1].first) {
-				LL temp = tree.query(ps[i - 1].second + 1, ps[i].second - 1, 0, ny, 1);
-				res += temp;
-			}
-			if (rr[ps[i].second] == ps[i].first) {
-				tree.update(ps[i].second, -1, 0, ny, 1);
-			}
-			*/
 			int j = i;
 			for (; ps[i].first == ps[j].first && j < n; j++);
-			for (int k = i + 1; k < j; k++) {
-				LL temp = bit.sum(ps[k].second - 1) - bit.sum(ps[k - 1].second);
-				res += temp;
-			}
 			for (int k = i; k < j; k++) {
 				if (ll[ps[k].second] == ps[k].first) {
 					bit.add(ps[k].second, 1);
 				}
+			}
+			LL temp = bit.sum(ps[j - 1].second) - bit.sum(ps[i].second - 1);
+			res += temp;
+			for (int k = i; k < j; k++) {
 				if (rr[ps[k].second] == ps[k].first) {
 					bit.add(ps[k].second, -1);
 				}
