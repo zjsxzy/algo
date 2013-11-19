@@ -29,7 +29,7 @@ func AddComment()
     endif
 endfunc
 
-map <f12> :call SetTitle()<CR>Gkkk
+map <F10> :call SetTitle()<CR>Gkkk
 func SetTitle()
 let l = 0
 let l = l + 1 | call setline(l, '#include <map>')
@@ -52,6 +52,7 @@ let l = l + 1 | call setline(l, '#define PB push_back')
 let l = l + 1 | call setline(l, '#define MP make_pair')
 let l = l + 1 | call setline(l, '#define SZ(v) ((int)(v).size())')
 let l = l + 1 | call setline(l, '#define abs(x) ((x) > 0 ? (x) : -(x))')
+let l = l + 1 | call setline(l, '#define FOREACH(e,x) for(__typeof(x.begin()) e=x.begin();e!=x.end();++e)')
 let l = l + 1 | call setline(l, 'typedef long long LL;')
 let l = l + 1 | call setline(l, '')
 let l = l + 1 | call setline(l, 'int main() {')
