@@ -18,8 +18,6 @@ filetype plugin on
 map <F2> gg"+yG
 map <F3> "+P
 
-colorscheme koehler
-
 map<f4> :call AddComment()<cr>
 func AddComment()
     if matchstr(getline('.'), '[^ ]') == '/'
@@ -29,7 +27,7 @@ func AddComment()
     endif
 endfunc
 
-map <F10> :call SetTitle()<CR>Gkkk
+map <F12> :call SetTitle()<CR>Gkkk
 func SetTitle()
 let l = 0
 let l = l + 1 | call setline(l, '#include <map>')
