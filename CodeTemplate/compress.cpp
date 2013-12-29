@@ -1,4 +1,4 @@
-void compress(int as[], int n) {
+void compress() {
 	vector<int> num;
 	for (int i = 0; i < n; i++) {
 		num.PB(as[i]);
