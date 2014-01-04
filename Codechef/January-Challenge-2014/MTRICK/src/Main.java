@@ -22,24 +22,25 @@ public class Main {
             String str = in.nextLine();
             str = in.nextLine();
             //System.out.println(str);
+            int dir = 0, head = 0, tail = n - 1;
+            BigInteger add = BigInteger.ZERO, mul = BigInteger.ONE;
             for (int i = 0; i < n; i++) {
                 char ch = str.charAt(i);
                 if (ch == 'R') {
-                    for (int j = 0; j < (n - i) / 2; j++) {
-                        BigInteger temp = L[i + j];
-                        L[i + j] = L[n - j - 1];
-                        L[n - j - 1] = temp;
-                    }
+                    dir ^= 1;
                 } else if (ch == 'A') {
-                    for (int j = i; j < n; j++) {
-                        L[j] = L[j].add(A).mod(C);
-                    }
+                    add = add.add(A).mod(C);
                 } else {
-                    for (int j = i; j < n; j++) {
-                        L[j] = L[j].multiply(B).mod(C);
-                    }
+                    add = add.multiply(B).mod(C);
+                    mul = mul.multiply(B).mod(C);
                 }
-                System.out.print(L[i].toString());
+                BigInteger cur;
+                if (dir == 0) {
+                    cur = L[head++];
+                } else {
+                    cur = L[tail--];
+                }
+                System.out.print(cur.multiply(mul).mod(C).add(add).mod(C));
                 if (i == n - 1) System.out.println();
                 else System.out.print(" ");
             }
