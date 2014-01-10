@@ -29,7 +29,7 @@ public:
 		int n = graph.size();
 		vector<int> draw(n);
 		for (int i = 0; i < n; i++) {
-			dp[i] = (double)winprob[i] / (winprob[i] + looseprob[i]);
+			dp[i] = (double)winprob[i] / 100;
 			draw[i] = 100 - winprob[i] - looseprob[i];
 		}
 		queue<int> q;
