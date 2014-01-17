@@ -59,28 +59,40 @@ int main() {
 		}
 		cout << endl;
 	} else if (cnt.size() == 2) {
-		bool flag = false;
-		LL d, a;
-		for (map<LL, int>::iterator it = cnt.begin(); it != cnt.end(); it++) {
-			if (it->second == 1) {
-				d = it->first;
-				flag = true;
+		if (n == 3) {
+			if (2 * diff[0] == diff[1]) {
+				cout << 1 << endl;
+				cout << card[1] + diff[0] << endl;
+			} else if (2 * diff[1] == diff[0]) {
+				cout << 1 << endl;
+				cout << card[0] + diff[1] << endl;
 			} else {
-				a = it->first;
+				puts("0");
 			}
-		}
-		if (!flag) {
-			puts("0");
 		} else {
-			if (2 * a != d) {
+			bool flag = false;
+			LL d, a;
+			for (map<LL, int>::iterator it = cnt.begin(); it != cnt.end(); it++) {
+				if (it->second == 1) {
+					d = it->first;
+					flag = true;
+				} else {
+					a = it->first;
+				}
+			}
+			if (!flag) {
 				puts("0");
 			} else {
-				cout << 1 << endl;
-				for (int i = 0; i < n - 1; i++)
-					if (diff[i] == d) {
-						cout << card[i] + a << endl;
-						break;
-					}
+				if (2 * a != d) {
+					puts("0");
+				} else {
+					cout << 1 << endl;
+					for (int i = 0; i < n - 1; i++)
+						if (diff[i] == d) {
+							cout << card[i] + a << endl;
+							break;
+						}
+				}
 			}
 		}
 	} else {
