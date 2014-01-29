@@ -78,14 +78,6 @@ int main() {
 	TimeStamp = 0;
 	depth[1] = 0;
 	dfs(1, 0);
-	/*
-	for (int i = 1; i <= n; i++)
-		cout << order[i] << " ";
-	cout << endl;
-	for (int i = 1; i <= n; i++) {
-		cout << st[i] << " " << ed[i] << endl;
-	}
-	*/
 	bit[0].init(n);
 	bit[1].init(n);
 	for (int i = 1; i <= n; i++) {
