@@ -74,7 +74,8 @@ int main() {
 			occ.insert(p);
 		} else {
 			int ll = *--occ.lower_bound(p), rr = *occ.upper_bound(p);
-			int add = rr - ll - 1 - (bit.sum(rr) - bit.sum(ll));
+			//int add = rr - ll - 1 - (bit.sum(rr) - bit.sum(ll));
+			int add = rr - ll - 1 - (bit.sum(rr) - (ll > 1 ? bit.sum(ll - 1) : 0));
 			//cout << i << " " << ll << " " << rr << " " << add << endl;
 			ret += (LL)add;
 			bit.add(p, 1);
