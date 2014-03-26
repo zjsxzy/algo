@@ -22,7 +22,6 @@ using namespace std;
 typedef long long LL;
 
 const int maxn = 1000005;
-int n;
 vector<pair<int, int> > ps;
 vector<int> vx, vy; 
 LL sumx[maxn], sumy[maxn];

@@ -25,9 +25,18 @@ int N;
 int m[105][105],d[105];
 int work(){
     cin>>N;
+	bool flag = true;
     for(int i=0;i<N*N;i++)
-        for(int j=0;j<N*N;j++)
+        for(int j=0;j<N*N;j++) {
             cin>>m[i][j];
+			if (m[i][j] > N * N) {
+				flag = false;
+			}
+		}
+	if (!flag) {
+		cout << "No" << endl;
+		return 0;
+	}
     for(int i=0;i<N*N;i++){
         memset(d,0,sizeof(d));
         for(int j=0;j<N*N;j++)
@@ -61,6 +70,7 @@ int work(){
                 }
         }
 	cout << "Yes" << endl;
+	return 0;
 }
 
 int main() {
