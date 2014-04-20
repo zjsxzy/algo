@@ -179,7 +179,6 @@ int main() {
 	scanf("%d%d\n", &n, &m);
 	for (int i = 0; i < 2; i++) {
 		scanf("%s", mat[i] + 1);
-		//printf("%s\n", mat[i] + 1);
 	}
 	lca.init(2 * n + 1);
 	memset(vis, false, sizeof(vis));
