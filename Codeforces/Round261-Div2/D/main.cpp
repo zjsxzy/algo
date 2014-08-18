@@ -65,6 +65,9 @@ int n;
 int a[MAXN], cnt[MAXN];
 
 int main() {
+#ifndef ONLINE_JUDGE
+	freopen("in4", "r", stdin);
+#endif
 	scanf("%d", &n);
 	map<int, int> cnt;
 	vector<node> vec;
