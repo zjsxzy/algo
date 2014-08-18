@@ -40,7 +40,6 @@ int strToInt(string s) {
 
 string intToStr(pair<int, int> x) {
 	int num = x.first, mask = x.second;
-	if (num == -1) return "ERROR!";
 	string ret = numStr[num];
 	for (int i = 0; i < 7; i++) {
 		if ((mask & (1 << i)) && ret[i] == '1') {
@@ -50,14 +49,14 @@ string intToStr(pair<int, int> x) {
 	return ret;
 }
 
-pair<int, int> solve() {
+string solve() {
 	scanf("%d", &n);
 	for (int i = 0; i < n; i++) {
 		string str;
 		cin >> str;
 		s[i] = strToInt(str);
 	}
-	vector<pair<int, int> > ret;
+	set<string> ret;
 	for (int mask = 0; mask < (1 << 7); mask++) {
 		bool flag = true;
 		for (int i = 0; i < n; i++) {
@@ -73,7 +72,8 @@ pair<int, int> solve() {
 			flag = true;
 			for (int i = 0; i <= n && flag; i++) {
 				if (i == n) {
-					ret.PB(MP(cur, mask));
+					string str = intToStr(MP(cur, mask));
+					ret.insert(str);
 				} else {
 					int state = mp[cur];
 					for (int j = 0; j < 7; j++) {
@@ -90,8 +90,8 @@ pair<int, int> solve() {
 			}
 		}
 	}
-	if (ret.size() == 0 || ret.size() > 1) return MP(-1, -1);
-	else return ret[0];
+	if (ret.size() == 0 || ret.size() > 1) return "ERROR!";
+	return *ret.begin();
 }
 
 void init() {
@@ -116,8 +116,7 @@ int main() {
 	init();
 	for (int cas = 1; cas <= ts; cas++) {
 		printf("Case #%d: ", cas);
-		pair<int, int> res = solve();
-		cout << intToStr(res) << endl;
+		cout << solve() << endl;
 	}
 	return 0;
 }
