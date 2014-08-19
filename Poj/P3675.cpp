@@ -146,6 +146,13 @@ double CircleTrianlge(Point a, Point b, Point o, double radius) {
 	}
 }
 
+void calc() {
+	for (int i = 0; i < n; i++) {
+		printf("%d", a[i]);
+		cout << a[i] << endl;
+	}
+}
+
 //圆与一般多边形面积交
 double CirclePolygon(Point *ps, int n, Point o, double radius) {
 	//保证逆时针

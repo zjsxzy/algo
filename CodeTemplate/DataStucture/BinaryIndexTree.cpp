@@ -26,4 +26,4 @@ struct BinaryIndexTree {
 			ret += C[i];
 		return ret;
 	}
-}T;
+}bit;

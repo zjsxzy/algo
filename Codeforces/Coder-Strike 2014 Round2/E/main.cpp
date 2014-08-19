@@ -82,7 +82,7 @@ struct LCA2RMQ {
 		memset(E, 255, sizeof(E));
 	}
 	void addEdge(int a, int b, int v) {
-		//cout << a << " " << b << endl;
+		cout << a << " " << b << endl;
 		buf[len].init(b, E[a]);		V[len] = v;		E[a] = len ++;
 		buf[len].init(a, E[b]);		V[len] = v;		E[b] = len ++;
 	}
@@ -164,13 +164,20 @@ int idx(int i, int j) {
 bool inside(int i, int j) {
 	return i >= 0 && i <= 1 && j >= 1 && j <= n;
 }
-void dfs(int i, int j) {
+void bfs(int i, int j) {
+	queue<pair<int, int> > q;
+	q.push(MP(i, j));
 	vis[i][j] = true;
-	for (int k = 0; k < 4; k++) {
-		int x = i + dx[k], y = j + dy[k];
-		if (inside(x, y) && !vis[x][y] && mat[x][y] == '.') {
-			lca.addEdge(idx(i, j), idx(x, y), 1);
-			dfs(x, y);
+	while (!q.empty()) {
+		pair<int, int> cur = q.front(); q.pop();
+		int i = cur.first, j = cur.second;
+		for (int k = 0; k < 4; k++) {
+			int x = i + dx[k], y = j + dy[k];
+			if (inside(x, y) && !vis[x][y] && mat[x][y] == '.') {
+				vis[x][y] = true;
+				lca.addEdge(idx(i, j), idx(x, y), 1);
+				q.push(MP(x, y));
+			}
 		}
 	}
 }
@@ -186,7 +193,7 @@ int main() {
 		for (int j = 1; j <= n; j++) {
 			if (!vis[i][j] && mat[i][j] == '.') {
 				lca.addEdge(0, idx(i, j), 1);
-				dfs(i, j);
+				bfs(i, j);
 			}
 		}
 	}

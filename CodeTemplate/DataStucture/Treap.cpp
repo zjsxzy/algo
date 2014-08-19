@@ -3,11 +3,12 @@ struct Treap {
 
 	bool flag;
 
-	Treap() {
+	void init() {
 		root = 0;
 		treapCnt = 1;
 		priority[0] = INT_MAX;
 		size[0] = 0;
+		key[0] = -1;
 	}
 
 	void update(int x) {
@@ -45,7 +46,7 @@ struct Treap {
 	}
 
 	void __erase(int &x, int k) {
-		if (!flag) return;
+		//if (!flag) return;
 		if (key[x] == k) {
 			if (cnt[x] > 1) {
 				cnt[x]--;
@@ -95,4 +96,11 @@ struct Treap {
 	int getKth(int k) {
 		return __getKth(root, k);
 	}
-};
+
+	//以x为根的子树中小于等于k的元素个数
+	int select(int x, int k) {
+		if (!x) return 0;
+		if (k < key[x]) return select(childs[x][0], k);
+		return size[childs[x][0]] + cnt[x] + select(childs[x][1], k);
+	}
+}treap;
