@@ -1,6 +1,6 @@
 void compress() {
 	vector<int> num;
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < as.size(); i++) {
 		num.PB(as[i]);
 	}
 	sort(num.begin(), num.end());
