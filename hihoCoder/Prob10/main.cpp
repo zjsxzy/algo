@@ -33,7 +33,7 @@ void GetPostOrder(const string &PreOrder, const string &InOrder) {
 		PostOrder += PreOrder[0];
 		return;
 	}
-	
+
 	int k = -1;
 	char root = PreOrder[0];
 	// cout << root << endl;
@@ -46,13 +46,13 @@ void GetPostOrder(const string &PreOrder, const string &InOrder) {
 	string PreSub = PreOrder.substr(1, k);
 	string InSub = InOrder.substr(0, k);
 	GetPostOrder(PreSub, InSub);
-	
+
 	if (k + 1 < n) {
 		PreSub = PreOrder.substr(k + 1, n - k - 1);
 		InSub = InOrder.substr(k + 1, n - k - 1);
 		GetPostOrder(PreSub, InSub);
 	}
-	
+
 	PostOrder += root;
 }
 
@@ -61,10 +61,12 @@ int main() {
 	freopen("in.txt", "r", stdin);
 #endif
 	string PreOrder, InOrder;
+	string a, b;
+	cin >> a >> b;
+	cout << a + b << endl;
 	cin >> PreOrder >> InOrder;
 	PostOrder = "";
 	GetPostOrder(PreOrder, InOrder);
 	cout << PostOrder << endl;
 	return 0;
 }
-

@@ -22,31 +22,21 @@ using namespace std;
 #define FOREACH(e,x) for(__typeof(x.begin()) e=x.begin();e!=x.end();++e)
 typedef long long LL;
 
-int a[1005];
+int n = 20, m = 200, k = 15;
+bool adj[22][22];
 int main() {
-	int n = 1000;
-	int ones = 500;
-	int twos = 300;
-	int threes = 100;
-	int rest = n - ones - twos - threes;
-	printf("1");
-	for (int i = 0; i < ones; i++) {
-		a[rand() % 1000] = 1;
+	freopen("in.txt", "w", stdout);
+	cout << 1 << endl;
+	cout << n << " " << m << " " << k << endl;
+	for (int i = 0; i < m; ) {
+		int a = rand() % n + 1, b = rand() % n + 1;
+		if (a != b && !adj[a][b] && !adj[b][a]) {
+			cout << a << " " << b << endl;
+			adj[a][b] = adj[b][a] = true;
+			i++;
+		}
+		// cout << a << " " << b << endl;
 	}
-	for (int i = 0; i < twos; i++) {
-		a[rand() % 1000] = 2;
-	}
-	for (int i = 0; i < threes; i++) {
-		a[rand() % 1000] = 3;
-	}
-	for (int i = 0; i < rest; i++) {
-		a[rand() % 1000] = rand() % 1000 + 1;
-	}
-	for (int i = 0; i < 999; i++) {
-		if (a[i] == 0) a[i] = 1;
-		printf(",%d", a[i]);
-	}
-	printf("");
 	return 0;
 }
 

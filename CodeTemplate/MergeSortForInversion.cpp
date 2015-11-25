@@ -3,7 +3,8 @@
  * Notice that the array is a[1], a[2], ..., a[N]
  */
 struct MergeSortForInv {
-	int n, tot;
+	int n;
+	LL tot;
 	int a[maxn], tmp[maxn];
 
 	void init(int n) {
@@ -52,8 +53,9 @@ struct MergeSortForInv {
 	    }
 	}
 
-	int solve() {
-		mergesort(1, N);//Notice merge a[1]...a[N]!
+	LL solve() {
+		mergesort(1, n);//Notice merge a[1]...a[N]!
 		return tot;
 	}
 }mg;
+
