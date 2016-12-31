@@ -15,6 +15,14 @@ language messages zh_CN.utf-8
 set helplang=cn
 filetype indent on
 filetype plugin on
+syntax enable
+color slate
+if has("gui_running")
+  " Set a nicer font.
+  set guifont=Consolas:h11:cDEFAULT
+  " Hide the toolbar.
+  set guioptions-=T
+endif
 map <F2> gg"+yG
 map <F3> "+P
 
@@ -57,4 +65,3 @@ let l = l + 1 | call setline(l, 'int main() {')
 let l = l + 1 | call setline(l, '}')
 let l = l + 1 | call setline(l, '')
 endfunc
-
