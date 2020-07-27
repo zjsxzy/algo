@@ -13,7 +13,6 @@
 #include <vector>
 using namespace std;
 
-
 const int MAXN = 5000 + 10;
 int N, K, a[MAXN];
 
