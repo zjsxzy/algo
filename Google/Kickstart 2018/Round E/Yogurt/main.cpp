@@ -17,7 +17,6 @@ using namespace std;
 const int MAXN = 5000 + 10;
 int N, K, a[MAXN];
 
-
 int main() {
     int testnum; scanf("%d", &testnum);
     for (int ti = 1; ti <= testnum; ti++) {
