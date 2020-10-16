@@ -20,7 +20,7 @@ char s[MAXN];
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	scanf("%s", s);
 	stack<bool> Sta;
 	char* t = s;

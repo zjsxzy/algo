@@ -37,7 +37,7 @@ void dfs(int s, int u) {
 }
 
 int main() {
-	freopen("in", "r", stdin);
+	// freopen("in", "r", stdin);
 	cin >> n >> m;
 	for (int i = 0; i < m; i++) {
 		int a, b;

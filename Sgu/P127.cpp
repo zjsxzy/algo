@@ -21,7 +21,7 @@ int F[15];
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	memset(F, 0, sizeof(F));
 	scanf("%d", &K);
 	scanf("%d", &N);

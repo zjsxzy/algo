@@ -34,7 +34,7 @@ void dfs(int u, int c) {
 }
 
 int main() {
-	freopen("in", "r", stdin);
+	// freopen("in", "r", stdin);
 	int n, m;
 	num = 0;
 	memset(Head, -1, sizeof(Head));

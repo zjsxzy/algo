@@ -46,7 +46,7 @@ int Count(int x, int y, int d)
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	scanf("%d%d", &n, &m);
 	char s[MAXN];
 	for (int i = 1; i <= n; i++)

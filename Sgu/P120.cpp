@@ -113,7 +113,7 @@ bool Try()
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	scanf("%d%d%d", &n, &m1, &m2);
 	scanf("%lf%lf%lf%lf", &a[m1].x, &a[m1].y, &a[m2].x, &a[m2].y);
 	if (m1 > m2) swap(m1, m2);

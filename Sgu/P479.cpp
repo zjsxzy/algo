@@ -34,7 +34,7 @@ void Cant()
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	memset(mark, 0, sizeof(mark));
 	cin >> n >> m;
 	queue<int> Q;

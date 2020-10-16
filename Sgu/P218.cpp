@@ -70,7 +70,7 @@ bool check(int lim)
 
 int main()
 {
-	freopen("in", "r", stdin);
+	// freopen("in", "r", stdin);
 	cin >> N;
 	int Left = inf, Right = -inf;
 	for (int i = 1; i <= N; i++)

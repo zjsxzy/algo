@@ -30,7 +30,7 @@ vector<pair<int, int> > edge;
 vector<int> cost;
 
 int main() {
-	freopen("in", "r", stdin);
+	// freopen("in", "r", stdin);
 	cin >> N >> M >> R;
 	if (N == 1 && R == 0) {
 		cout << 0 << endl;

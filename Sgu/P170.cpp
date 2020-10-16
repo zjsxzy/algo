@@ -5,7 +5,7 @@ const int maxn = 5005;
 char s1[maxn], s2[maxn];
 
 int main() {
-	freopen("in.txt", "r", stdin);
+	// freopen("in.txt", "r", stdin);
 	int a = 0, b = 0, c = 0, d = 0, n;
 	scanf("%s", s1);
 	scanf("%s", s2);

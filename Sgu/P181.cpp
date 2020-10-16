@@ -6,7 +6,7 @@ using namespace std;
 int vis[11111];
 
 int main() {
-	freopen("in.txt", "r", stdin);
+	// freopen("in.txt", "r", stdin);
 	int A, a, b, r, M, k;
 	cin >> A >> a >> b >> r >> M >> k;
 	int x = A;

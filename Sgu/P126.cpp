@@ -26,7 +26,7 @@ int gcd(int a, int b)
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	scanf("%d%d", &A, &B);
 	int G = gcd(A, B);
 	int temp = (A + B) / G;

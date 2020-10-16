@@ -90,7 +90,7 @@ vector<pair<int, int> > v;
 vector<int> cnt;
 
 int main() {
-	freopen("in", "r", stdin);
+	// freopen("in", "r", stdin);
 	cin >> n;
 	for (int i = 1; i <= n; i++)
 		cin >> w[i];

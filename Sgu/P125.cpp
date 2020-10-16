@@ -58,7 +58,7 @@ void DFS(int x, int y)
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	scanf("%d", &N);
 	for (int i = 0; i < N; i++)
 	for (int j = 0; j < N; j++)

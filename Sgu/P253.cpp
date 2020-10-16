@@ -73,7 +73,7 @@ void solve()
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	scanf("%d%d%d", &N, &M, &K);
 	for (int i = 1; i <= N; i++)
 		scanf("%lf%lf", &P[i].x, &P[i].y);

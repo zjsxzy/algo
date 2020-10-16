@@ -30,7 +30,7 @@ bool cmp(Node a, Node b)
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	scanf("%d", &N);
 	int sum = 0;
 	for (int i = 1; i <= N; i++)

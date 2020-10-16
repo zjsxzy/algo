@@ -48,7 +48,7 @@ bool toposort()
 
 int main()
 {
-	freopen("in", "r", stdin);
+	// freopen("in", "r", stdin);
 	cin >> N >> M;
 	while (M--) {
 		int a, b;

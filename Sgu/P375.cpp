@@ -19,7 +19,7 @@ long long n;
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	cin >> n;
 	if (n % 2 == 0) 
 	{

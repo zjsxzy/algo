@@ -25,7 +25,7 @@ int N;
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	scanf("%d", &N);
 	for (int i = 1; i <= N; i++)
 	{

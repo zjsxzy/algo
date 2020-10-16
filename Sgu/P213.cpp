@@ -62,7 +62,7 @@ void output() {
 }
 
 int main() {
-	freopen("in", "r", stdin);
+	// freopen("in", "r", stdin);
 	scanf("%d%d%d%d", &N, &M, &S, &T);
 	for (int i = 1; i <= M; i++) {
 		int a, b;

@@ -2,7 +2,7 @@
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	int m, n;
 	scanf("%d%d", &n, &m);
 	for (int x = 0; x < 1 << n; x++)

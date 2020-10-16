@@ -34,7 +34,7 @@ bool cmp(Person A, Person B)
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	cin >> N;
 	for (int i = 1; i <= N; i++)
 	{

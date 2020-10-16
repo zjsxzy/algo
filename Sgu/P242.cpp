@@ -117,7 +117,7 @@ SAP sap;
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	cin >> N >> M;
 	sap.init(N + M + 2);
 	int source = 0, sink = N + M + 1;

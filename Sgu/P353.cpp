@@ -2,7 +2,7 @@
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	int N, k1, k2, p1, p2, p3;
 	scanf("%d%d%d%d%d%d", &N, &k1, &k2, &p1, &p2, &p3);
 	int cnt = 0;

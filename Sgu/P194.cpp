@@ -104,7 +104,7 @@ struct BoundFlow
 			ans += sap(source, inf);
 		return ans;
 	}
-	int solve(int source, int sink)
+	void solve(int source, int sink)
 	{
 		int total = 0;
 		for (int i = 0; i < n; i++)
@@ -125,52 +125,39 @@ struct BoundFlow
 			popCap(n, i);
 			popCap(i, n + 1);
 		}
-		if (total != ans) return 0;
-		else return 1;
-	}
-	void print(int source, int sink)
-	{
+		if (total != ans) 
+		{
+			printf("NO\n");
+			return;
+		}
+		printf("YES\n");
 		solveSAP(source, sink);
+		ans = 0;
 		for (int i = 0; i < len; i++)
 		{
 			buf[i].flow += buf[i].low;
-			if (buf[i].flow > 0) printf("%d ", buf[i].flow);
+			if (buf[i].flow > 0) printf("%d\n", buf[i].flow);
+			if (buf[i].b == sink)
+				ans += buf[i].flow;
 		}
 	}
 };
-//sgu 176，求最小流，枚举源点到汇点的流量下界
+
+//sgu 194，求无源汇的可行流
 BoundFlow bf;
 
 int main()
 {
-	freopen("a.txt", "r", stdin);
+	// freopen("a.txt", "r", stdin);
 	int N, M;
 	scanf("%d%d", &N, &M);
-	bf.init(N);
+	bf.init(N + 2);
 	for (int i = 1; i <= M; i++)
 	{
 		int a, b, c, d;
 		scanf("%d%d%d%d", &a, &b, &c, &d);
-		if (d == 0) bf.addCap(a, b, 0, c);
-		else bf.addCap(a, b, c, c);
+		bf.addCap(a, b, c, d);
 	}
-	if (!bf.solve(1, N))
-	{
-		printf("Impossible\n");
-	}
-	else
-	{
-		int Left = -1, Right = 1000000, Mid;
-		bf.init(N + 2);
-		while (Left <= Right)
-		{
-			Mid = (Left + Right) / 2;
-			bf.addCap(1, N, Mid, inf);
-			if (bf.solve(0, N + 1)) Right = Mid - 1;
-			else Left = Mid + 1;
-		}
-		printf("%d\n", Right + 1);
-		bf.print(0, N + 1);
-	}
+	bf.solve(0, N + 1);
 	return 0;
 }

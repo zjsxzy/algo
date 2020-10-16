@@ -129,7 +129,7 @@ void Build(int mid)
 
 int main()
 {
-	freopen("a", "r", stdin);
+	// freopen("a", "r", stdin);
 	scanf("%d%d%d%d", &N, &M, &D, &W);
 	for (int i = 0; i < N; i++)
 	{
