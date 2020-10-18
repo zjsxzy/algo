@@ -55,6 +55,7 @@ int main() {
             }
         }
     }
+
     int res = INT_MAX;
     vector<int> perm;
     for (int i = 0; i < n; i++) {
