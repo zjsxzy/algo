@@ -24,21 +24,32 @@ using namespace std;
 typedef long long LL;
 
 const int MAXN = 100005;
+LL a[MAXN], cut[MAXN];
 int n, k;
+
+LL f(LL l, LL p) {
+    LL x = l / p, y = l % p;
+    return x * x * (p - y) + (x + 1) * (x + 1) * y;
+}
 
 int main() {
     cin >> n >> k;
-    priority_queue<int> pq;
+    priority_queue<pair<LL, int> > pq;
+    LL res = 0;
     for (int i = 0; i < n; i++) {
-        int x;
-        cin >> x;
-        pq.push(x);
+        cin >> a[i];
+        res += (LL)a[i] * a[i];
+        cut[i] = 1;
+        pq.push({f(a[i], cut[i]) - f(a[i], cut[i] + 1), i});
     }
-    while (k--) {
-        int x = pq.top(); pq.pop();
-        pq.push(x / 2);
-        pq.push(x - x / 2);
+    for (int i = 0; i < k - n; i++) {
+        auto it = pq.top(); pq.pop();
+        res -= it.first;
+        int j = it.second;
+        cut[j]++;
+        pq.push({f(a[j], cut[j]) - f(a[j], cut[j] + 1), j});
     }
+    cout << res << endl;
     return 0;
 }
 
