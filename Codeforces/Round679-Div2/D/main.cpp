@@ -23,18 +23,58 @@ using namespace std;
 #define FOREACH(e,x) for(__typeof(x.begin()) e=x.begin();e!=x.end();++e)
 typedef long long LL;
 
+const int MAXN = 200005;
 int n;
+int buy[MAXN];
+string op[MAXN];
 
 int main() {
     cin >> n;
     for (int i = 0; i < 2 * n; i++) {
-        string op;
-        cin >> op;
-        if (op == "-") {
-            int buy;
-            cin >> buy;
+        cin >> op[i];
+        if (op[i] == "-") {
+            cin >> buy[i];
         }
     }
+
+    int tot = 0;
+    vector<int> stk, res(2 * n);
+    for (int i = 0; i < 2 * n; i++) {
+        if (op[i] == "+") {
+            tot++;
+            stk.push_back(i);
+        } else {
+            tot--;
+            if (tot < 0) {
+                cout << "NO" << endl;
+                return 0;
+            }
+            int top = stk.back(); stk.pop_back();
+            res[top] = buy[i];
+        }
+    }
+
+    priority_queue<int> pq;
+    for (int i = 0; i < 2 * n; i++) {
+        if (op[i] == "+") {
+            pq.push(-res[i]);
+        } else {
+            int b = -pq.top(); pq.pop();
+            if (b != buy[i]) {
+                cout << "NO" << endl;
+                return 0;
+            }
+        }
+    }
+
+    cout << "YES" << endl;
+    for (int i = 0; i < 2 * n; i++) {
+        if (op[i] == "+") {
+            cout << res[i] << " ";
+        }
+    }
+    cout << endl;
+
     return 0;
 }
 
