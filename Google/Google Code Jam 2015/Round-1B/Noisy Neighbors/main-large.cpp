@@ -26,7 +26,7 @@ typedef long long LL;
 int r, c, n, m;
 int main() {
 #ifndef ONLINE_JUDGE
-	freopen("in.txt", "r", stdin);
+	// freopen("in.txt", "r", stdin);
 #endif
 	int ts;
 	cin >> ts;
