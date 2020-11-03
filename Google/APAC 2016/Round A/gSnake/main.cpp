@@ -27,7 +27,7 @@ const int MAXN = 100 + 5;
 int dx[4] = {1, 0, -1, 0};
 int dy[4] = {0, 1, -1, -1};
 stack<pair<int, int> > stk;
-map<int, char> action[MAXN];
+map<int, char> action;
 int R, C, X;
 int dir; // 0: Right, 1: Down, 2: Left, 3: Up
 void makeMove() {
@@ -42,7 +42,7 @@ void solve() {
 }
 int main() {
 #ifndef ONLINE_JUDGE
-	freopen("in.txt", "r", stdin);
+	// freopen("in.txt", "r", stdin);
 #endif
 	int ts;
 	cin >> ts;
