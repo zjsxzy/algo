@@ -24,6 +24,9 @@ using namespace std;
 typedef long long LL;
 
 int main() {
+    int a, b;
+    cin >> a >> b;
+    cout << max(2 * a + 100 - b, 0) << endl;
     return 0;
 }
 

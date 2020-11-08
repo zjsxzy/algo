@@ -23,7 +23,18 @@ using namespace std;
 #define FOREACH(e,x) for(__typeof(x.begin()) e=x.begin();e!=x.end();++e)
 typedef long long LL;
 
+int n;
+LL x;
+
 int main() {
+    cin >> n >> x;
+    vector<int> a(n), mul(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    for (int i = 1; i < n; i++) {
+        mul[i] = a[i] / a[i - 1];
+    }
     return 0;
 }
 

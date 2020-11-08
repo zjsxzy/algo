@@ -24,6 +24,26 @@ using namespace std;
 typedef long long LL;
 
 int main() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+    int res = -1, mx = 0;
+    for (int i = 2; i <= 1000; i++) {
+        int tot = 0;
+        for (int j = 0; j < n; j++) {
+            if (a[j] % i == 0) {
+                tot++;
+            }
+        }
+        if (tot > mx) {
+            res = i;
+            mx = tot;
+        }
+    }
+    cout << res << endl;
     return 0;
 }
 

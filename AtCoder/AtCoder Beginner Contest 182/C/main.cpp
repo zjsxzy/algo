@@ -24,6 +24,29 @@ using namespace std;
 typedef long long LL;
 
 int main() {
+    string s;
+    cin >> s;
+    int n = s.size();
+    int sum = 0;
+    vector<int> cnt(3);
+    for (int i = 0; i < n; i++) {
+        int x = s[i] - '0';
+        cnt[x % 3]++;
+    }
+    int a = cnt[1], b = cnt[2];
+    int res = -1;
+    for (int i = a; i >= 0; i--) {
+        for (int j = b; j >= 0; j--) {
+            if ((i + j * 2) % 3 == 0) {
+                int temp = a - i + b - j;
+                if (res == -1 || temp < res) {
+                    res = temp;
+                }
+            }
+        }
+    }
+    if (res == n) res = -1;
+    cout << res << endl;
     return 0;
 }
 

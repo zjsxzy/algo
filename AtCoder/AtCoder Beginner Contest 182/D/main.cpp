@@ -23,7 +23,30 @@ using namespace std;
 #define FOREACH(e,x) for(__typeof(x.begin()) e=x.begin();e!=x.end();++e)
 typedef long long LL;
 
+const int MAXN = 200005;
+int n;
+LL a[MAXN], s[MAXN], m[MAXN];
+
+
 int main() {
+    cin >> n;
+    s[0] = 0;
+    m[0] = 0;
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+        s[i] = s[i - 1] + a[i];
+        m[i] = max(m[i - 1], s[i]);
+    }
+    /*
+    for (int i = 1; i <= n; i++)
+        cout << m[i] << " ";
+    cout << endl;
+    */
+    LL cur = 0, res = 0;
+    for (int i = 1; i <= n; i++) {
+        res = max(res, cur + m[i]);
+        cur += s[i];
+    }
+    cout << res << endl;
     return 0;
 }
-
