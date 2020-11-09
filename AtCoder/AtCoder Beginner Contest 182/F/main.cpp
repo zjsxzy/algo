@@ -27,15 +27,34 @@ int main() {
     int n;
     LL X;
     cin >> n >> X;
-    vector<LL> a(n+1), d(n+1);
+    vector<LL> a(n), x(n);
     for (int i = 0; i < n; i++) {
         cin >> a[i];
     }
     for (int i = n - 1; i >= 0; i--) {
-        d[i] = X / a[i];
+        x[i] = X / a[i];
         X %= a[i];
     }
-    vector<vector<LL> > dp(n, vector<LL>(2));
+    // for (int i = 0; i < n; i++) {
+        // cout << x[i] << " ";
+    // }
+    // cout << endl;
+    vector<vector<LL> > dp(n + 1, vector<LL>(2));
+    dp[0][0] = 1;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < 2; j++) {
+            LL xd = x[i] + j;
+            if (xd == 0) {
+                dp[i + 1][0] += dp[i][j];
+            } else if (i + 1 < n && xd == a[i + 1] / a[i]) {
+                dp[i + 1][1] += dp[i][j];
+            } else {
+                dp[i + 1][0] += dp[i][j];
+                dp[i + 1][1] += dp[i][j];
+            }
+        }
+        // cout << i << " " << dp[i][0] << " " << dp[i][1] << endl;
+    }
     cout << dp[n][0] << endl;
     return 0;
 }
