@@ -25,14 +25,15 @@ typedef long long LL;
 
 const LL INF = 1e18;
 int n;
-LL k, pos_sz, neg_sz, zeros;
+LL k;
+LL neg_sz, pos_sz, zeros;
 vector<LL> neg, pos;
 
 // how many values lower than or equal to x
 LL count(LL val) {
     LL sum = 0;
     if (val == 0) {
-        sum = neg_sz * pos_sz;
+        sum = zeros * (neg_sz + pos_sz) + neg_sz * pos_sz + zeros * (zeros - 1) / 2;
     } else if (val > 0) {
         sum = zeros * (neg_sz + pos_sz) + neg_sz * pos_sz + zeros * (zeros - 1) / 2;
         // cout << sum << endl;
@@ -41,9 +42,7 @@ LL count(LL val) {
             LL t = val / px;
             LL cnt = upper_bound(pos.begin(), pos.end(), t) - pos.begin();
             // cout << px << " " << t << " " << cnt << endl;
-            if (cnt > i) {
-                sum += cnt - i - 1;
-            }
+            sum += max(cnt - i - 1, 0LL);
         }
         // cout << sum << endl;
         for (int i = 0; i < neg_sz; i++) {
@@ -51,19 +50,15 @@ LL count(LL val) {
             LL t = val / nx;
             LL cnt = lower_bound(neg.begin(), neg.end(), t) - neg.begin();
             // cout << t << " " << cnt << endl;
-            if (cnt > i) {
-                sum += neg_sz - cnt;
-            } else {
-                sum += neg_sz - i - 1;
-            }
+            sum += min(neg_sz - cnt, neg_sz - i - 1);
         }
         // cout << sum << endl;
     } else if (val < 0) {
         for (int i = 0; i < neg_sz; i++) {
             LL nx = neg[i];
             LL t = val / nx;
-            LL cnt = upper_bound(pos.begin(), pos.end(), t) - pos.begin();
-            // cout << t << " " << cnt << endl;
+            if (val % nx != 0) t++;
+            LL cnt = lower_bound(pos.begin(), pos.end(), t) - pos.begin();
             sum += pos_sz - cnt;
         }
     }
@@ -73,11 +68,9 @@ LL count(LL val) {
 int main() {
     cin >> n >> k;
     zeros = 0;
-    map<LL, int> cnt;
     for (int i = 0; i < n; i++) {
         LL x;
         cin >> x;
-        cnt[x]++;
         if (x > 0) pos.push_back(x);
         else if (x < 0) neg.push_back(x);
         else zeros++;
@@ -89,7 +82,7 @@ int main() {
     LL lo = -INF, hi = INF;
     LL res;
     while (lo <= hi) {
-        LL mid = (lo + hi) >> 1;
+        LL mid = (lo + hi) / 2;
         LL t = count(mid);
         if (t >= k) {
             res = mid;
@@ -97,23 +90,8 @@ int main() {
         } else {
             lo = mid + 1;
         }
+        // cout << mid << " " << t << " " << lo << " " << hi << endl;
     }
-    bool find = false;
-    for (auto x : cnt) {
-        if (x.first != 0 && res % x.first == 0) {
-            int r = res / x.first;
-            if (r == x.first) {
-                if (cnt[r] > 1) find = true;
-            } else {
-                if (cnt.find(r) != cnt.end()) {
-                    find = true;
-                }
-            }
-        }
-    }
-    if (!find) res--;
-    //cout << find << endl;
-    //cout << res << " " << lo << " " << hi << endl;
     cout << res << endl;
     return 0;
 }
