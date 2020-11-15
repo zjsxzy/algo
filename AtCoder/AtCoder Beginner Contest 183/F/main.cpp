@@ -26,16 +26,16 @@ typedef long long LL;
 const int maxn = 200005;
 int n, q;
 int c[maxn];
-set<int> st[maxn];
-map<int, int> mp[maxn];
 
 struct DisJointSet{
 	int rank[maxn], parent[maxn];
+    map<int, int> mp[maxn];
 
 	void init(int n) {
 		for (int i = 0; i < n; i++) {
 			rank[i] = 0;
 			parent[i] = i;
+            mp[i][c[i]] = 1;
 		}
 	}
 
@@ -51,11 +51,17 @@ struct DisJointSet{
 		if (x == y) return;
 
 		if (rank[x] >= rank[y]) {
+            for (auto it : mp[y]) {
+                mp[x][it.first] += it.second;
+            }
 			parent[y] = x;
 			if (rank[x] == rank[y])
 				rank[x]++;
 		}
 		else {
+            for (auto it : mp[x]) {
+                mp[y][it.first] += it.second;
+            }
 			parent[x] = y;
 		}
 	}
@@ -87,6 +93,7 @@ int main() {
             cin >> x >> y;
             x--;
             int f = uf.Find(x);
+            cout << uf.mp[f][y] << endl;
         }
     }
     return 0;
