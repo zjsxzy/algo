@@ -1,3 +1,6 @@
+set re=1
+set ttyfast
+set lazyredraw
 set nocompatible
 set syntax=on
 set autoindent
