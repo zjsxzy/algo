@@ -26,38 +26,21 @@ int main() {
     string s, t;
     cin >> n;
     cin >> s >> t;
-    queue<int> q;
-    for (int i = 0; i < n; i++) {
-        if (s[i] == '1') {
-            q.push(i);
-        }
-    }
+    vector<int> vec;
     LL res = 0;
     for (int i = 0; i < n; i++) {
-        if (t[i] == '1') {
-            if (q.empty()) {
-                cout << -1 << endl;
-                return 0;
+        if (t[i] == '1') vec.push_back(i);
+        if (s[i] == '1') {
+            if (vec.empty()) {
+                vec.push_back(i);
+            } else {
+                int pre = vec.back();
+                vec.pop_back();
+                res += i - pre;
             }
-            int x = q.front(); q.pop();
-            while (x < i) {
-                if (q.empty()) {
-                    cout << -1 << endl;
-                    return 0;
-                } else {
-                    int y = q.front(); q.pop();
-                    res += (LL)(y - x);
-                }
-                if (q.empty()) {
-                    cout << -1 << endl;
-                    return 0;
-                } else {
-                    x = q.front(); q.pop();
-                }
-            }
-            res += (LL)(x - i);
         }
     }
+    if (!vec.empty()) res = -1;
     cout << res << endl;
     return 0;
 }
