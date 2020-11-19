@@ -27,12 +27,12 @@ int main() {
     cin >> n;
     cin >> s >> t;
     queue<int> q;
-    int res = 0;
     for (int i = 0; i < n; i++) {
         if (s[i] == '1') {
             q.push(i);
         }
     }
+    LL res = 0;
     for (int i = 0; i < n; i++) {
         if (t[i] == '1') {
             if (q.empty()) {
@@ -44,18 +44,18 @@ int main() {
                 if (q.empty()) {
                     cout << -1 << endl;
                     return 0;
+                } else {
+                    int y = q.front(); q.pop();
+                    res += (LL)(y - x);
                 }
-                int y = q.front(); q.pop();
-                res += y - x;
-                if (!q.empty()) {
+                if (q.empty()) {
+                    cout << -1 << endl;
+                    return 0;
+                } else {
                     x = q.front(); q.pop();
                 }
             }
-            if (x < i) {
-                cout << -1 << endl;
-                return 0;
-            }
-            res += x - i;
+            res += (LL)(x - i);
         }
     }
     cout << res << endl;
