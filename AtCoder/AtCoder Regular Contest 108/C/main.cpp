@@ -24,48 +24,9 @@ using namespace std;
 typedef long long LL;
 
 const int maxm = 200005;
-struct DisJointSet{
-	int rank[maxm], parent[maxm];
-
-	void init(int n) {
-		for (int i = 0; i < n; i++) {
-			rank[i] = 0;
-			parent[i] = i;
-		}
-	}
-
-	int Find(int x) {
-		if (parent[x] == x) return x;
-		return parent[x] = Find(parent[x]);
-	}
-
-	void Union(int x, int y) {
-		x = Find(x);
-		y = Find(y);
-
-		if (x == y) return;
-
-		if (rank[x] >= rank[y]) {
-			parent[y] = x;
-			if (rank[x] == rank[y])
-				rank[x]++;
-		}
-		else {
-			parent[x] = y;
-		}
-	}
-
-	int count(int n) {
-		int ret = 0;
-		for (int i = 0; i < n; i++)
-			ret += Find(i) == i;
-		return ret;
-	}
-}uf;
-
 int n, m;
 int u[maxm], v[maxm], c[maxm], vis[maxm];
-map<pair<int, int> > cnt;
+vector<pair<int, int> > adj[maxm];
 
 void output() {
     for (int i = 1; i <= n; i++) {
@@ -73,30 +34,31 @@ void output() {
     }
 }
 
+void dfs(int p) {
+    for (auto e : adj[p]) {
+        if (!vis[e.first]) {
+            if (e.second != vis[p]) {
+                vis[e.first] = e.second;
+            } else {
+                vis[e.first] = e.second == 1 ? 2 : 1;
+            }
+            dfs(e.first);
+        }
+    }
+}
+
 void solve() {
-    vector<pair<int, pair<int, int> > > vec;
-    for (auto x : cnt) {
-        vec.push_back({x.second, x.first});
-    }
-    sort(vec.begin(), vec.end());
-    reverse(vec.begin(), vec.end());
-
-
-    for (auto x : vec) {
-        if (!vis[x.second.first]) {
-            vis[x.second.first] = x.second.second;
+    memset(vis, 0, sizeof(vis));
+    vis[1] = 1;
+    dfs(1);
+    bool flag = true;
+    for (int i = 1; i <= n; i++) {
+        if (!vis[i]) {
+            flag = false;
+            break;
         }
     }
-
-    uf.init(n);
-    int idx = n + 1;
-    for (int i = 0; i < m; i++) {
-        if (vis[u[i]] == c[i]) {
-            uf.Union(u[i], v[i]);
-        }
-    }
-
-    if (uf.count() == n) {
+    if (flag) {
         output();
     } else {
         cout << "No" << endl;
@@ -107,10 +69,11 @@ int main() {
     cin >> n >> m;
     for (int i = 0; i < m; i++) {
         cin >> u[i] >> v[i] >> c[i];
-        cnt[{u[i], c[i]}]++;
-        cnt[{v[i], c[i]}]++;
+        adj[u[i]].push_back({v[i], c[i]});
+        adj[v[i]].push_back({u[i], c[i]});
     }
     solve();
     return 0;
 }
+
 
