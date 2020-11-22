@@ -23,7 +23,26 @@ using namespace std;
 #define FOREACH(e,x) for(__typeof(x.begin()) e=x.begin();e!=x.end();++e)
 typedef long long LL;
 
+void solve() {
+    LL k, d;
+    cin >> d >> k;
+    LL cur = 0;
+    while ((cur + k) * (cur + k) * 2 <= d * d) {
+        cur += k;
+    }
+    if ((cur + k) * (cur + k) + cur * cur <= d * d) {
+        cout << "Ashish" << endl;
+    } else {
+        cout << "Utkarsh" << endl;
+    }
+}
+
 int main() {
+    int ts;
+    cin >> ts;
+    while (ts--) {
+        solve();
+    }
     return 0;
 }
 
