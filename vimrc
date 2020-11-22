@@ -38,6 +38,12 @@ func AddComment()
     endif
 endfunc
 
+map <F5> :call CompileGcc()<CR>G
+func! CompileGcc()
+exec "w"
+exec "!clang++ % -std=c++11"
+endfunc
+
 map <F12> :call SetTitle()<CR>Gkkk
 func SetTitle()
 let l = 0
@@ -68,3 +74,4 @@ let l = l + 1 | call setline(l, 'int main() {')
 let l = l + 1 | call setline(l, '}')
 let l = l + 1 | call setline(l, '')
 endfunc
+
