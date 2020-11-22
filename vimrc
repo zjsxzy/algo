@@ -38,7 +38,7 @@ func AddComment()
     endif
 endfunc
 
-map <F5> :call CompileGcc()<CR>G
+map <F5> :call CompileGcc()<CR>
 func! CompileGcc()
 exec "w"
 exec "!clang++ % -std=c++11"
