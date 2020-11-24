@@ -26,6 +26,11 @@ if has("gui_running")
   " Hide the toolbar.
   set guioptions-=T
 endif
+inoremap ' ''<ESC>i
+inoremap " ""<ESC>i
+inoremap ( ()<ESC>i
+inoremap [ []<ESC>i
+inoremap { {<CR>}<ESC>O
 map <F2> gg"+yG
 map <F3> "+P
 
