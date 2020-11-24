@@ -11,6 +11,8 @@ set number
 set nobackup
 set noswapfile
 set ruler
+set splitbelow
+set splitright
 set langmenu=zh_CN.UTF-8
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
