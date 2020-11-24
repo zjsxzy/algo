@@ -58,13 +58,14 @@ void solve() {
 		parent[i] = i;
 	}
 	for (int i = 0; i < n; i++) {
-		if (cow[i + 1].first - cow[i].first <= R && cow[i + 1].second == 1 && cow[i].second == 1) {
+		if (cow[i + 1].first - cow[i].first < R && cow[i + 1].second == 1 && cow[i].second == 1) {
 			merge(i, i + 1);
 		}
 	}
 	int res = 0;
 	for (int i = 0; i < n; i++) {
-		res += parent[i] == i;
+        if (cow[i].second == 0) continue;
+		res += find(i) == i;
 	}
 	cout << res << endl;
 }
