@@ -32,7 +32,7 @@ struct DisJointSet{
 		for (int i = 0; i < n; i++) {
 			rank[i] = 0;
 			parent[i] = i;
-		} 
+		}
 	}
 
 	int Find(int x) {
@@ -45,7 +45,7 @@ struct DisJointSet{
 		y = Find(y);
 
 		if (x == y) return;
-		
+
 		if (rank[x] >= rank[y]) {
 			parent[y] = x;
 			if (rank[x] == rank[y])
