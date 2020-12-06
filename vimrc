@@ -48,27 +48,13 @@ endfunc
 map <F5> :call CompileGcc()<CR>
 func! CompileGcc()
 exec "w"
-exec "!clang++ % -std=c++11"
+exec "!g++ % -std=c++17 -O2"
 endfunc
 
 map <F12> :call SetTitle()<CR>Gkkk
 func SetTitle()
 let l = 0
-let l = l + 1 | call setline(l, '#include <map>')
-let l = l + 1 | call setline(l, '#include <set>')
-let l = l + 1 | call setline(l, '#include <list>')
-let l = l + 1 | call setline(l, '#include <cmath>')
-let l = l + 1 | call setline(l, '#include <queue>')
-let l = l + 1 | call setline(l, '#include <stack>')
-let l = l + 1 | call setline(l, '#include <bitset>')
-let l = l + 1 | call setline(l, '#include <vector>')
-let l = l + 1 | call setline(l, '#include <cstdio>')
-let l = l + 1 | call setline(l, '#include <string>')
-let l = l + 1 | call setline(l, '#include <sstream>')
-let l = l + 1 | call setline(l, '#include <cstdlib>')
-let l = l + 1 | call setline(l, '#include <cstring>')
-let l = l + 1 | call setline(l, '#include <iostream>')
-let l = l + 1 | call setline(l, '#include <algorithm>')
+let l = l + 1 | call setline(l, '#include <bits/stdc++.h>')
 let l = l + 1 | call setline(l, 'using namespace std;')
 let l = l + 1 | call setline(l, '#define PB push_back')
 let l = l + 1 | call setline(l, '#define MP make_pair')
