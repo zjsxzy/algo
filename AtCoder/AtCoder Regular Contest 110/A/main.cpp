@@ -8,6 +8,7 @@
 #include <vector>
 #include <cstdio>
 #include <string>
+#include <numeric>
 #include <sstream>
 #include <cstdlib>
 #include <cstring>
@@ -26,10 +27,9 @@ int main() {
 #endif
     int n;
     cin >> n;
-    unsigned long long res = 1;
-    for (int i = min(29, n); i >= 2; i--) {
-        if (res % i != 0)
-            res *= (unsigned long long)i;
+    long long res = 1;
+    for (int i = 2; i <= n; i++) {
+        res = lcm(res, i);
     }
     cout << res + 1 << endl;
     return 0;
