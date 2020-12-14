@@ -57,7 +57,6 @@ let l = 0
 let l = l + 1 | call setline(l, '#include <bits/stdc++.h>')
 let l = l + 1 | call setline(l, 'using namespace std;')
 let l = l + 1 | call setline(l, '#define PB push_back')
-let l = l + 1 | call setline(l, '#define MP make_pair')
 let l = l + 1 | call setline(l, '#define SZ(v) ((int)(v).size())')
 let l = l + 1 | call setline(l, '#define abs(x) ((x) > 0 ? (x) : -(x))')
 let l = l + 1 | call setline(l, 'typedef long long LL;')
