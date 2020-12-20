@@ -1,3 +1,45 @@
+const int MAXN = 100005;
+const int inf = 1e9;
+int n;
+int a[MAXN];
+struct SegTree {
+	int mx[MAXN << 2];
+	int lson(int rt) {return rt << 1;}
+	int rson(int rt) {return rt << 1 | 1;}
+	void pushUp(int rt) {
+		mx[rt] = max(mx[lson(rt)], mx[rson(rt)]);
+	}
+	void build(int l, int r, int rt) {
+		if (l == r) {
+			mx[rt] = a[l];
+			return;
+		}
+		int mid = (l + r) >> 1;
+		build(l, mid, lson(rt));
+		build(mid + 1, r, rson(rt));
+		pushUp(rt);
+	}
+	int query(int L, int R, int l, int r, int rt) {
+		if (L <= l && r <= R) {
+			return mx[rt];
+		}
+		int mid = (l + r) >> 1;
+		int res = -inf;
+		if (L <= mid) res = max(res, query(L, R, l, mid, lson(rt)));
+		if (mid < R) res = max(res, query(L, R, mid + 1, r, rson(rt)));
+		return res;
+	}
+    void update(int p, int val, int l, int r, int rt) {
+        if (l == r) {
+            mx[rt] = val;
+            return;
+        }
+        int mid = (l + r) >> 1;
+        if (p <= mid) update(p, val, l, mid, lson(rt));
+        else update(p, val, mid + 1, r, rson(rt));
+        pushUp(rt);
+    }
+}tree;
 /*
  * 线段树有离散型和连续型两种。
  * 离散型线段树就是常规的线段树形式，叶子节点为[i,i]，区间分解为[l,mid]、[mid+1,r]
@@ -168,7 +210,7 @@ struct SegTree {
 			add[rt] = 0;
 		}
 	}
-	
+
 	void build(int l, int r, int rt) {
 		add[rt] = 0;
 		put[rt] = -1;
@@ -195,7 +237,7 @@ struct SegTree {
 		if (R > mid) updateAdd(L, R, c, mid + 1, r, rson(rt));
 		pushUp(rt);
 	}
-	
+
 	void updateSet(int L, int R, int c, int l, int r, int rt) {
 		pushDown(rt, r - l + 1);
 		if (L <= l && r <= R) {
@@ -220,5 +262,5 @@ struct SegTree {
 		if (mid < R) res += query(L, R, mid + 1, r, rson(rt));
 		return res;
 	}
-	
+
 }tree;
