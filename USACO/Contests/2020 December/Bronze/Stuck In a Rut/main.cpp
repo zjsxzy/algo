@@ -14,24 +14,33 @@ void solve() {
         cin >> dir[i] >> x[i] >> y[i];
     }
 
-    vector<pair<int, pair<int, int>>> dist;
+	vector<vector<int>> dist;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (i == j) continue;
+			vector<int> temp;
             if (dir[i] == "E" && dir[j] == "E" && y[i] == y[j] && x[j] > x[i]) {
-                dist.push_back({x[j] - x[i], {i, j}});
+				temp.push_back(x[j] - x[i]); temp.push_back(i); temp.push_back(j);
+				dist.push_back(temp);
+                //dist.push_back({x[j] - x[i], {i, j}});
             }
             if (dir[i] == "N" && dir[j] == "N" && x[i] == x[j] && y[j] > y[i]) {
-                dist.push_back({y[j] - y[i], {i, j}});
+				temp.push_back(y[j] - y[i]); temp.push_back(i); temp.push_back(j);
+				dist.push_back(temp);
+                //dist.push_back({y[j] - y[i], {i, j}});
             }
             if (dir[i] == "E" && dir[j] == "N" && y[i] >= y[j] && x[i] <= x[j]) {
                 if (y[i] - y[j] < x[j] - x[i]) {
-                    dist.push_back({x[j] - x[i], {i, j}});
+					temp.push_back(x[j] - x[i]); temp.push_back(i); temp.push_back(j); temp.push_back(y[i] - y[j]);
+					dist.push_back(temp);
+                    //dist.push_back({x[j] - x[i], {i, j}});
                 }
             }
             if (dir[i] == "N" && dir[j] == "E" && x[i] >= x[j] && y[i] <= y[j]) {
                 if (x[i] - x[j] < y[j] - y[i]) {
-                    dist.push_back({y[j] - y[i], {i, j}});
+					temp.push_back(y[j] - y[i]); temp.push_back(i); temp.push_back(j); temp.push_back(x[i] - x[j]);
+					dist.push_back(temp);
+                    //dist.push_back({y[j] - y[i], {i, j}});
                 }
             }
         }
@@ -41,11 +50,11 @@ void solve() {
     vector<pair<int, int>> update;
     for (int k = 0, kk = 0; k < dist.size(); k = kk) {
         update.clear();
-        while (kk < dist.size() && dist[k].first == dist[kk].first) {
-            int t = dist[kk].first, i = dist[kk].second.first, j = dist[kk].second.second;
+        while (kk < dist.size() && dist[k][0] == dist[kk][0]) {
+            int t = dist[kk][0], i = dist[kk][1], j = dist[kk][2];
             if (dir[j] == dir[i]) update.push_back({i, t});
             else {
-                if (res[j] == INT_MAX) update.push_back({i, t});
+				if (res[j] > dist[kk][3]) update.push_back({i, t});
             }
             kk++;
         }
