@@ -21,10 +21,11 @@ set helplang=cn
 filetype indent on
 filetype plugin on
 syntax enable
-color slate
+"color slate
+colorscheme molokai
 if has("gui_running")
   " Set a nicer font.
-  set guifont=Consolas:h11:cDEFAULT
+  set guifont=Consolas:h12:cDEFAULT
   " Hide the toolbar.
   set guioptions-=T
 endif
