@@ -75,3 +75,5 @@ let l = l + 1 | call setline(l, '}')
 let l = l + 1 | call setline(l, '')
 endfunc
 
+vmap <C-c> :w! ~/.vimbuffer \| !cat ~/.vimbuffer \| clip.exe <CR><CR>
+map <C-v> :r ~/.vimbuffer<CR>
