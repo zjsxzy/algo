@@ -7,48 +7,28 @@ using namespace std;
 typedef long long LL;
 
 const int inf = 1e9;
-const int maxn = 5005;
-int a[maxn], s[maxn];
-int dp[maxn][maxn];
-
-int calc(int l, int r) {
-    //cout << l << " " << r << endl;
-    //if (l > r) return inf;
-    if (l == r) {
-        if (a[l] == 0) return dp[l][r] = 0;
-        else return dp[l][r] = inf;
-    }
-    int sum = s[r] - s[l - 1];
-    if (dp[l][r] != inf) return dp[l][r];
-    if (sum > r - l + 1 - sum) return dp[l][r] = inf;
-    //if (sum == 1) return dp[l][r] = 1;
-    //if (sum == 0) return dp[l][r] = 0;
-    int res = inf;
-    for (int k = l; k < r; k++) {
-        int left = calc(l, k);
-        if (left == inf) continue;
-        int right = calc(k + 1, r);
-        if (left + right < res) res = left + right;
-    }
-    if (res == inf) return dp[l][r] = sum * sum;
-    return dp[l][r] = res;
-}
 
 void solve() {
     int n;
     cin >> n;
-    s[0] = 0;
-    for (int i = 1; i <= n; i++) {
+    vector<int> pos, a(n);
+    for (int i = 0; i < n; i++) {
         cin >> a[i];
-        s[i] = s[i - 1] + a[i];
+        if (a[i]) pos.push_back(i);
     }
-    for (int i = 1; i <= n; i++) {
-        for (int j = i; j <= n; j++) {
-            dp[i][j] = inf;
+    int m = pos.size();
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, inf));
+    dp[0][0] = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j <= m; j++) {
+            if (dp[i][j] == inf) continue;
+            dp[i + 1][j] = min(dp[i + 1][j], dp[i][j]);
+            if (a[i] == 0 && j < m) {
+                dp[i + 1][j + 1] = min(dp[i + 1][j + 1], dp[i][j] + abs(pos[j] - i));
+            }
         }
     }
-    int res = calc(1, n);
-    cout << res << endl;
+    cout << dp[n][m] << endl;
 }
 
 int main() {
