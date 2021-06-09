@@ -33,15 +33,12 @@ class Flagpole {
         sort(rsum.begin(), rsum.end());
         LL res = 0;
         for (int i = 0; i < lsum.size(); i++) {
-            int x = LO - lsum[i];
+            LL x = LO - lsum[i];
             auto lit = upper_bound(rsum.begin(), rsum.end(), x);
-            if (*lit == x) lit++;
 
             x = HI - lsum[i];
-            auto rit = lower_bound(rsum.begin(), rsum.end(), x);
-            if (rit == rsum.end()) rit--;
-            if (*rit > x) rit--;
-            res += (LL)(rit - lit + 1);
+            auto rit = upper_bound(rsum.begin(), rsum.end(), x);
+            res += (LL)(rit - lit);
         }
         return res;
 	}
