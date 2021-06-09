@@ -18,7 +18,7 @@ class SudokuTypo {
 		}
 		return -1;
     }
-    
+
 // BEGIN CUT HERE
 	public:
 	void run_test(int Case) { if ((Case == -1) || (Case == 0)) test_case_0(); if ((Case == -1) || (Case == 1)) test_case_1(); if ((Case == -1) || (Case == 2)) test_case_2(); }
