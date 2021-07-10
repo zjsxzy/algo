@@ -7,31 +7,7 @@ typedef long long LL;
 
 const int MAXN = 500000;
 vector<int> adj[MAXN];
-int win[MAXN], vst[MAXN];
-
-void dfs(int u) {
-    vst[u] = 1;
-    if (adj[u].size() == 0) {
-        win[u] = 1;
-        return;
-    }
-    for (auto &v: adj[u]) {
-        if (!vst[v]) {
-            dfs(v);
-        }
-    }
-    bool flag = false;
-    for (auto &v: adj[u]) {
-        if (win[v] == 1) {
-            win[u] = -1;
-            return;
-        }
-        if (win[v] != -1) {
-            flag = true;
-        }
-    }
-    if (!flag) win[u] = 1;
-}
+int win[MAXN], outdeg[MAXN];
 
 void solve() {
     int n;
@@ -39,6 +15,7 @@ void solve() {
     vector<string> s(n);
     map<string, int> idx;
     int m = 0;
+    memset(outdeg, 0, sizeof(outdeg));
     for (auto &x: s) {
         cin >> x;
         string prefix = x.substr(0, 3);
@@ -51,12 +28,34 @@ void solve() {
             idx[suffix] = m;
             m++;
         }
-        adj[idx[prefix]].push_back(idx[suffix]);
+        adj[idx[suffix]].push_back(idx[prefix]);
+        outdeg[idx[prefix]]++;
     }
+    vector<int> q;
     memset(win, 0, sizeof(win));
-    memset(vst, 0, sizeof(vst));
     for (int i = 0; i < m; i++) {
-        dfs(i);
+        if (outdeg[i] == 0) {
+            win[i] = 1;
+            q.push_back(i);
+        }
+    }
+    while (!q.empty()) {
+        int u = q.back(); q.pop_back();
+        for (auto &v: adj[u]) {
+            if (win[v] != 0) continue;
+            if (win[u] == 1) {
+                win[v] = -1;
+                outdeg[v] = 0;
+                q.push_back(v);
+            }
+            if (win[u] == -1) {
+                if (outdeg[v]) outdeg[v]--;
+                if (!outdeg[v]) {
+                    win[v] = 1;
+                    q.push_back(v);
+                }
+            }
+        }
     }
     /*
     for (auto &[k, v]: idx) {
