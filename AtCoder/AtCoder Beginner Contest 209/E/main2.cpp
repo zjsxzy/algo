@@ -7,7 +7,7 @@ typedef long long LL;
 
 const int MAXN = 500000;
 vector<int> adj[MAXN];
-int win[MAXN], deg[MAXN];
+int win[MAXN], outdeg[MAXN];
 
 void solve() {
     int n;
@@ -15,7 +15,7 @@ void solve() {
     vector<string> s(n);
     map<string, int> idx;
     int m = 0;
-    memset(deg, 0, sizeof(deg));
+    memset(outdeg, 0, sizeof(outdeg));
     for (auto &x: s) {
         cin >> x;
         string prefix = x.substr(0, 3);
@@ -29,14 +29,32 @@ void solve() {
             m++;
         }
         adj[idx[suffix]].push_back(idx[prefix]);
-        deg[idx[prefix]]++;
+        outdeg[idx[prefix]]++;
     }
     vector<int> q;
     memset(win, 0, sizeof(win));
     for (int i = 0; i < m; i++) {
-        if (deg[i] == 0) {
+        if (outdeg[i] == 0) {
             win[i] = 1;
-            q.push(i);
+            q.push_back(i);
+        }
+    }
+    while (!q.empty()) {
+        int u = q.back(); q.pop_back();
+        for (auto &v: adj[u]) {
+            if (win[v] != 0) continue;
+            if (win[u] == 1) {
+                win[v] = -1;
+                outdeg[v] = 0;
+                q.push_back(v);
+            }
+            if (win[u] == -1) {
+                if (outdeg[v]) outdeg[v]--;
+                if (!outdeg[v]) {
+                    win[v] = 1;
+                    q.push_back(v);
+                }
+            }
         }
     }
     /*
