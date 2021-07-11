@@ -9,34 +9,32 @@ void solve() {
     int n;
     LL c;
     cin >> n >> c;
-    vector<pair<LL, LL>> vec;
+    map<LL, int> cnt;
     for (int i = 0; i < n; i++) {
         LL l, r;
         cin >> l >> r;
-        vec.emplace_back(l, 1);
-        vec.emplace_back(r, -1);
+        cnt[l + 1]++;
+        cnt[r]--;
     }
-    sort(vec.begin(), vec.end());
-    LL cur = 0, prev = 1;
-    vector<pair<LL, LL>> ans;
-    for (auto &p: vec) {
-        if (p.first - prev > 1) {
-            ans.emplace_back(cur, p.first - prev - 1);
-        }
-        if (p.second == 1) {
-            if (p.first > prev) ans.emplace_back(cur, 1);
-            cur++;
-        } else {
-            cur--;
-            if (p.first > prev) ans.emplace_back(cur, 1);
-        }
-        prev = p.first;
+
+    LL cur = 0;
+    vector<LL> pos, freq;
+    for (auto &[k, v]: cnt) {
+        cur += v;
+        pos.emplace_back(k);
+        freq.emplace_back(cur);
     }
-    sort(ans.begin(), ans.end());
-    reverse(ans.begin(), ans.end());
+
+    vector<pair<LL, LL>> v;
+    for (int i = 1; i < pos.size(); i++) {
+        LL len = pos[i] - pos[i - 1];
+        v.emplace_back(freq[i - 1], len);
+    }
+    sort(v.rbegin(), v.rend());
+
     LL res = 0;
-    for (auto &p: ans) {
-        cout << p.first << " " << p.second << endl;
+    for (auto &p: v) {
+        //cout << p.first << " " << p.second << endl;
         if (p.first == 0) break;
         if (c > p.second) {
             res += p.first * p.second;
