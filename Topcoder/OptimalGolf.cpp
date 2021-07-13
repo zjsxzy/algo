@@ -14,8 +14,9 @@ class OptimalGolf {
         for (int i = 0; i < n; i++) {
             if (clubHi[i] > mx) mx = clubHi[i];
             if (clubLo[i] < mn) mn = clubLo[i];
+            if (clubLo[i] <= D && D <= clubHi[i]) return 1;
         }
-        if (mn > D) return 2;
+        if (mx > D) return 2;
         int res = D / mx, mod = D % mx;
         if (mod == 0) return res;
         else {
