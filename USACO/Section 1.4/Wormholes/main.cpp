@@ -11,7 +11,7 @@ using namespace std;
 typedef long long LL;
 
 const int MAXN = 15;
-int n;
+int n, res;
 int x[MAXN], y[MAXN];
 int next_on_right[MAXN], partner[MAXN];
 
@@ -33,27 +33,24 @@ bool cycle() {
     return false;
 }
 
-int search() {
+void search() {
     int i, total = 0;
     for (i = 0; i < n; i++) {
         if (partner[i] == -1) break;
     }
 
     if (i == n) {
-        if (cycle()) return 1;
-        else return 0;
+        if (cycle()) res++;
     }
 
     for (int j = i + 1; j < n; j++) {
         if (partner[j] == -1) {
             partner[i] = j;
             partner[j] = i;
-            total += search();
+            search();
             partner[i] = partner[j] = -1;
         }
     }
-
-    return total;
 }
 
 void solve() {
@@ -80,7 +77,9 @@ void solve() {
     }
     */
 
-    int res = search();
+    // int res = search();
+    res = 0;
+    search();
     cout << res << endl;
 }
 
