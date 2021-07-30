@@ -46,9 +46,16 @@ void solve() {
 
     dfs(0, 0, C);
 
+	vector<int> out;
     for (int i = 0; i < MAXN; i++) {
-        if (res[i]) cout << i << " ";
+        if (res[i]) out.emplace_back(i);
     }
+	int sz = out.size();
+	cout << out[0];
+	for (int i = 1; i < sz; i++) {
+		cout << " " << out[i];
+	}
+	cout << endl;
 }
 
 int main() {
