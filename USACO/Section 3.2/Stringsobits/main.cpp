@@ -1,3 +1,8 @@
+/*
+ID: frankzh1
+TASK: kimbits
+LANG: C++
+ */
 #include <bits/stdc++.h>
 using namespace std;
 #define PB push_back
@@ -9,10 +14,11 @@ const int MAXN = 33;
 long long dp[MAXN][MAXN], sumdp[MAXN][MAXN];
 vector<int> bits;
 
-void dfs(int x, int l, int p) {
+void dfs(int x, int l, long long p) {
     if (x == 0) {
         return;
     }
+    //cout << x << " " << l << " " << p << " " << sumdp[x - 1][l] << endl;
     if (p <= sumdp[x - 1][l]) {
         bits.emplace_back(0);
         dfs(x - 1, l, p);
@@ -36,13 +42,13 @@ void solve() {
             dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1];
         }
     }
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= i; j++) {
+    for (int i = 0; i <= n; i++) {
+        sumdp[i][0] = 1;
+        for (int j = 1; j <= n; j++) {
             sumdp[i][j] = sumdp[i][j - 1] + dp[i][j];
         }
     }
     dfs(n, l, p);
-    reverse(bits.begin(), bits.end());
     for (auto &b: bits) {
         cout << b;
     }
@@ -50,7 +56,8 @@ void solve() {
 }
 
 int main() {
-    freopen("in.txt", "r", stdin);
+    freopen("kimbits.in", "r", stdin);
+    freopen("kimbits.out", "w", stdout);
     solve();
     return 0;
 }
