@@ -1,3 +1,38 @@
+void euler(int u) {
+    for (int v = 1; v <= n; v++) {
+        if (g[u][v]) {
+            g[u][v]--;
+            g[v][u]--;
+            euler(v);
+        }
+    }
+    res.push_back(u);
+}
+
+void solve() {
+    int m;
+    cin >> m;
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        g[u][v]++;
+        g[v][u]++;
+        deg[u]++; deg[v]++;
+    }
+    int st = 1;
+    for (int u = 1; u <= n; u++) {
+        if (deg[u] & 1) {
+            st = u;
+            break;
+        }
+    }
+    euler(st);
+    reverse(res.begin(), res.end());
+    for (auto &x: res) {
+        cout << x << endl;
+    }
+}
+
 //vector<string> ans record the euler path
 void dfs(int u, int id) {
 	for (int i = Head[u]; i != -1; i = edge[i].next)
