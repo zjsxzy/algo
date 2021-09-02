@@ -1,5 +1,9 @@
 struct edge {
     int to, cost;
+    edge() {int to, int cost} {
+        this->to = to;
+        this->cost = cost;
+    }
 };
 int dijkstra(int st, int ed) {
     vector<vector<edge> > adj(n);
