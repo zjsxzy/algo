@@ -1,3 +1,8 @@
+/*
+ID: frankzh1
+TASK: charrec
+LANG: C++
+ */
 #include <bits/stdc++.h>
 using namespace std;
 #define PB push_back
@@ -5,9 +10,10 @@ using namespace std;
 #define abs(x) ((x) > 0 ? (x) : -(x))
 typedef long long LL;
 
+#define get tot > 120 ? 0 : ch[i / 20]
 const int maxm = 555;
 const int maxn = 1205;
-const char *ch = "abcdefghijklmnopqrstuvwxyz";
+const char *ch = " abcdefghijklmnopqrstuvwxyz";
 int nf, n;
 vector<string> sf, s;
 int diff[maxm][maxn], Min[maxn][3], f[maxn];
@@ -20,7 +26,6 @@ void solve() {
     for (int i = 1; i <= n; i++) {
         cin >> s[i];
     }
-    cout << s[4] << endl;
     for (int i = 1; i <= nf; i++) {
         for (int j = 1; j <= n; j++) {
             int sum = 0;
@@ -76,7 +81,7 @@ void solve() {
         }
         if (i >= 21 && f[i - 21] + Min[i - 20][2] < f[i]) {
             f[i] = f[i - 21] + Min[i - 20][2];
-            ans[i] = ans[i - 20] + r[i - 20][2];
+            ans[i] = ans[i - 21] + r[i - 20][2];
         }
     }
     cout << ans[n] << endl;
@@ -90,7 +95,7 @@ int main() {
         cin >> sf[i];
     }
     freopen("charrec.in", "r", stdin);
-    //freopen("charrec.out", "w", stdout);
+    freopen("charrec.out", "w", stdout);
     solve();
     return 0;
 }
