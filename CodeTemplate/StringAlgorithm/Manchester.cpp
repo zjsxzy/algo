@@ -1,5 +1,6 @@
-int Manchester() {
-	int n = strlen(s);
+string Manchester(string& s) {
+	int n = s.size();
+    string str(n * 2 + 1, ' ');
 	int j = 0;
 	for (int i = 0; i < n; i++) {
 		str[j++] = '#';
@@ -8,8 +9,9 @@ int Manchester() {
 	str[j++] = '#';
 	n = j;
 
-	int res = 0;
+    int res = 0;
 	int right = -1, id = -1;
+    vector<int> dp(n);
 	for (int i = 0; i < n; i++) {
 		int r = 1;
 		if (right >= i) {
@@ -23,7 +25,14 @@ int Manchester() {
 			id = i;
 		}
 		dp[i] = r;
-		if (r > res) res = r;
+        if (r > res) res = r;
 	}
-	return res - 1;
+    int maxLen = res - 1, center = 0;
+    for (int i = 0; i < n; i++) {
+        if (dp[i] > dp[center]) center = i;
+    }
+    int start = (center - maxLen) / 2;
+    return s.substr(start, maxLen);
 }
+
+
