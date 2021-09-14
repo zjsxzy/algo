@@ -63,7 +63,7 @@ int lineCross(Point a, Point b, Point c, Point d, Point &p) {
 	if(sig(s1)==0 && sig(s2)==0)	return 2;
 	if(sig(s2-s1)==0)	return 0;
 	p.x = (c.x*s2-d.x*s1)/(s2-s1);
-	p.y = (c.y*s2-d.y*s1)/(s2-s1); 
+	p.y = (c.y*s2-d.y*s1)/(s2-s1);
 	return 1;
 }
 double area(Point * p, int n) {
@@ -120,15 +120,15 @@ double angle(Point o, Point a, Point b) {
 bool angle(Point a1, Point a2, Point b1, Point b2, Point & p, double & ang) {
 	Point vecA = a2-a1, vecB = b2-b1;
 	if(sig(vecA.mod()-vecB.mod()) != 0)	return false;
-	
+
 	double cr = vecA.x*vecB.y-vecA.y*vecB.x;
 	double dt = vecA.x*vecB.x+vecA.y*vecB.y;
-	
+
 	if(sig(cr)==0)	cr = 0;
 	if(sig(dt)==0)	dt = 0;
-	
+
 	ang = atan2(cr, dt);
-	
+
 	if(sig(cr)==0) {
 		if(sig(dt)>=0)	return false;
 		p = (a1+b1) * 0.5;
@@ -257,13 +257,13 @@ bool calCore(Point * p, int & n) {
 	else				reverse_copy(p, p+n, pp);
 	pp[n] = pp[0];
 	int nn = n;			//pp,nn init over!
-	
+
 	p[0] = Point(-BOUND, -BOUND);
 	p[1] = Point(BOUND, -BOUND);
 	p[2] = Point(BOUND, BOUND);
 	p[3] = Point(-BOUND, BOUND);
 	n = 4;				//p, n init over!
-	
+
 	for(int i = 0; i < nn && n; i ++)
 		polygon_cut(p, n, pp[i], pp[i+1]);
 	return n != 0;
@@ -352,6 +352,7 @@ double diam(Point *p, int n) {
 //计算两个凸多边形间最近，最远距离，assume两个凸多边形分离
 //返回o到线段ab的最短距离
 double minDis(Point o, Point a, Point b) {
+    if (a == b) return dis(o, a);
 	if(sig(dot(b, a, o))<0)	return dis(o, b);
 	if(sig(dot(a, b, o))<0)	return dis(o, a);
 	return fabs(cross(o, a, b)/dis(a, b));
@@ -373,21 +374,21 @@ double mind2p(Point *P, int n, Point *Q, int m) {
 	if(area(P, n) < 0)	reverse(P, P+n);	//需要逆时针的
 	if(area(Q, m) < 0)	reverse(Q, Q+m);
 	int p0 = min_element(P, P+n)-P, q0 = max_element(Q, Q+m)-Q;
-	
+
 	double res = dis(P[p0], Q[q0]);
-	
+
 	double ang = -M_PI/2, rotateP, rotateQ;
 	int pi, pj, qi, qj, totP, totQ, val;
 	for(pi=p0, qi=q0, totP=0, totQ=0; totP<n && totQ<m; ) {
 		pj = (pi+1) % n;
 		qj = (qi+1) % m;
-		
+
 		rotateP = calRotate(P[pi], P[pj], ang);
 		rotateQ = calRotate(Q[qi], Q[qj], ang+M_PI);
-		
+
 		val = sig(rotateP - rotateQ);
 		ang += min(rotateP, rotateQ);
-		
+
 		if(val == -1)	res = min(res, minDis(Q[qi], P[pi], P[pj]));
 		else if(val==1)	res = min(res, minDis(P[pi], Q[qi], Q[qj]));
 		else {
@@ -409,21 +410,21 @@ double maxd2p(Point *P, int n, Point *Q, int m) {	//【【【待测】】】....
 	if(area(P, n) < 0)	reverse(P, P+n);	//需要逆时针的
 	if(area(Q, m) < 0)	reverse(Q, Q+m);
 	int p0 = min_element(P, P+n)-P, q0 = max_element(Q, Q+m)-Q;
-	
+
 	double res = dis(P[p0], Q[q0]);
-	
+
 	double ang = -M_PI/2, rotateP, rotateQ;
 	int pi, pj, qi, qj, totP, totQ, val;
 	for(pi=p0, qi=q0, totP=0, totQ=0; totP<n && totQ<m; ) {
 		pj = (pi+1) % n;
 		qj = (qi+1) % m;
-		
+
 		rotateP = calRotate(P[pi], P[pj], ang);
 		rotateQ = calRotate(Q[qi], Q[qj], ang+M_PI);
-		
+
 		val = sig(rotateP - rotateQ);
 		ang += min(rotateP, rotateQ);
-		
+
 		if(val == -1)	res = max(res, max(dis(Q[qi], P[pi]), dis(Q[qi], P[pj])));
 		else if(val==1)	res = max(res, max(dis(P[pi], Q[qi]), dis(P[pi], Q[qj])));
 		else {
@@ -441,7 +442,7 @@ double maxd2p(Point *P, int n, Point *Q, int m) {	//【【【待测】】】....
 //poj3608
 	Point P[maxn], Q[maxn];
 	int n, m;
-	
+
 	int main() {
 		while(scanf("%d%d", &n, &m), n||m) {
 			for(int i = 0; i < n; i ++)	scanf("%lf%lf", &P[i].x, &P[i].y);
@@ -485,16 +486,16 @@ bool cmp2(const Point &a, const Point &b) {
 double minRect0(Point *p, int n) {
 	if(n<=2)	return 0;
 	if(area(p, n) < 0)	reverse(p, p+n);
-	
+
 	int ai = min_element(p, p+n)      -p;
 	int bi = min_element(p, p+n, cmp2)-p;
 	int ci = max_element(p, p+n)      -p;
 	int di = max_element(p, p+n, cmp2)-p;
 	int aj, bj, cj, dj;
-	
+
 	double res = 1E100, ang = -M_PI/2;
 	double ra, rb, rc, rd, r, s, c, ac, bd;
-	
+
 	while(ang < M_PI * 0.51) {
 		aj=(ai+1)%n;	ra = calRotate(p[ai], p[aj], ang);
 		bj=(bi+1)%n;	rb = calRotate(p[bi], p[bj], ang+0.5*M_PI);
@@ -502,15 +503,15 @@ double minRect0(Point *p, int n) {
 		dj=(di+1)%n;	rd = calRotate(p[di], p[dj], ang+1.5*M_PI);
 		r = min(min(ra,rb), min(rc,rd));
 		ang += r;
-		
+
 		s = sin(ang), c = cos(ang);
-		
+
 		ac = -s*(p[ci].x-p[ai].x) + c*(p[ci].y-p[ai].y);
 		bd =  c*(p[di].x-p[bi].x) + s*(p[di].y-p[bi].y);
-		
+
 		res = min(res, fabs(ac*bd));
 			//改为(fabs(ac)+fabs(bd))*2就是求最小周长外接矩形
-		
+
 		if(sig(ra-r)==0)	ai=aj;
 		if(sig(rb-r)==0)	bi=bj;
 		if(sig(rc-r)==0)	ci=cj;
@@ -568,7 +569,7 @@ int calNumLine(T *ts, int n) {
 	return res+1;
 }
 int main() {
-	
-	
+
+
 	return 0;
 }
