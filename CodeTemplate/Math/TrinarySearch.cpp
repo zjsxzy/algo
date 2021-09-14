@@ -13,10 +13,10 @@ void Solve()
     {
         mid = (Left + Right) / 2;
         midmid = (mid + Right) / 2;
-        mid_area = Calc(mid);
-        midmid_area = Calc(midmid);
+        mid_value = Calc(mid);
+        midmid_value = Calc(midmid);
         // 假设求解最大极值.
-        if (mid_area >= midmid_area) Right = midmid;
+        if (mid_value >= midmid_value) Right = midmid;
         else Left = mid;
     }
 }
