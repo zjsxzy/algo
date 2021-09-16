@@ -1,3 +1,8 @@
+/*
+ID: frankzh1
+TASK: clocks
+LANG: C++
+ */
 #include <bits/stdc++.h>
 using namespace std;
 #define PB push_back
@@ -6,19 +11,20 @@ using namespace std;
 typedef long long LL;
 
 int step[9][9] = {{1, 1, 0, 1, 1, 0, 0, 0, 0},
-    {1, 1, 1, 0, 0, 0, 0, 0, 0},
-    {0, 1, 1, 0, 1, 1, 0, 0, 0},
-    {1, 0, 0, 1, 0, 0, 1, 0, 0},
-    {0, 1, 0, 1, 1, 1, 0, 1, 0},
-    {0, 0, 1, 0, 0, 1, 0, 0, 1},
-    {0, 0, 0, 1, 1, 0, 1, 1, 0},
-    {0, 0, 0, 0, 0, 0, 1, 1, 1},
-    {0, 0, 0, 0, 1, 1, 0, 1, 1}};
+                  {1, 1, 1, 0, 0, 0, 0, 0, 0},
+                  {0, 1, 1, 0, 1, 1, 0, 0, 0},
+                  {1, 0, 0, 1, 0, 0, 1, 0, 0},
+                  {0, 1, 0, 1, 1, 1, 0, 1, 0},
+                  {0, 0, 1, 0, 0, 1, 0, 0, 1},
+                  {0, 0, 0, 1, 1, 0, 1, 1, 0},
+                  {0, 0, 0, 0, 0, 0, 1, 1, 1},
+                  {0, 0, 0, 0, 1, 1, 0, 1, 1}};
+int vis[300000];
 
 struct node {
     vector<int> clocks;
     vector<int> moves;
-    int next;
+    int next; // 当前操作
     node(vector<int> &clocks, vector<int> &moves, int next) : clocks(clocks), moves(moves), next(next) {}
 };
 
@@ -34,6 +40,7 @@ struct cmp {
     }
 };
 
+
 int getCode(vector<int> &clocks) {
     int code = 0;
     for (int i = 0; i < 9; i++) {
@@ -47,16 +54,24 @@ node bfs(vector<int>& clocks) {
     priority_queue<node, vector<node>, cmp> q;
     vector<int> moves;
     q.push(node(clocks, moves, 0));
-    m[getCode(clocks)] = 1;
+    vis[getCode(clocks)] = 1;
     while (!q.empty()) {
         node u = q.top(); q.pop();
         int code = getCode(u.clocks);
         if (code == 0) return u;
-        m[code] = 1;
+        vis[code] = 1;
         if (u.next == 9) continue;
         int s = u.next++;
-        if (s == 4 && u.clocks[0] != 0) continue;
+        if (s == 4 && u.clocks[0] != 0) continue; // 后面的操作不会再操作A
         q.push(u);
+        for (int i = 0; i < 3; i++) { // 操作4次回到初始位置，所以同一操作最多三次
+            for (int j = 0; j < u.clocks.size(); j++) {
+                u.clocks[j] = (u.clocks[j] + step[s][j]) % 4;
+            }
+            u.moves.push_back(s + 1);
+            if (vis[getCode(u.clocks)]) continue;
+            q.push(u);
+        }
     }
     return node(clocks, moves, 0);
 }
@@ -67,7 +82,7 @@ void solve() {
         cin >> clocks[i];
         clocks[i] = (clocks[i] / 3) % 4;
     }
-    memset(m, 0, sizeof(m));
+    memset(vis, 0, sizeof(vis));
     node ans = bfs(clocks);
     for (int i = 0; i < ans.moves.size(); i++) {
         if (i != 0) cout << " ";
@@ -77,7 +92,8 @@ void solve() {
 }
 
 int main() {
-    freopen("in.txt", "r", stdin);
+    freopen("clocks.in", "r", stdin);
+    freopen("clocks.out", "w", stdout);
     solve();
     return 0;
 }
