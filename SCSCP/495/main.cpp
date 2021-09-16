@@ -9,10 +9,10 @@ const int maxn = 100005;
 int n;
 int a[maxn];
 vector<int> adj[maxn];
-map<int, int> mp[maxn];
-int ans[maxn];
+map<int, LL> mp[maxn];
+LL ans[maxn];
 
-bool compare (const pair<int, int>&a, const pair<int, int>&b) {
+bool compare (const pair<int, LL>&a, const pair<int, LL>&b) {
    return a.second < b.second;
 }
 
