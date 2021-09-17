@@ -19,7 +19,8 @@ void dfs(int row) {
         cnt++;
         if (cnt <= 3) {
             for (int i = 0; i < n; i++) {
-                cout << ans[i] + 1 << " ";
+                if (i != 0) cout << " ";
+                cout << ans[i] + 1;
             }
             cout << endl;
         }
