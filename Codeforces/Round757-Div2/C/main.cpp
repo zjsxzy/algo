@@ -18,7 +18,7 @@ void solve() {
 	for (int i = 0; i < n - 1; i++) {
 		res = (res * 2) % mod;
 	}
-	cout << res << endl;
+	cout << res % mod << endl;
 }
 
 int main() {
