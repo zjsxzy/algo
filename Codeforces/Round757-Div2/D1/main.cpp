@@ -31,7 +31,6 @@ void solve() {
             dp[j] = max(dp[j], dp[i] + (LL)cnt[j] * (j - i));
         }
         res = max(res, dp[i]);
-        // if (i <= 10) cout << i << " " << dp[i] << endl;
     }
     cout << res << endl;
 }
