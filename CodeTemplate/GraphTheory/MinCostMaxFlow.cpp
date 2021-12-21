@@ -14,7 +14,7 @@ struct Nod {
 struct MinCost {
     int E[maxV];        int n;
     Nod buf[maxE*2];    int len;
-    
+
     int p[maxV];
     void init(int n) {
         this->n = n;
@@ -30,7 +30,7 @@ struct MinCost {
         static int d[maxV];
         memset(d,  63, sizeof(d));
         memset(p, 255, sizeof(p));
-        
+
         d[source] = 0;
         q.push(source);
         int u, v;
