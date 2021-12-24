@@ -61,88 +61,45 @@ void solve() {
 		return;
 	}
 	set<LL> one, two;
-	vector<vector<int>> comp(n);
+	vector<int> val;
+	vector<LL> d1(n, inf), dn(n, inf);
+	int r1 = uf.Find(0), rn = uf.Find(n - 1);
+	d1[r1] = 0; dn[rn] = 0;
 	for (int i = 0; i < n; i++) {
-		if (uf.Find(i) == uf.Find(0)) one.insert(i);
-		else if (uf.Find(i) == uf.Find(n - 1)) two.insert(i);
-		else {
-			comp[uf.Find(i)].push_back(i);
-		}
-	}
-	vector<int> root, val;
-	for (int i = 0; i < n; i++) {
-		if (comp[i].size() == 1) {
+		if (uf.Find(i) == r1) {
+			one.insert(i);
+		} else if (uf.Find(i) == rn) {
+			two.insert(i);
+		} else {
 			val.push_back(i);
-		} else if (comp[i].size() > 1) {
-			root.push_back(i);
-			sort(comp[i].begin(), comp[i].end());
 		}
 	}
 
 	LL res = inf;
-	for (auto x: one) {
-		auto y = two.lower_bound(x);
-		if (y != two.end()) {
-			res = min(res, (*y - x) * (*y - x));
+	for (int i = 0; i < n; i++) {
+		int f = uf.Find(i);
+		auto j = one.lower_bound(i);
+		LL dis = inf;
+		if (j != one.end()) {
+			dis = min(dis, (*j - i) * (*j - i));
 		}
-		if (y != two.begin()) {
-			y--;
-			res = min(res, (*y - x) * (*y - x));
+		if (j != one.begin()) {
+			j--;
+			dis = min(dis, (*j - i) * (*j - i));
 		}
-	}
-	for (auto x: val) {
-		auto y = one.lower_bound(x);
-		LL t1 = inf;
-		if (y != one.end()) {
-			t1 = min(t1, (*y - x) * (*y - x));
-		}
-		if (y != one.begin()) {
-			y--;
-			t1 = min(t1, (*y - x) * (*y - x));
-		}
+		d1[f] = min(d1[f], dis);
 
-		y = two.lower_bound(x);
-		LL t2 = inf;
-		if (y != two.end()) {
-			t2 = min(t2, (*y - x) * (*y - x));
+		j = two.lower_bound(i);
+		dis = inf;
+		if (j != two.end()) {
+			dis = min(dis, (*j - i) * (*j - i));
 		}
-		if (y != two.begin()) {
-			y--;
-			t2 = min(t2, (*y - x) * (*y - x));
+		if (j != two.begin()) {
+			j--;
+			dis = min(dis, (*j - i) * (*j - i));
 		}
-
-		res = min(res, t1 + t2);
-	}
-
-	for (auto x: one) {
-		auto z = two.lower_bound(x);
-		if (z != two.end()) {
-			for (auto u: root) {
-				auto l = lower_bound(comp[u].begin(), comp[u].end(), x);
-				auto r = upper_bound(comp[u].begin(), comp[u].end(), *z);
-				if (r != comp[u].begin()) r--;
-				if (r - l >= 0) {
-					LL t = (*l - x) * (*l - x);
-					t += (*z - *r) * (*z - *r);
-					res = min(res, t);
-				}
-			}
-		}
-	}
-	for (auto x: two) {
-		auto z = one.lower_bound(x);
-		if (z != one.end()) {
-			for (auto u: root) {
-				auto l = lower_bound(comp[u].begin(), comp[u].end(), x);
-				auto r = upper_bound(comp[u].begin(), comp[u].end(), *z);
-				if (r != comp[u].begin()) r--;
-				if (r - l >= 0) {
-					LL t = (*l - x) * (*l - x);
-					t += (*z - *r) * (*z - *r);
-					res = min(res, t);
-				}
-			}
-		}
+		dn[f] = min(dn[f], dis);
+		res = min(res, d1[f] + dn[f]);
 	}
 	cout << res << endl;
 }
