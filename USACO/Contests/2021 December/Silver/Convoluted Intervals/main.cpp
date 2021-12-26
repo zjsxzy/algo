@@ -8,14 +8,14 @@ typedef long long LL;
 void solve() {
     int n, m;
     cin >> n >> m;
-    vector<int> p(m + 1), q(m + 1);
+    vector<LL> p(m + 1), q(m + 1);
     for (int i = 0; i < n; i++) {
         int a, b;
         cin >> a >> b;
         p[a]++;
         q[b]++;
     }
-    vector<int> P(2 * m + 1), Q(2 * m + 1);
+    vector<LL> P(2 * m + 1), Q(2 * m + 1);
     for (int i = 0; i <= m; i++) {
         for (int j = 0; j <= m; j++) {
             P[i + j] += p[i] * p[j];
