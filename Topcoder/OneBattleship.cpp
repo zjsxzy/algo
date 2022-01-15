@@ -1,4 +1,3 @@
-#line 2 "OneBattleship.cpp"
 #include <bits/stdc++.h>
 using namespace std;
 #define PB push_back
