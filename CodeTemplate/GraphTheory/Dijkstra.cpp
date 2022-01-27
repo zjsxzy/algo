@@ -1,6 +1,6 @@
 struct edge {
     int to, cost;
-    edge() {int to, int cost} {
+    edge(int to, int cost) {
         this->to = to;
         this->cost = cost;
     }
