@@ -1,26 +1,22 @@
-/*
- * Find the center of a circle with radious R that p1p2 is the diameter
- */
-Point Find_Center(Point p1, Point p2)
-{
-	Point p3, center, mid;
-	double b, c, ang;
-	p3.x = p2.x - p1.x;
-	p3.y = p2.y - p1.y;
-	mid.x = (p1.x + p2.x) / 2;
-	mid.y = (p1.y + p2.y) / 2;
-	b = dis(p1, mid);
-	c = sqrt(R * R - b);
-	if (fabs(p3.y) < eps)
-	{
-		center.x = mid.x;
-		center.y = mid.y + c;
-	}
-	else
-	{
-		ang = atan(-p3.x / p3.y);
-		center.x = mid.x + c * cos(ang);
-		center.y = mid.y + c * sin(ang);
-	}
-	return center;
+double dist(double x1, double y1, double x2, double y2){
+    return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 }
+
+//计算圆心
+point f(point& a, point& b, double r){
+    //算中点
+    point mid((a.x + b.x) / 2.0,(a.y + b.y) / 2.0);
+    //AB距离的一半
+    double d = dist(a.x, a.y, mid.x, mid.y);
+    //计算h
+    double h = sqrt(r * r - d * d);
+    //计算垂线
+    point ba(b.x - a.x, b.y - a.y);
+    point hd(-ba.y, ba.x);
+    double len = sqrt(hd.x * hd.x + hd.y * hd.y);
+    hd.x /= len, hd.y /= len;
+    hd.x *= h, hd.y *= h;
+    return point(hd.x + mid.x, hd.y + mid.y);
+}
+
+
