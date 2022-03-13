@@ -7,7 +7,7 @@ struct edge {
 };
 int dijkstra(int st, int ed) {
     vector<vector<edge> > adj(n);
-    // construct graph: adj[u].push_back({v, c})
+    // construct graph: adj[u].emplace_back(v, c)
     vector<int> dist(adj.size(), inf);
     dist[st] = 0;
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
