@@ -5,6 +5,12 @@ using namespace std;
 #define abs(x) ((x) > 0 ? (x) : -(x))
 typedef long long LL;
 
+struct hsh {
+	size_t operator()(const pair<LL, LL> &p) const {
+		return p.first * 239 + p.second;
+	}
+};
+
 void solve() {
     int n;
     cin >> n;
@@ -36,24 +42,19 @@ void solve() {
         }
     }
 
-    map<pair<LL, LL>, vector<int>> lmp, rmp;
+    unordered_map<pair<LL, LL>, map<int, int>, hsh> lmp;
     for (int i = 0; i < (1 << ls); i++) {
         int s = __builtin_popcount(i);
-        lmp[{lsum[i].first, lsum[i].second}].push_back(s);
-    }
-    for (int i = 0; i < (1 << rs); i++) {
-        int s = __builtin_popcount(i);
-        rmp[{rsum[i].first, rsum[i].second}].push_back(s);
+        lmp[{lsum[i].first, lsum[i].second}][s]++;
     }
 
-    vector<int> ans(n + 1);
-    for (auto& [k, v]: lmp) {
-        pair<LL, LL> t = {gx - k.first, gy - k.second};
-        if (rmp.find(t) != rmp.end()) {
-            for (auto x: v) {
-                for (auto y: rmp[t]) {
-                    ans[x + y]++;
-                }
+    vector<LL> ans(n + 1);
+    for (int i = 0; i < (1 << rs); i++) {
+        int s = __builtin_popcount(i);
+        pair<LL, LL> t = {gx - rsum[i].first, gy - rsum[i].second};
+        if (lmp.find(t) != lmp.end()) {
+            for (auto &[k, cnt]: lmp[t]) {
+                ans[s + k] += cnt;
             }
         }
     }
