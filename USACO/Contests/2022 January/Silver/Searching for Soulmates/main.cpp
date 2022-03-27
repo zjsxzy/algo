@@ -5,64 +5,30 @@ using namespace std;
 #define abs(x) ((x) > 0 ? (x) : -(x))
 typedef long long LL;
 
-void big(LL x, LL y) {
-    map<LL, int> step;
-    step[x] = 0;
-    queue<int> q;
-    q.push(x);
-    while (!q.empty()) {
-        LL t = q.front(); q.pop();
-        int d = step[t];
-        if (t == y) {
-            cout << d << endl;
-            return;
-        }
-        if (step.find(t + 1) == step.end()) {
-            step[t + 1] = d + 1;
-            q.push(t + 1);
-        }
-        if (t * 2 <= y && step.find(t * 2) == step.end()) {
-            step[t * 2] = d + 1;
-            q.push(t * 2);
-        }
-    }
-}
-
-void small(LL x, LL y) {
-    map<LL, int> step;
-    step[x] = 0;
-    queue<int> q;
-    q.push(x);
-    while (!q.empty()) {
-        LL t = q.front(); q.pop();
-        int d = step[t];
-        if (t == y) {
-            cout << d << endl;
-            return;
-        }
-        if (step.find(t + 1) == step.end()) {
-            step[t + 1] = d + 1;
-            q.push(t + 1);
-        }
-        if (t % 2 == 0 && step.find(t / 2) == step.end()) {
-            step[t / 2] = d + 1;
-            q.push(t / 2);
-        }
-    }
+LL f(LL a, LL b) {
+    if (a > b) return 1e18;
+    if (a * 2 > b) return b - a;
+    if (b % 2 == 1) return f(a, b - 1) + 1;
+    if (b % 2 == 0 && a <= b / 2) return f(a, b / 2) + 1;
+    return 1e18;
 }
 
 void solve() {
-    LL x, y;
-    LL cnt = 0;
-    cin >> x >> y;
-    if (x == y) {
+    LL a, b;
+    cin >> a >> b;
+    if (a == b) {
         cout << 0 << endl;
         return;
-    } else if (x < y) {
-        big(x, y);
-    } else {
-        small(x, y);
     }
+    LL res = 1e18, cnt1 = 0; // divide and plus
+    while (a > 1) {
+        LL cnt2 = f(a, b); // multiply and plus
+        res = min(res, cnt1 + cnt2);
+        if (a % 2 == 1) a++;
+        else a /= 2;
+        cnt1++;
+    }
+    cout << res << endl;
 }
 
 int main() {
