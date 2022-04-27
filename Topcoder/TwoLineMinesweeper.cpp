@@ -14,12 +14,12 @@ class TwoLineMinesweeper {
         n = firstLine.size();
         cnt = firstLine;
         ans.clear();
-        dfs(0, 0, "");
+        dfs(0, "");
         sort(ans.begin(), ans.end());
         return ans;
 	}
 
-    void dfs(int p, int prev, string curr) {
+    void dfs(int p, string curr) {
         if (ans.size() == 50) return;
         if (p == n) {
             bool flag = true;
@@ -37,14 +37,21 @@ class TwoLineMinesweeper {
             }
             if (flag) ans.push_back(curr);
         } else {
-            if (cnt[p] == 0) dfs(p + 1, 0, curr + "-");
-            else {
-                if (prev == 1) dfs(p + 1, 0, curr + "*");
+            if (cnt[p] == 0) dfs(p + 1, curr + "-");
+            else if (cnt[p] == 1) {
+                if (p - 1 >= 0 && curr[p - 1] == '*') dfs(p + 1, curr + "-");
                 else {
-                    dfs(p + 1, 1, curr + "-");
-                    dfs(p + 1, 0, curr + "*");
+                    dfs(p + 1, curr + "-");
+                    dfs(p + 1, curr + "*");
                 }
-            }
+            } else if (cnt[p] == 2) {
+                    if (p - 1 >= 0 && p - 2 >= 0 && cnt[p - 1] == '*' && cnt[p - 2] == '*') dfs(p + 1, curr + '-');
+                    else {
+                        dfs(p + 1, curr + "-");
+                        dfs(p + 1, curr + "*");
+                    }
+                }
+            } else if (cnt[p] == 3) dfs(p + 1, curr + "*");
         }
     }
 
@@ -58,7 +65,7 @@ class TwoLineMinesweeper {
 	void test_case_0() { int Arr0[] = {0, 0, 0, 0, 0, 0}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arr1[] = {"------" }; vector <string> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); verify_case(0, Arg1, solve(Arg0)); }
 	void test_case_1() { int Arr0[] = {0, 0, 1, 1, 1, 0}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arr1[] = {"---*--" }; vector <string> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); verify_case(1, Arg1, solve(Arg0)); }
 	void test_case_2() { int Arr0[] = {1, 1}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arr1[] = {"*-", "-*" }; vector <string> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); verify_case(2, Arg1, solve(Arg0)); }
-	void test_case_3() { int Arr0[] = {2, 2, 2, 2, 2}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arr1[] = {"**-**" }; vector <string> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); verify_case(3, Arg1, solve(Arg0)); }
+	void test_case_3() { int Arr0[] = {1, 1, 1, 1, 1}; vector <int> Arg0(Arr0, Arr0 + (sizeof(Arr0) / sizeof(Arr0[0]))); string Arr1[] = {"*--*-", "-*--*"}; vector <string> Arg1(Arr1, Arr1 + (sizeof(Arr1) / sizeof(Arr1[0]))); verify_case(3, Arg1, solve(Arg0)); }
 
 // END CUT HERE
 
