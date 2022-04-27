@@ -19,39 +19,27 @@ class TwoLineMinesweeper {
         return ans;
 	}
 
-    void dfs(int p, string curr) {
+    void dfs(int pos, string curr) {
         if (ans.size() == 50) return;
-        if (p == n) {
-            bool flag = true;
-            for (int i = 0; i < n; i++) {
-                int t = 0;
-                for (int d = -1; d <= 1; d++) {
-                    if (i + d >= 0 && i + d < n) {
-                        t += (curr[i + d] == '*');
-                    }
-                }
-                if (t != cnt[i]) {
-                    flag = false;
-                    break;
-                }
+        if (pos == n) {
+            if (cnt[pos - 1] == 0) ans.push_back(curr);
+            return;
+        }
+        for (int i = pos - 1; i <= pos + 1; i++) {
+            if (i >= 0 && i < n) {
+                cnt[i]--;
             }
-            if (flag) ans.push_back(curr);
-        } else {
-            if (cnt[p] == 0) dfs(p + 1, curr + "-");
-            else if (cnt[p] == 1) {
-                if (p - 1 >= 0 && curr[p - 1] == '*') dfs(p + 1, curr + "-");
-                else {
-                    dfs(p + 1, curr + "-");
-                    dfs(p + 1, curr + "*");
-                }
-            } else if (cnt[p] == 2) {
-                    if (p - 1 >= 0 && p - 2 >= 0 && cnt[p - 1] == '*' && cnt[p - 2] == '*') dfs(p + 1, curr + '-');
-                    else {
-                        dfs(p + 1, curr + "-");
-                        dfs(p + 1, curr + "*");
-                    }
-                }
-            } else if (cnt[p] == 3) dfs(p + 1, curr + "*");
+        }
+        if (pos == 0 || cnt[pos - 1] == 0) {
+            dfs(pos + 1, curr + '*');
+        }
+        for (int i = pos - 1; i <= pos + 1; i++) {
+            if (i >= 0 && i < n) {
+                cnt[i]++;
+            }
+        }
+        if (pos == 0 || cnt[pos - 1] == 0) {
+            dfs(pos + 1, curr + '-');
         }
     }
 
