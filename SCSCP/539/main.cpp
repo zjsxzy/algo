@@ -13,8 +13,8 @@ void solve() {
     cin >> n >> k;
     for (int i = 1; i <= n; i++) cin >> a[i];
     dp[1][1][1] = a[1];
-    dp[1][0][0] = 0;
-    for (int i = 2; i < n; i++) {
+    dp[2][1][0] = a[2];
+    for (int i = 3; i < n; i++) {
         for (int j = 0; j <= k; j++) {
             dp[i][j][0] = dp[i - 1][j][0];
             dp[i][j][1] = dp[i - 1][j][1];
