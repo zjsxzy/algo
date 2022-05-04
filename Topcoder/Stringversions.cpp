@@ -8,44 +8,18 @@ typedef long long LL;
 class Stringversions {
 	public:
 	string create(int L, int N) {
-        string res;
-        int n = N;
-        res += "z";
-        vector<int> cnt(26);
-        cnt[25]++;
-        for (int i = 2; i <= L; i++) {
-            int sum = 0, j;
-            for (j = 25; j >= 0; j--) {
-                if (cnt[j] == 0) {
-                    break;
-                } else {
-                    if (sum + cnt[j] > n) {
-                        break;
-                    } else {
-                        sum += cnt[j];
-                    }
-                }
-            }
-            if (j < 0) return "";
-            res += (char)('a' + j);
-            cnt[j]++;
-            n -= sum;
-            if (n == 0) break;
-        }
-        if (n > 0) return "";
-        while (res.size() < L) {
-            res += "z";
-        }
-        /*
-        int t = 0;
+        string s;
+        for (int i = 0; i < L; i++) s += 'a' + i % 26;
+        sort(s.begin(), s.end());
         for (int i = 0; i < L; i++) {
-            for (int j = i + 1; j < L; j++) {
-                if (res[i] > res[j]) t++;
+            for (int j = i - 1; N && j >= 0; j--) {
+                if (s[j] == s[j + 1]) break;
+                swap(s[j], s[j + 1]);
+                N--;
             }
         }
-        cout << t << endl;
-        */
-        return res;
+        if (N) return "";
+        return s;
 	}
 
 
