@@ -70,7 +70,8 @@ double area(Point * p, int n) {
 	double res = 0;
 	p[n] = p[0];
 	for(int i = 0; i < n; i ++) {
-		res += p[i].x*p[i+1].y - p[i+1].x*p[i].y;
+		// res += p[i].x*p[i+1].y - p[i+1].x*p[i].y;
+        res += cross(p[0], p[i], p[i+1]);
 	}
 	return res / 2;
 }
