@@ -23,3 +23,26 @@ struct union_find{
         siz[X] = 0;
     }
 };
+
+// with solution
+vector<set<int>> groups;
+vector<int> owner;
+void merge_and_solve(int a, int b) {
+    a = owner[a];
+    b = owner[b];
+    if (a == b) return;
+    if (groups[a].size() > groups[b].size()) swap(a, b);
+    for (int x : groups[a]) {
+        owner[x] = b;
+        groups[b].insert(x);
+    }
+    groups[a].clear();
+}
+void init() {
+    groups.assign(n, {});
+    owner.resize(n);
+    for (int i = 0; i < i; i++) {
+        owner[i] = i;
+        groups[i] = {i};
+    }
+}
