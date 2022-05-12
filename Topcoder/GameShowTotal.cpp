@@ -10,7 +10,7 @@ class GameShowTotal {
 	string verify(int N, vector <int> A, int W) {
         if (W == 0) return "possible";
         int curr = 0;
-        for (int i = N; i >= 0; i--) {
+        for (int i = N - 1; i >= 0; i--) {
             curr += A[i];
             if (W == curr) return "possible";
         }
