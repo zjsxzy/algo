@@ -6,11 +6,11 @@ void solve() {
     string s;
     cin >> s;
     int n = s.size();
-    sort(s.begin(), s.end());
-    if (n > 2) {
-        cout << s[0] << endl;
-    } else {
+    if (n == 2) {
         cout << s[1] << endl;
+    } else {
+        sort(s.begin(), s.end());
+        cout << s[0] << endl;
     }
 }
 
