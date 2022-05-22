@@ -49,3 +49,24 @@ struct union_find {
         groups[a].clear();
     }
 }
+
+void left_and_right(vector<int>& nums) {
+    int n = nums.size();
+    vector<int> a(n + 1);
+    for (int i = 0; i < n; i++) {
+        a[i + 1] = nums[i];
+    }
+    vector<int> left(n + 1), right(n + 1);
+    for (int i = 1; i <= n; i++) {
+        left[i] = i - 1;
+        while (left[i] >= 1 && a[left[i]] >= a[i]) {
+            left[i] = left[left[i]];
+        }
+    }
+    for (int i = n; i >= 1; i--) {
+        right[i] = i + 1;
+        while (right[i] <= n && a[right[i]] >= a[i]) {
+            right[i] = right[right[i]];
+        }
+    }
+}
