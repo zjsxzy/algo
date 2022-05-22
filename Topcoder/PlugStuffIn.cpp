@@ -6,39 +6,19 @@ class PlugStuffIn {
 	public:
 	vector <int> plug(vector <int> gadgets) {
         int n = gadgets.size();
-        vector<int> used = gadgets;
-        int mx = 0, idx;
-        for (int i = 0; i < n; i++) {
-            if (gadgets[i] > mx) {
-                mx = gadgets[i];
-                idx = i;
-            }
-        }
         vector<int> ans(n, -1);
         priority_queue<pair<int, int>> pq;
-        if (mx > 0) {
-            ans[idx] = n;
-            pq.push({gadgets[idx], idx});
-        } else {
-            int cnt = 0;
-            for (int i = 0; i < n; i++) {
-                if (gadgets[i] == 0) {
-                    ans[i] = n;
-                    cnt++;
-                    if (cnt > 1) return {};
-                }
-            }
-            return ans;
-        }
+        pq.push({1, n});
 
-        for (int k = 0; k < n; k++)
-        for (int i = 0; i < n; i++) {
-            if (ans[i] == -1 && gadgets[i]) {
-                if (!pq.empty()) {
-                    auto p = pq.top(); pq.pop();
-                    ans[i] = p.second;
-                    if (p.first > 1) pq.push({p.first - 1, p.second});
-                    pq.push({gadgets[i], i});
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                if (ans[i] == -1 && gadgets[i]) {
+                    if (!pq.empty()) {
+                        auto p = pq.top(); pq.pop();
+                        ans[i] = p.second;
+                        if (p.first > 1) pq.push({p.first - 1, p.second});
+                        pq.push({gadgets[i], i});
+                    }
                 }
             }
         }
