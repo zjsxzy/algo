@@ -2,90 +2,54 @@
 using namespace std;
 typedef long long LL;
 
-const int inf = 1e8;
-int dist[55][55][55];
-int dx[4] = {-1, 0, 1, 0};
-int dy[4] = {0, 1, 0, -1};
-struct node {
-    int dis, x, y, jet;
-    node() {}
-    node(int d, int x_, int y_, int j) : dis(d), x(x_), y(y_), jet(j) {}
-};
-bool operator < (const node& a, const node& b) {
-    if (a.dis != b.dis) return a.dis < b.dis;
-    return a.jet < b.jet;
-}
+const int inf = 1e9;
+int dist[55][55][2];
+int dx[4] = {0, 0, -1, 1};
+int dy[4] = {-1, 1, 0, 0};
 class Jetpack {
 	public:
 	int travel(vector <string> maze, int T) {
         int n = maze.size(), m = maze[0].size();
-        int stx, sty, edx, edy;
-        int pits = 0;
+        int stx = -1, sty = -1, edx = -1, edy = -1;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                if (maze[i][j] == 'A') {
-                    stx = i, sty = j;
-                }
-                if (maze[i][j] == 'B') {
-                    edx = i, edy = j;
-                }
-                if (maze[i][j] == '_') {
-                    pits++;
-                }
+                if (maze[i][j] == 'A') stx = i, sty = j;
+                if (maze[i][j] == 'B') edx = i, edy = j;
             }
         }
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                for (int k = 0; k <= pits; k++) {
-                    dist[i][j][k] = inf;
-                }
+                dist[i][j][0] = dist[i][j][1] = inf;
             }
         }
+        priority_queue<pair<int, pair<pair<int, int>, int>>> pq;
         dist[stx][sty][0] = 0;
-        multiset<node> q;
-        q.insert(node(0, stx, sty, 0));
-        while (!q.empty()) {
-            auto p = q.begin();
-            int d = p->dis;
-            int x = p->x;
-            int y = p->y;
-            int jet = p->jet;
-            q.erase(p);
-            if (d > dist[x][y][jet]) continue;
+        pq.push({0, {{stx, sty}, 0}});
+        while (!pq.empty()) {
+            auto p = pq.top(); pq.pop();
+            int d = -p.first;
+            int x = p.second.first.first;
+            int y = p.second.first.second;
+            int f = p.second.second;
+            if (d > dist[x][y][f]) continue;
+            if (x == edx && y == edy) return d;
             for (int k = 0; k < 4; k++) {
                 int nx = x + dx[k];
                 int ny = y + dy[k];
-                if (nx >= 0 && nx < n && ny >= 0 && ny < m) {
-                    if (maze[nx][ny] == '.' || maze[nx][ny] == 'B') {
-                        int nd = d + 1;
-                        if (nd < dist[nx][ny][jet]) {
-                            dist[nx][ny][jet] = nd;
-                            q.insert(node(nd, nx, ny, jet));
-                        }
-                    }
-                    if (maze[nx][ny] == '_' && jet > 0) {
-                        int nd = d + 1;
-                        if (nd < dist[nx][ny][jet - 1]) {
-                            dist[nx][ny][jet - 1] = nd;
-                            q.insert(node(nd, nx, ny, jet - 1));
-                        }
-                    }
-                    if (maze[nx][ny] == 'C') {
-                        for (int t = 0; t <= pits - jet; t++) {
-                            int nd = d + T * t + 1;
-                            if (nd < dist[nx][ny][t + jet]) {
-                                dist[nx][ny][t + jet] = nd;
-                                q.insert(node(nd, nx, ny, t + jet));
-                            }
-                        }
+                if (nx >= 0 && nx < n && ny >= 0 && ny < m && maze[nx][ny] != '#') {
+                    if (maze[nx][ny] == '_' && f == 0) continue;
+                    int nf = f;
+                    if (maze[nx][ny] == 'C') nf = 1;
+                    int nd = d + 1;
+                    if (maze[nx][ny] == '_') nd += T;
+                    if (nd < dist[nx][ny][nf]) {
+                        dist[nx][ny][nf] = nd;
+                        pq.push({-nd, {{nx, ny}, nf}});
                     }
                 }
             }
         }
-        int res = inf;
-        for (int k = 0; k <= pits; k++) res = min(res, dist[edx][edy][k]);
-        if (res == inf) res = -1;
-        return res;
+        return -1;
 	}
 
 
