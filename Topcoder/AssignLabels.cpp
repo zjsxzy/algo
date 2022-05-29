@@ -6,14 +6,15 @@ class AssignLabels {
 	public:
 	vector <string> assign(int N, vector <int> order) {
         vector<string> res(N);
-        string curr('a', 12);
+        string curr;
+        for (int i = 0; i < 12; i++) curr += 'a';
         int p = 11;
         for (auto i: order) {
             if (curr[p] == 'z') {
                 p--;
             }
             curr[p]++;
-            res.push_back(curr);
+            res[i] = curr;
         }
         return res;
 	}
