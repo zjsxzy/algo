@@ -2,8 +2,6 @@
 using namespace std;
 typedef long long LL;
 
-int dx[4] = {0, 0, -1, 1};
-int dy[4] = {-1, 1, 0, 0};
 class AddFlowers {
 	public:
 	vector <string> add(vector <string> lawn) {
