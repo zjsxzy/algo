@@ -2,53 +2,52 @@
 using namespace std;
 typedef long long LL;
 
-const int MAXN = 200005;
 const LL inf = 1ll << 60;
-int n;
-LL s[MAXN], a[MAXN];
-struct SegTree {
-	LL mx[MAXN << 2], mn[MAXN << 2];
-	int lson(int rt) {return rt << 1;}
-	int rson(int rt) {return rt << 1 | 1;}
-	void pushUp(int rt) {
-        mn[rt] = min(mn[lson(rt)], mn[rson(rt)]);
-		mx[rt] = max(mx[lson(rt)], mx[rson(rt)]);
-	}
-	void build(int l, int r, int rt) {
-		if (l == r) {
-			mx[rt] = s[l];
-            mn[rt] = s[r];
-			return;
+LL f_min(LL a, LL b){
+  return min(a, b);
+}
+LL f_max(LL a, LL b){
+  return max(a, b);
+}
+template <typename T>
+struct segment_tree{
+	int N;
+	vector<T> ST;
+	function<T(T, T)> f;
+	T E;
+	segment_tree(vector<T> A, function<T(T, T)> f, T E): f(f), E(E){
+		int n = A.size();
+		N = 1;
+		while (N < n){
+			N *= 2;
 		}
-		int mid = (l + r) >> 1;
-		build(l, mid, lson(rt));
-		build(mid + 1, r, rson(rt));
-		pushUp(rt);
-	}
-	LL query_min(int L, int R, int l, int r, int rt) {
-		if (L <= l && r <= R) {
-			return mn[rt];
+		ST = vector<T>(N * 2 - 1, E);
+		for (int i = 0; i < n; i++){
+			ST[N - 1 + i] = A[i];
 		}
-		int mid = (l + r) >> 1;
-		LL res = inf;
-		if (L <= mid) res = min(res, query_min(L, R, l, mid, lson(rt)));
-		if (mid < R) res = min(res, query_min(L, R, mid + 1, r, rson(rt)));
-		return res;
-	}
-	LL query_max(int L, int R, int l, int r, int rt) {
-		if (L <= l && r <= R) {
-			return mx[rt];
+		for (int i = N - 2; i >= 0; i--){
+			ST[i] = f(ST[i * 2 + 1], ST[i * 2 + 2]);
 		}
-		int mid = (l + r) >> 1;
-		LL res = -inf;
-		if (L <= mid) res = max(res, query_max(L, R, l, mid, lson(rt)));
-		if (mid < R) res = max(res, query_max(L, R, mid + 1, r, rson(rt)));
-		return res;
 	}
-}tree;
+	T query(int L, int R, int i, int l, int r){
+		if (R <= l || r <= L){
+			return E;
+		} else if (L <= l && r <= R){
+			return ST[i];
+		} else {
+			int m = (l + r) / 2;
+			return f(query(L, R, i * 2 + 1, l, m), query(L, R, i * 2 + 2, m, r));
+		}
+	}
+	T query(int L, int R){
+		return query(L, R, 0, 0, N);
+	}
+};
 
 void solve() {
+    int n;
     cin >> n;
+    vector<LL> a(n + 1), s(n + 1);
     s[0] = 0;
     for (int i = 1; i <= n; i++) {
         cin >> a[i];
@@ -67,10 +66,11 @@ void solve() {
             right[i] = right[right[i]];
         }
     }
-    tree.build(0, n, 1);
+    segment_tree<LL> stmin(s, f_min, inf);
+    segment_tree<LL> stmax(s, f_max, -inf);
     for (int i = 1; i <= n; i++) {
-        LL r = tree.query_max(i, right[i] - 1, 0, n, 1);
-        LL l = tree.query_min(left[i], i - 1, 0, n, 1);
+        LL r = stmax.query(i, right[i]);
+        LL l = stmin.query(left[i], i);
         // cout << i << " " << a[i] << ' ' << left[i] << ' ' << right[i] << ' ' << r - l << endl;
         if (a[i] < r - l) {
             cout << "NO\n";
@@ -91,4 +91,3 @@ int main() {
    }
    return 0;
 }
-
