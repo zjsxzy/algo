@@ -16,7 +16,7 @@ class AddFlowers {
             int x = e.first, y = e.second;
             if (x == n - 1) x--;
             if (y == m - 1) y--;
-            lawn[x + 1][y] = lawn[x][y + 1] = lawn[x + 1][y + 1] = 'F';
+            lawn[x][y] = lawn[x + 1][y] = lawn[x][y + 1] = lawn[x + 1][y + 1] = 'F';
         }
         return lawn;
 	}
