@@ -36,6 +36,9 @@ struct segment_tree {
 		return query(L, R, 0, 0, N);
 	}
 };
+// 左闭右开区间，A是每个节点的乘数
+// 如区间为[1,2,3,4,5]，初始时线段树维护区间值为[0,0,0,0,0]，更新位置range_update(1,3,2)，则维护的区间更新为[0,4,6,0,0]
+// 若要是更新值为值本身，另初始的A为全1的数组即可
 template <typename T>
 struct lazy_segment_tree {
     int N;
