@@ -36,6 +36,68 @@ struct segment_tree{
 		return query(L, R, 0, 0, N);
 	}
 };
+template <typename T>
+struct lazy_segment_tree{
+    int N;
+    vector<T> sum, ST, lazy;
+    lazy_segment_tree(vector<T> &A) {
+        int N2 = A.size();
+        N = 1;
+        while (N < N2) {
+            N *= 2;
+        }
+        sum = vector<T>(N * 2 - 1, 0);
+        for (int i = 0; i < N2; i++) {
+            sum[N - 1 + i] = A[i];
+        }
+        for (int i = N - 2; i >= 0; i--) {
+            sum[i] = sum[i * 2 + 1] + sum[i * 2 + 2];
+        }
+        ST = vector<T>(N * 2 - 1, 0);
+        lazy = vector<T>(N * 2 - 1, -1);
+    }
+    void eval(int i) {
+        if (lazy[i] != -1) {
+            if (i < N - 1) {
+                lazy[i * 2 + 1] = lazy[i];
+                lazy[i * 2 + 2] = lazy[i];
+            }
+            ST[i] = sum[i] * lazy[i];
+            lazy[i] = -1;
+        }
+    }
+    void range_update(int L, int R, T x, int i, int l, int r) {
+        eval(i);
+        if (r <= L || R <= l) {
+            return;
+        } else if (L <= l && r <= R) {
+        lazy[i] = x;
+        eval(i);
+        } else {
+            int m = (l + r) / 2;
+            range_update(L, R, x, i * 2 + 1, l, m);
+            range_update(L, R, x, i * 2 + 2, m, r);
+            ST[i] = ST[i * 2 + 1] + ST[i * 2 + 2];
+        }
+    }
+    void range_update(int L, int R, T x) {
+        range_update(L, R, x, 0, 0, N);
+    }
+    T range_sum(int L, int R, int i, int l, int r) {
+        eval(i);
+        if (r <= L || R <= l) {
+            return 0;
+        } else if (L <= l && r <= R) {
+            return ST[i];
+        } else {
+            int m = (l + r) / 2;
+            return range_sum(L, R, i * 2 + 1, l, m) + range_sum(L, R, i * 2 + 2, m, r);
+        }
+    }
+    T range_sum(int L, int R) {
+        return range_sum(L, R, 0, 0, N);
+    }
+};
 
 const int MAXN = 100005;
 const int inf = 1e9;
