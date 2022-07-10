@@ -1,19 +1,9 @@
-void factor(int n, int a[maxn], int b[maxn], int &tot) {
-	int temp, i, now;
-	temp = (int)((double)sqrt(n) + 1);
-	tot = 0;
-	now = n;
-	for (i = 2; i <= temp; i++)
-		if (now % i == 0) {
-			a[++tot] = i;
-			b[tot] = 0;
-			while (now % i == 0) {
-				++b[tot];
-				now /= i;
-			}
-		}
-	if (now != 1) {
-		a[++tot] = now;
-		b[tot] = 1;
-	}
+// 计算质因子
+void get_prime_factor(int m) {
+    vector<vector<int>> fac(m + 1);
+    for (int i = 1; i <= m; i++) {
+        for (int j = i * 2; j <= m; j += i) {
+            fac[j].push_back(i);
+        }
+    }
 }
