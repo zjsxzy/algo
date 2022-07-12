@@ -13,8 +13,6 @@ void solve() {
         else s[i] = s[i - 1] + a[i];
     }
     LL res = s[n - 1] - k * n;
-    int bad = 0;
-    LL bad_sum = 0;
     for (int i = n - 1; i >= 0; i--) {
         LL good_sum = 0, bad_sum = 0;
         if (i > 0) good_sum = s[i - 1] - k * i;
