@@ -15,10 +15,10 @@ void solve() {
     sort(vec.begin(), vec.end());
     vector<int> cnt(n);
     vector<int> ans(m + 2);
-    int sz = vec.size(), tot = 0, pi = 0, pj = 0;
+    int tot = 0, pi = 0, pj = 0;
     for (int i = 1, j = 1; i <= m; i++) {
         while (j <= m && tot < n) {
-            while (vec[pj].first == j) {
+            while (pj < 2 * n && vec[pj].first == j) {
                 if (cnt[vec[pj].second] == 0) {
                     tot++;
                 }
@@ -29,12 +29,11 @@ void solve() {
         }
 
         if (tot == n) {
-            // cout << i << ' ' << j - 1 << ' ' << j - i << ' ' << m + 2 - i << endl;
             ans[j - i]++;
-            ans[m + 2 - i]--;
+            ans[m + 1 - i + 1]--;
         }
 
-        while (vec[pi].first == i) {
+        while (pi < 2 * n && vec[pi].first == i) {
             cnt[vec[pi].second]--;
             if (cnt[vec[pi].second] == 0) {
                 tot--;
