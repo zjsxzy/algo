@@ -2,9 +2,10 @@
 using namespace std;
 typedef long long LL;
 
+
 class AddFlowers {
-	public:
-	vector <string> add(vector <string> lawn) {
+    public:
+    vector <string> add(vector <string> lawn) {
         int n = lawn.size(), m = lawn[0].size();
         vector<pair<int, int>> p;
         for (int i = 0; i < n; i++) {
@@ -19,8 +20,7 @@ class AddFlowers {
             lawn[x][y] = lawn[x + 1][y] = lawn[x][y + 1] = lawn[x + 1][y + 1] = 'F';
         }
         return lawn;
-	}
-
+    }
 
 // BEGIN CUT HERE
 	public:
@@ -52,10 +52,9 @@ class AddFlowers {
 };
 
 // BEGIN CUT HERE
-int main()
-{
-	AddFlowers ___test;
-	___test.run_test(-1);
-	return 0;
+int main() {
+  AddFlowers ___test;
+  ___test.run_test(-1);
+  return 0;
 }
 // END CUT HERE
