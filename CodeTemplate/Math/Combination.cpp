@@ -10,6 +10,19 @@ void init(int n) {
     }
 }
 
+void factorial(int n) {
+    fac[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        fac[i] = fac[i - 1] * i;
+    }
+}
+
+mint C(int n, int m) { // C(n, m) = n!/((n-m)!*m!)%mod
+    if (n < m) return 0;
+    if (m == 0) return 1;
+    return fac[n] / fac[n - m] / fac[m];
+}
+
 // inverse of combination
 LL quickpow(LL a, LL x) { // a^x%mod
     LL res = 1;
