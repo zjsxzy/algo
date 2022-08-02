@@ -5,25 +5,32 @@ typedef long long LL;
 void solve() {
     string t;
     cin >> t;
-    t = ' ' + t;
     int n;
     cin >> n;
     vector<string> s(n);
     for (int i = 0; i < n; i++) cin >> s[i];
     int sz = t.size(), inf = 1e9;
-    vector<vector<int>> dp(m + 1, vector<int>(m + 1, inf));
-    for (int l = 1; l <= sz; l++) {
-        for (int i = 1; i + l - 1 <= sz; i++) {
-            int j = i + l - 1;
-            string subt = t.substr(i, l);
-            bool f = false;
-            for (auto ss: s) {
-                if (subt == ss) {
-                    f = true;
-                    break;
+    vector<int> dp(sz + 1, inf);
+    vector<vector<pair<int, int>>> res(sz + 1);
+    dp[0] = 0;
+    for (int i = 0; i < sz; i++) {
+        for (int j = 0; j < n; j++) {
+            for (int k = 0; k <= i; k++) {
+                if (k + s[j].size() > i && k + s[j].size() <= sz && t.substr(k, s[j].size()) == s[j]) {
+                    if (dp[i] + 1 < dp[k + s[j].size()]) {
+                        dp[k + s[j].size()] = dp[i] + 1;
+                        res[k + s[j].size()] = res[i];
+                        res[k + s[j].size()].push_back({j, k});
+                    }
                 }
             }
-            if (f) dp[i][j] = 1;
+        }
+    }
+    if (dp[sz] == inf) cout << -1 << endl;
+    else {
+        cout << dp[sz] << endl;
+        for (auto [x, y]: res[sz]) {
+            cout << x + 1 << ' ' << y + 1 << endl;
         }
     }
 }
