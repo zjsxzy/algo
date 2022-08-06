@@ -1,3 +1,4 @@
+// 左闭右开区间
 struct SegmentTree {
     using T = int;
 
