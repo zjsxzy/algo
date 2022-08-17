@@ -1,14 +1,16 @@
 const int INF = 1000000000;
 struct Edge {
     int w = INF, to = -1;
+    Edge() {}
+    Edge(int _w, int _to) : w(_w), to(_to) {}
     bool operator<(Edge const& other) const {
         return make_pair(w, to) < make_pair(other.w, other.to);
     }
 };
 
-void prims(vector<vector<Edge>> &adj,int &n) {
+void prims(vector<vector<Edge>>& adj, int n) {
     int total_weight = 0;
-    vector<Edge> min_e(n);
+    vector<Edge> min_e(n); // initial INF
     min_e[0].w = 0;
     set<Edge> q;
     q.insert({0, 0});
