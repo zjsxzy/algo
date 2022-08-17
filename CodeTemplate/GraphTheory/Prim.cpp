@@ -8,7 +8,7 @@ struct Edge {
     }
 };
 
-void prims(vector<vector<Edge>>& adj, int n) {
+void prim(vector<vector<Edge>>& adj, int n) {
     int total_weight = 0;
     vector<Edge> min_e(n); // initial INF
     min_e[0].w = 0;
