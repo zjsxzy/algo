@@ -10,21 +10,20 @@ class GoodLetters {
         for (auto x: good) vst[x - 'A'] = 1;
         string res;
         int tot = 0;
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n && tot < G; i++) {
             if (vst[i]) {
                 tot++;
                 res += (char)('A' + i);
-                if (tot == G) break;
             }
         }
-        if (res.size() != G) return "";
-        for (int i = 0; i < n; i++) {
+        if (tot < G) return "";
+
+        for (int i = 0; i < n && tot < N; i++) {
             if (vst[i]) continue;
             res += (char)('A' + i);
             tot++;
-            if (tot == N) break;
         }
-        if (res.size() != N) return "";
+        if (tot < N) return "";
         return res;
 	}
 
