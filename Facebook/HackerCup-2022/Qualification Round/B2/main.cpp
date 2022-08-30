@@ -6,57 +6,52 @@ void solve() {
     int r, c;
     cin >> r >> c;
     vector<string> s(r);
-    queue<pair<int, int>> q;
     for (int i = 0; i < r; i++) {
         cin >> s[i];
-        for (int j = 0; j < c; j++) {
-            if (s[i][j] == '^') {
-                q.push({i, j});
-            }
-        }
     }
-    if (q.empty()) {
-        cout << "Possible" << endl;
-        for (int i = 0; i < r; i++) cout << s[i] << endl;
-        return;
-    }
-    int dx[4] = {0, 0, -1, 1};
-    int dy[4] = {-1, 1, 0, 0};
+    vector<vector<int>> d(r, vector<int>(c));
+    vector<vector<int>> ban(r, vector<int>(c));
+    vector<int> dx = {0, 0, -1, 1};
+    vector<int> dy = {-1, 1, 0, 0};
     auto check = [&](int x, int y) {
-        int cnt = 0;
-        for (int k = 0; k < 4; k++) {
-            int nx = x + dx[k], ny = y + dy[k];
-            if (nx >= 0 && nx < r && ny >= 0 && ny < c) {
-                if (s[nx][ny] == '.' || s[nx][ny] == '^') cnt++;
+        return x >= 0 && x < r && y >= 0 && y < c && s[x][y] != '#';
+    };
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++) {
+            if (s[i][j] != '#') {
+                for (int k = 0; k < 4; k++) {
+                    d[i][j] += check(i + dx[k], j + dy[k]);
+                }
             }
         }
-        return cnt >= 2;
-    };
+    }
+    queue<pair<int, int>> q;
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++) {
+            if (s[i][j] != '#' && d[i][j] < 2) q.emplace(i, j);
+        }
+    }
     while (!q.empty()) {
-        auto t = q.front(); q.pop();
-        int i = t.first, j = t.second;
+        auto [i, j] = q.front(); q.pop();
+        ban[i][j] = 1;
         for (int k = 0; k < 4; k++) {
             int ni = i + dx[k], nj = j + dy[k];
-            if (ni >= 0 && ni < r && nj >= 0 && nj < c && s[ni][nj] == '.') {
-                if (check(ni, nj)) {
-                    s[ni][nj] = '^';
-                    q.push({ni, nj});
-                }
+            if (check(ni, nj) && (d[ni][nj] -= 1) == 1) {
+                 q.emplace(ni, nj);
             }
         }
     }
 
     for (int i = 0; i < r; i++) {
         for (int j = 0; j < c; j++) {
-            if (s[i][j] != '^') continue;
-            int cnt = 0;
-            for (int k = 0; k < 4; k++) {
-                int ni = i + dx[k], nj = j + dy[k];
-                if (ni >= 0 && ni < r && nj >= 0 && nj < c && s[ni][nj] == '^') cnt++;
-            }
-            if (cnt < 2) {
-                cout << "Impossible" << endl;
-                return;
+            if (s[i][j] == '#') continue;
+            if (ban[i][j]) {
+                if (s[i][j] == '^') {
+                    cout << "Impossible" << endl;
+                    return;
+                }
+            } else {
+                s[i][j] = '^';
             }
         }
     }
