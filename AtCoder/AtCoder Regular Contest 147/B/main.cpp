@@ -6,27 +6,21 @@ void solve() {
     int n;
     cin >> n;
     vector<int> p(n), odd, even;
+    for (int i = 0; i < n; i++) cin >> p[i];
+    vector<pair<char, int>> ans;
     for (int i = 0; i < n; i++) {
-        cin >> p[i];
-        if (i % 2 == p[i] % 2) {
-            if (i & 1) odd.push_back(i);
-            else even.push_back(i);
+        for (int j = 0; j + 2 < n; j++) {
+            if (p[j] % 2 != p[j + 2] % 2 && p[j] % 2 != j % 2) {
+                ans.emplace_back('B', j);
+                swap(p[j], p[j + 2]);
+            }
         }
     }
-    vector<pair<char, int>> ans;
-    int sz = odd.size();
-    for (int i = 0; i < sz; i++) {
-        int a = odd[i], b = even[i];
-
-        if (a > b) swap(a, b);
-        while (b - a > 1) {
-            ans.emplace_back('B', a);
-            swap(p[a], p[a + 2]);
-            a += 2;
+    for (int i = 0; i + 1 < n; i++) {
+        if (p[i] % 2 != p[i + 1] && p[i] % 2 == i % 2) {
+            ans.emplace_back('A', i);
+            swap(p[i], p[i + 1]);
         }
-        // b - a == 1
-        ans.emplace_back('A', a);
-        swap(p[a], p[a + 1]);
     }
     for (int i = 0; i < n; i++) {
         for (int j = 0; j + 2 < n; j += 2) {
