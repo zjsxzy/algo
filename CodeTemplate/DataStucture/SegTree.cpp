@@ -1,4 +1,143 @@
 // 左闭右开区间
+namespace atcoder {
+
+namespace internal {
+
+// @param n `0 <= n`
+// @return minimum non-negative `x` s.t. `n <= 2**x`
+int ceil_pow2(int n) {
+    int x = 0;
+    while ((1U << x) < (unsigned int)(n)) x++;
+    return x;
+}
+
+// @param n `1 <= n`
+// @return minimum non-negative `x` s.t. `(n & (1 << x)) != 0`
+constexpr int bsf_constexpr(unsigned int n) {
+    int x = 0;
+    while (!(n & (1 << x))) x++;
+    return x;
+}
+
+// @param n `1 <= n`
+// @return minimum non-negative `x` s.t. `(n & (1 << x)) != 0`
+int bsf(unsigned int n) {
+#ifdef _MSC_VER
+    unsigned long index;
+    _BitScanForward(&index, n);
+    return index;
+#else
+    return __builtin_ctz(n);
+#endif
+}
+
+}  // namespace internal
+
+template <class S, S (*op)(S, S), S (*e)()> struct segtree {
+  public:
+    segtree() : segtree(0) {}
+    explicit segtree(int n) : segtree(std::vector<S>(n, e())) {}
+    explicit segtree(const std::vector<S>& v) : _n(int(v.size())) {
+        log = internal::ceil_pow2(_n);
+        size = 1 << log;
+        d = std::vector<S>(2 * size, e());
+        for (int i = 0; i < _n; i++) d[size + i] = v[i];
+        for (int i = size - 1; i >= 1; i--) {
+            update(i);
+        }
+    }
+
+    void set(int p, S x) {
+        assert(0 <= p && p < _n);
+        p += size;
+        d[p] = x;
+        for (int i = 1; i <= log; i++) update(p >> i);
+    }
+
+    S get(int p) const {
+        assert(0 <= p && p < _n);
+        return d[p + size];
+    }
+
+    S prod(int l, int r) const {
+        assert(0 <= l && l <= r && r <= _n);
+        S sml = e(), smr = e();
+        l += size;
+        r += size;
+
+        while (l < r) {
+            if (l & 1) sml = op(sml, d[l++]);
+            if (r & 1) smr = op(d[--r], smr);
+            l >>= 1;
+            r >>= 1;
+        }
+        return op(sml, smr);
+    }
+
+    S all_prod() const { return d[1]; }
+
+    template <bool (*f)(S)> int max_right(int l) const {
+        return max_right(l, [](S x) { return f(x); });
+    }
+    template <class F> int max_right(int l, F f) const {
+        assert(0 <= l && l <= _n);
+        assert(f(e()));
+        if (l == _n) return _n;
+        l += size;
+        S sm = e();
+        do {
+            while (l % 2 == 0) l >>= 1;
+            if (!f(op(sm, d[l]))) {
+                while (l < size) {
+                    l = (2 * l);
+                    if (f(op(sm, d[l]))) {
+                        sm = op(sm, d[l]);
+                        l++;
+                    }
+                }
+                return l - size;
+            }
+            sm = op(sm, d[l]);
+            l++;
+        } while ((l & -l) != l);
+        return _n;
+    }
+
+    template <bool (*f)(S)> int min_left(int r) const {
+        return min_left(r, [](S x) { return f(x); });
+    }
+    template <class F> int min_left(int r, F f) const {
+        assert(0 <= r && r <= _n);
+        assert(f(e()));
+        if (r == 0) return 0;
+        r += size;
+        S sm = e();
+        do {
+            r--;
+            while (r > 1 && (r % 2)) r >>= 1;
+            if (!f(op(d[r], sm))) {
+                while (r < size) {
+                    r = (2 * r + 1);
+                    if (f(op(d[r], sm))) {
+                        sm = op(d[r], sm);
+                        r--;
+                    }
+                }
+                return r + 1 - size;
+            }
+            sm = op(d[r], sm);
+        } while ((r & -r) != r);
+        return 0;
+    }
+
+  private:
+    int _n, size, log;
+    std::vector<S> d;
+
+    void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
+};
+}  // namespace atcoder
+
 struct SegmentTree {
     using T = int;
 
@@ -194,139 +333,8 @@ struct SegTree {
         pushUp(rt);
     }
 }tree;
-/*
- * 线段树有离散型和连续型两种。
- * 离散型线段树就是常规的线段树形式，叶子节点为[i,i]，区间分解为[l,mid]、[mid+1,r]
- * 当为连续型时，比如[3,6]表示的就是连续的一段区间，比如就算它被[3,5]、[5,6]覆盖，依然有(5,6)没有被覆盖。
- * 此时叶子节点为[i,i+1]，而区间[l,r]应该分解为[l,mid]、[mid,r]
- */
-//离散型
-const int MAXN = 5005;
-struct SegTree {
 
-	int sum[MAXN << 2], add[MAXN << 2];
-
-	int lson(int rt) {
-		return rt << 1;
-	}
-
-	int rson(int rt) {
-		return rt << 1 | 1;
-	}
-
-	void pushUp(int rt) {
-		sum[rt] = sum[lson(rt)] + sum[rson(rt)];
-	}
-
-	void pushDown(int rt, int m) {
-		if (m == 1) return;
-		if (add[rt]) {
-			add[lson(rt)] += add[rt];
-			add[rson(rt)] += add[rt];
-			sum[lson(rt)] += add[rt] * (m - (m >> 1));
-			sum[rson(rt)] += add[rt] * (m >> 1);
-			add[rt] = 0;
-		}
-	}
-
-	void build(int l, int r, int rt) {
-		add[rt] = 0;
-		sum[rt] = 0;
-		if (l == r) {
-			return;
-		}
-		int mid = (l + r) >> 1;
-		build(l, mid, lson(rt));
-		build(mid + 1, r, rson(rt));
-		pushUp(rt);
-	}
-
-	void update(int L, int R, int c, int l, int r, int rt) {
-		pushDown(rt, r - l + 1);
-		if (L <= l && r <= R) {
-			add[rt] += c;
-			sum[rt] += c * (r - l + 1);
-			return;
-		}
-		int mid = (l + r) >> 1;
-		if (L <= mid) update(L, R, c, l, mid, lson(rt));
-		if (R > mid) update(L, R, c, mid + 1, r, rson(rt));
-		pushUp(rt);
-	}
-
-	int query(int L, int R, int l, int r, int rt) {
-		pushDown(rt, r - l + 1);
-		if (L <= l && r <= R) {
-			return sum[rt];
-		}
-		int mid = (l + r) >> 1;
-		int res = 0;
-		if (L <= mid) res += query(L, R, l, mid, lson(rt));
-		if (mid < R) res += query(L, R, mid + 1, r, rson(rt));
-		return res;
-	}
-}tree;
-
-//连续型
-bool Hash[MAXN];
-int ret;
-struct SegTree {
-
-	int col[MAXN << 2];
-
-	int lson(int rt) {
-		return rt << 1;
-	}
-
-	int rson(int rt) {
-		return rt << 1 | 1;
-	}
-
-	void pushDown(int rt) {
-		if (col[rt] != -1) {
-			col[lson(rt)] = col[rt];
-			col[rson(rt)] = col[rt];
-			col[rt] = -1;
-		}
-	}
-
-	void build(int l, int r, int rt) {
-		col[rt] = -1;
-		if (l + 1 == r) {
-			return;
-		}
-		int mid = (l + r) >> 1;
-		build(l, mid, lson(rt));
-		build(mid, r, rson(rt));
-	}
-
-	void update(int L, int R, int c, int l, int r, int rt) {
-		if (L <= l && r <= R) {
-			col[rt] = c;
-			return;
-		}
-		pushDown(rt);
-		int mid = (l + r) >> 1;
-		if (L < mid) update(L, R, c, l, mid, lson(rt));
-		if (R > mid) update(L, R, c, mid, r, rson(rt));
-	}
-
-	void query(int l, int r, int rt) {
-		if (col[rt] != -1) {
-			if (!Hash[col[rt]]) {
-				ret++;
-				Hash[col[rt]] = true;
-			}
-			return;
-		}
-		if (l + 1 == r) return;
-		int mid = (l + r) >> 1;
-		query(l, mid, lson(rt));
-		query(mid, r, rson(rt));
-	}
-}tree;
-
-// 既有增加操作也有设置操作的线段是
+// 既有增加操作也有设置操作的线段
 const int MAXN = 100000 + 5;
 int val[MAXN];
 struct SegTree {
