@@ -2,7 +2,7 @@
 using namespace std;
 typedef long long LL;
 
-bool find_substring(vector<int>& pattern, vector<int>& text) {
+bool find_substring(vector<int>& pattern, vector<int>& text, int k) {
 	int n = pattern.size();
 	vector<int> next(n + 1, 0);
 	for (int i = 1; i < n; i++) {
@@ -30,7 +30,7 @@ bool find_substring(vector<int>& pattern, vector<int>& text) {
 			}
 		}
 		if (j == n) {
-            return true;
+            if (k >= 2 || i >= n) return true;
 		}
 	}
     return false;
@@ -52,24 +52,19 @@ void solve() {
         return;
     }
     if (n == 2) {
-        if (a == b) {
-            if (k % 2 == 0) cout << "YES" << endl;
-            else cout << "NO" << endl;
+        if (a == b && k % 2 == 0) {
+            cout << "YES" << endl;
+        } else if (k % 2 == 1 && a[0] == b[1] && a[1] == b[0]) {
+            cout << "YES" << endl;
         } else {
-            if (k & 1) cout << "YES" << endl;
-            else cout << "NO" << endl;
+            cout << "NO" << endl;
         }
         return;
     }
-    if (a == b) {
-        if (k > 1) cout << "YES" << endl;
-        else cout << "NO" << endl;
-        return;
-    }
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n - 1; i++) {
         a.push_back(a[i]);
     }
-    bool sub = find_substring(b, a);
+    bool sub = find_substring(b, a, k);
     if (sub) cout << "YES" << endl;
     else cout << "NO" << endl;
 }
