@@ -9,17 +9,16 @@ class PerfectParty {
         int n = candies.size(), m = 0;
         for (auto c: candies) m += c;
         vector<vector<LL>> dp(n + 1, vector<LL>(m + 1));
-        auto newdp = dp;
         dp[0][0] = 1;
         for (int i = 1; i <= n; i++) {
             int c = candies[i - 1];
-            newdp = dp;
-            for (int j = 0; j < i; j++) {
+            for (int j = n; j >= 0; j--) {
                 for (int k = 0; k + c <= m; k++) {
-                    newdp[j + 1][k + c] += dp[j][k];
+                    if (dp[j][k] > 0) {
+	                    dp[j + 1][k + c] += dp[j][k];
+                    }
                 }
             }
-            dp = newdp;
         }
         LL res = 0;
         for (int j = 0; j <= n; j++) {
