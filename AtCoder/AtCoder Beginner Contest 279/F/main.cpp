@@ -2,29 +2,35 @@
 using namespace std;
 typedef long long LL;
 
-struct DSU {
-    std::vector<int> f, siz;
-    DSU(int n) : f(n), siz(n, 1) { std::iota(f.begin(), f.end(), 0); }
-    int leader(int x) {
-        while (x != f[x]) x = f[x] = f[f[x]];
-        return x;
+struct union_find{
+    int N;
+    vector<int> par, siz;
+    union_find(int n) : N(n){
+        par.resize(N);
+        siz.resize(N, 1);
+        for(int i=0; i<N; i++) par[i] = i;
     }
-    bool same(int x, int y) { return leader(x) == leader(y); }
-    bool merge(int x, int y) {
-        x = leader(x);
-        y = leader(y);
-        if (x == y) return false;
-        siz[x] += siz[y];
-        f[y] = x;
-        return true;
+    int root(int X){
+        if(par[X] == X) return X;
+        return par[X] = root(par[X]);
     }
-    int size(int x) { return siz[leader(x)]; }
+    bool same(int X, int Y){
+        return root(X) == root(Y);
+    }
+    void unite(int X, int Y){
+        X = root(X);
+        Y = root(Y);
+        if(X == Y) return;
+        par[X] = Y;
+        siz[Y] += siz[X];
+        siz[X] = 0;
+    }
 };
 
 void solve() {
     int n, q;
     cin >> n >> q;
-    DSU dsu(n + q);
+    union_find dsu(n + q);
     int k = n;
     vector<int> ball(n), box(n + q);
     iota(ball.begin(), ball.end(), 0);
@@ -35,7 +41,7 @@ void solve() {
         if (op == 3) {
             cin >> x;
             x--;
-            cout << box[dsu.leader(x)] + 1 << endl;
+            cout << box[dsu.root(x)] + 1 << endl;
         } else if (op == 2) {
             cin >> x;
             x--;
@@ -43,7 +49,7 @@ void solve() {
             if (ball[x] == -1) {
                 ball[x] = k;
             } else {
-                dsu.merge(ball[x], k);
+                dsu.unite(k, ball[x]);
             }
             k++;
         } else if (op == 1) {
@@ -54,7 +60,7 @@ void solve() {
                 ball[x] = ball[y];
                 box[ball[x]] = x;
             } else {
-                dsu.merge(ball[x], ball[y]);
+                dsu.unite(ball[y], ball[x]);
             }
             ball[y] = -1;
         }
@@ -72,4 +78,5 @@ int main() {
     }
     return 0;
 }
+
 
