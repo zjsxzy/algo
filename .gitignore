@@ -8,3 +8,5 @@ a.out.dSYM/
 .DS_Store/
 .DS_Store
 .cph/
+main.bin
+main.dSYM/
