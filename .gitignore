@@ -2,6 +2,7 @@
 *.txt
 *.out
 *.exe
+main
 a.out.dSYM/
 .vscode/
 .DS_Store/
