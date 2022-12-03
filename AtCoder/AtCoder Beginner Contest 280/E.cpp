@@ -66,18 +66,16 @@ struct Mod_Int {
 using mint = Mod_Int<MOD>;
 
 void solve() {
-    int n, p;
-    cin >> n >> p;
-    map<int, mint> dp;
-    dp[n] = 0;
-    mint prob = p, rprob = 100 - p;
-    prob /= 100;
-    rprob /= 100;
-    for (int i = n - 1; i >= -1; i--) {
-        dp[i] = (dp[i + 2] + 1) * prob + (dp[i + 1] + 1) * rprob;
+    int n, P;
+    cin >> n >> P;
+    vector<mint> dp(n + 1);
+    mint p = mint(P) / 100;
+    dp[0] = 0; dp[1] = 1;
+    for (int i = 2; i <= n; i++) {
+        dp[i] = p * (dp[i - 2] + 1) + (mint(1) - p) * (dp[i - 1] + 1);
         // cout << i << ' ' << dp[i] << endl;
     }
-    cout << (dp[2] + 1) * prob + (dp[1] + 2) * prob + (dp[1] + 1) * rprob << endl;
+    cout << dp[n] << endl;
 }
 
 int main() {

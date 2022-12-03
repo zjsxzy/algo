@@ -3,12 +3,13 @@ using namespace std;
 typedef long long LL;
 
 LL calc(LL x, LL cnt) {
-    LL i = x, sum = 1;
-    for (; sum < cnt; i += x) {
+    LL i = 0;
+    while (cnt > 0) {
+        i += x;
         LL y = i; 
         while (y % x == 0) {
             y /= x;
-            sum++;
+            cnt--;
         }
     }
     return i;
@@ -18,8 +19,7 @@ void solve() {
     LL K;
     cin >> K;
     LL res = 1;
-    for (LL x = 2; x <= sqrt(K); x++) {
-        if (K % x != 0) continue;
+    for (LL x = 2; x * x <= K; x++) {
         LL tot = 0;
         while (K % x == 0) {
             K /= x;
