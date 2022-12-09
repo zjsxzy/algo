@@ -58,18 +58,8 @@ struct Graph {
 
 }g;
 
-int calc(vector<vector<int>>& adj, vector<int>& cnt, int st) {
+vector<int> topo(vector<vector<int>>& adj, vector<int>& color, vector<int>& cnt) {
     int n = adj.size();
-    vector<int> color(n);
-    function<void(int)> dfs = [&](int u) {
-        color[u] = 1;
-        for (auto v: adj[u]) {
-            if (!color[v]) {
-                dfs(v);
-            }
-        }
-    };
-    dfs(st);
     vector<int> deg(n);
     vector<vector<int>> g(n);
     for (int u = 0; u < n; u++) {
@@ -96,24 +86,27 @@ int calc(vector<vector<int>>& adj, vector<int>& cnt, int st) {
             if (deg[v] == 0) q.push(v);
         }
     }
-    int res = 0;
-    for (auto v: adj[st]) {
-        res = max(res, dp[v]);
+    return dp;
+}
+
+void dfs(vector<vector<int>>& adj, vector<int>& vst, int u) {
+    vst[u] = 1;
+    for (auto v: adj[u]) {
+        if (!vst[v]) {
+            dfs(adj, vst, v);
+        }
     }
-    return res;
 }
 
 void solve() {
     int n, m;
     cin >> n >> m;
     g.init(n);
-    vector<pair<int, int>> eds;
     for (int i = 0; i < m; i++) {
         int u, v;
         cin >> u >> v;
         u--; v--;
         g.addEdge(u, v);
-        eds.emplace_back(u, v);
     }
     g.SCC();
     int sz = g.size;
@@ -121,21 +114,30 @@ void solve() {
     for (int i = 0; i < n; i++) {
         cnt[g.id[i]]++;
     }
-    vector<vector<int>> adj(sz);
-    for (int i = 0; i < m; i++) {
-        if (g.id[eds[i].first] != g.id[eds[i].second]) {
-            adj[g.id[eds[i].first]].push_back(g.id[eds[i].second]);
+    vector<vector<int>> adj(sz), radj(sz);
+    for (int u = 0; u < n; u++) {
+        for (auto v: g.adj[u]) {
+            if (g.id[u] == g.id[v]) continue;
+            adj[g.id[u]].push_back(g.id[v]);
+            radj[g.id[v]].push_back(g.id[u]);
         }
     }
-    int res1 = calc(adj, cnt, g.id[0]);
-    adj.assign(n, {});
-    for (int i = 0; i < m; i++) {
-        if (g.id[eds[i].first] != g.id[eds[i].second]) {
-            adj[g.id[eds[i].second]].push_back(g.id[eds[i].first]);
+    vector<int> color(sz), rcolor(sz);
+    dfs(adj, color, g.id[0]);
+    dfs(radj, rcolor, g.id[0]);
+    vector<int> f = topo(adj, color, cnt);
+    vector<int> rf = topo(radj, rcolor, cnt);
+    int res = cnt[g.id[0]];
+    for (int u = 0; u < sz; u++) {
+        if (rcolor[u]) {
+            for (auto v: adj[u]) {
+                if (color[v]) {
+                    res = max(res, rf[u] + f[v] - cnt[g.id[0]]);
+                }
+            }
         }
     }
-    int res2 = calc(adj, cnt, g.id[0]);
-    cout << max(cnt[g.id[0]], max(res1, res2)) << endl;
+    cout << res << endl;
 }
 
 int main() {
