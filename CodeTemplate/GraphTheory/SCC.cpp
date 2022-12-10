@@ -32,7 +32,6 @@ struct Graph {
 			}
 		}
 		if (low[u] == dfn[u]) {
-			size++;
 			int v;
 			do {
 				v = S.top();
@@ -40,6 +39,7 @@ struct Graph {
 				id[v] = size;
 				vis[v] = false;
 			} while (u != v);
+			size++;
 		}
 	}
 
