@@ -1,3 +1,8 @@
+/*
+ * Author: Yang Zhang
+ * Created Time: Sun 02 Sep 2012 01:24:45 AM CST
+ * File Name: makedata.cpp
+ */
 #include <map>
 #include <set>
 #include <list>
@@ -8,7 +13,6 @@
 #include <vector>
 #include <cstdio>
 #include <string>
-#include <climits>
 #include <sstream>
 #include <cstdlib>
 #include <cstring>
@@ -19,24 +23,15 @@ using namespace std;
 #define MP make_pair
 #define SZ(v) ((int)(v).size())
 #define abs(x) ((x) > 0 ? (x) : -(x))
-#define FOREACH(e,x) for(__typeof(x.begin()) e=x.begin();e!=x.end();++e)
 typedef long long LL;
 
-int n = 20, m = 200, k = 15;
-bool adj[22][22];
+int n = 47;
 int main() {
-	freopen("in.txt", "w", stdout);
-	cout << 1 << endl;
-	cout << n << " " << m << " " << k << endl;
-	for (int i = 0; i < m; ) {
-		int a = rand() % n + 1, b = rand() % n + 1;
-		if (a != b && !adj[a][b] && !adj[b][a]) {
-			cout << a << " " << b << endl;
-			adj[a][b] = adj[b][a] = true;
-			i++;
-		}
-		// cout << a << " " << b << endl;
-	}
+	freopen("cha", "w", stdout);
+	printf("{47");
+	for (int i = 1; i < 47; i++)
+		printf(",%d", rand() % 15);
+	printf("}");
 	return 0;
 }
 
