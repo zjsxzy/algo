@@ -146,55 +146,6 @@ int e() {
 }
 segtree<int, op, e> tree(m);
 
-struct SegmentTree {
-    using T = int;
-
-    int N;
-    vector<T> dat;
-
-    T id = 0;
-    T F(T &a, T &b) { return a + b; }
-
-    SegmentTree(int n){
-        N = 1;
-        while(n > N) N = N << 1;
-        dat = vector<T>(2 * N - 1, id);
-    }
-
-    SegmentTree(int n, vector<T> &v){
-        N = 1;
-        while(n > N) N = N << 1;
-        dat = vector<T>(2 * N - 1, id);
-        for(int i = 0; i < n; i++) dat[i + N - 1] = v[i];
-        for(int i = N - 2; i >= 0; i--) dat[i] = F(dat[i * 2 + 1], dat[i * 2 + 2]);
-    }
-
-    SegmentTree(){}
-
-    void update(int k, T a){
-        k += N - 1;
-        dat[k] = a;
-        while(k > 0){
-            k = (k - 1) / 2;
-            dat[k] = F(dat[k * 2 + 1], dat[k * 2 + 2]);
-        }
-    }
-
-    void reset() { fill(dat.begin(), dat.end(), id); }
-
-    T get(int a, int b, int k, int l, int r){
-        if(r <= a || b <= l) return id;
-        if(a <= l && r <= b) return dat[k];
-        else{
-            T vl = get(a, b, k * 2 + 1, l, (l + r) / 2);
-            T vr = get(a, b, k * 2 + 2, (l + r) / 2, r);
-            return F(vl, vr);
-        }
-    }
-    T get(int a, int b) { return get(a, b, 0, 0, N); }
-
-    T val(int k){ return dat[k + N - 1]; }
-};
 // 左闭右开区间，E是默认值
 int f(int a, int b) {
   return max(a, b);
@@ -233,6 +184,8 @@ struct segment_tree {
 		return query(L, R, 0, 0, N);
 	}
 };
+segment_tree<int> tree(n, f, 0);
+
 // 左闭右开区间，A是每个节点的乘数, 更新时区间[l,r)的值都更新为A[i]*k
 // 如区间为[1,2,3,4,5]，初始时线段树维护区间值为[0,0,0,0,0]，更新位置range_update(1,3,2)，则维护的区间更新为[0,4,6,0,0]
 // 若要是更新值为值本身，另初始的A为全1的数组即可
