@@ -69,7 +69,7 @@ struct union_find {
         }
         groups[a].clear();
     }
-}
+};
 
 // UnionFind Tree (0-indexed), based on size of each disjoint set
 struct UnionFind {
