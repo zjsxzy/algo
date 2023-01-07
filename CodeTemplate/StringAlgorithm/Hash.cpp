@@ -1,3 +1,15 @@
+const int M = 1e9 + 7;
+const int B = 233;
+vector<LL> get_hash(string s) {
+    int n = s.size();
+    vector<LL> sum(n + 1);
+    for (int i = 0; i < n; ++i) {
+        sum[i + 1] = (LL)(sum[i] * B + s[i]) % M;
+    }
+    return sum;
+}
+// 多次访问子串 sum[l..r]=sum[r]-sum[l-1]*B^(r-l+1)
+
 int ELFhash(string& s) {
     int h = 0, x = 0;
     for (int i = 0; i < s.size(); i++) {
