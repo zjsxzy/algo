@@ -82,3 +82,26 @@ struct BinaryIndexTree {
 		return ret;
 	}
 }bit;
+
+// 2-d
+const int MAXN = 500 + 10;
+int T , N , M;
+int C[MAXN][MAXN];
+
+int lowbit(int x) {
+	return x & (-x);
+}
+
+int sum(int x , int y) {
+	int ans = 0;
+	for (int i = x ; i <= N ; i += lowbit(i))
+	for (int j = y ; j <= N ; j += lowbit(j))
+		ans += C[i][j];
+	return ans;
+}
+
+void add(int x , int y , int num) {
+	for (int i = x ; i > 0 ; i -= lowbit(i))
+	for (int j = y ; j > 0 ; j -= lowbit(j))
+		C[i][j] += num;
+}
