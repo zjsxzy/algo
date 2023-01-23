@@ -49,7 +49,7 @@ void solve() {
     int res = 0;
     for (int i = 0; i < k; i++) {
         int d, x, y;
-        scanf("%d%d%d", &d, &x, &y);
+        cin >> d >> x >> y;
         x--; y--;
         if (x < 0 || x >= n || y < 0 || y >= n) {
             res++;
@@ -77,6 +77,8 @@ void solve() {
 }
 
 int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(0);
     int ts = 1;
     // cin >> ts;
     for (int t = 1; t <= ts; t++) {
