@@ -146,6 +146,7 @@ int e() {
 }
 segtree<int, op, e> tree(m);
 
+// lazysegtree
 namespace atcoder {
 
 namespace internal {
@@ -356,6 +357,29 @@ struct lazy_segtree {
 };
 
 }  // namespace atcoder
+using namespace std;
+// 维护区间和
+struct S {
+    LL sum, len;
+};
+S op(S l, S r) {
+    return {l.sum + r.sum, l.len + r.len};
+}
+S e() {
+    return {0, 0};
+}
+using F = LL;
+S mapping(F f, S x) {
+    return {x.sum + f * x.len, x.len};
+}
+F composition(F f, F g) {
+    return f + g;
+}
+F id() {
+    return 0;
+}
+lazy_segtree<S, op, e, F, mapping, composition, id> seg(a);
+
 
 // 左闭右开区间，E是默认值
 int f(int a, int b) {
