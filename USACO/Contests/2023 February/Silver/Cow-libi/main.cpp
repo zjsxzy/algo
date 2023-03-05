@@ -27,19 +27,18 @@ void solve() {
     int res = 0;
     for (int i = 0; i < n; i++) {
         auto x = lower_bound(graze.begin(), graze.end(), cow[i]);
-        // if (x == graze.end()) x--;
-        // if (x != graze.begin()) x--;
-        cout << i << ' ' << get<1>(cow[i]) << ' ' << get<2>(cow[i]) << ' ' << get<0>(cow[i]) << endl;
-        cout << get<1>(*x) << ' ' << get<2>(*x) << ' ' << get<0>(*x) << endl;
-        bool flag = reachable(*x, cow[i]);
-        x++;
-        if (x != graze.end()) {
-            flag |= reachable(*x, cow[i]);
+        if (x == graze.end()) x--;
+        // cout << i << ' ' << get<1>(cow[i]) << ' ' << get<2>(cow[i]) << ' ' << get<0>(cow[i]) << endl;
+        // cout << get<1>(*x) << ' ' << get<2>(*x) << ' ' << get<0>(*x) << endl;
+        bool innocent = !reachable(*x, cow[i]);
+        if (x != graze.begin()) {
+            x--;
+            innocent |= !reachable(*x, cow[i]);
         }
         // x++;
         // if (x != graze.end()) flag |= reachable(*x, cow[i]);
-        // cout << i << ' ' << flag << endl;
-        res += !flag;
+        // cout << i << ' ' << innocent << endl;
+        res += innocent;
     }
     cout << res << endl;
 }
