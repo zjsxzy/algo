@@ -6,22 +6,16 @@ void solve() {
     int n, x;
     cin >> n >> x;
     vector<int> a(n);
-    unordered_map<int, vector<int>> pos;
     for (int i = 0; i < n; i++) {
         cin >> a[i];
-        pos[a[i]].push_back(i);
     }
+    map<int, int> pos;
     for (int i = 0; i < n; i++) {
-        if (x - a[i] != a[i]) {
-            if (pos.find(x - a[i]) != pos.end()) {
-                cout << i + 1 << ' ' << pos[x - a[i]][0] + 1 << endl;
-                return;
-            }
-        } else {
-            if (pos.find(a[i]) != pos.end() && pos[a[i]].size() > 1) {
-                cout << pos[a[i]][0] + 1 << ' ' << pos[a[i]][1] + 1 << endl;
-            }
+        if (pos.count(x - a[i])) {
+            cout << pos[x - a[i]] << ' ' << i + 1 << endl;
+            return;
         }
+        pos[a[i]] = i + 1;
     }
     cout << "IMPOSSIBLE" << endl;
 }
