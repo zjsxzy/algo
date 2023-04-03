@@ -5,7 +5,6 @@ typedef long long LL;
 void solve() {
     int n, c;
     cin >> c >> n;
-    set<int> st;
     vector<int> a(n);
     for (int i = 0; i < n; i++) {
         string s;
@@ -13,17 +12,22 @@ void solve() {
         for (int j = 0; j < c; j++) {
             if (s[j] == 'G') a[i] |= (1 << j);
         }
-        st.insert(a[i]);
     }
-    map<int, int> ans;
-    for (auto x: st) {
-        int res = 0;
-        for (auto y: st) {
-            res = max(res, __builtin_popcount(x ^ y));
+    int m = 512;
+    vector<vector<int>> dis(m, vector<int>(m, -1e9));
+    for (int i = 0; i < n; i++) {
+        int l = a[i] / m, r = a[i] % m;
+        for (int j = 0; j < m; j++) {
+            dis[l][j] = max(dis[l][j], __builtin_popcount(r ^ j));
         }
-        ans[x] = res;
     }
-    for (int i = 0; i < n; i++) cout << ans[a[i]] << endl;
+    for (int i = 0; i < n; i++) {
+        int l = a[i] / m, r = a[i] % m, res = 0;
+        for (int j = 0; j < m; j++) {
+            res = max(res, __builtin_popcount(l ^ j) + dis[j][r]);
+        }
+        cout << res << endl;
+    }
 }
 
 int main() {
