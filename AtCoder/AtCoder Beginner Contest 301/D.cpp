@@ -6,43 +6,19 @@ void solve() {
     string s;
     cin >> s;
     reverse(s.begin(), s.end());
-    int m = s.size();
-    while (m <= 60) s += '0', m++;
-    LL n, res = -1;
+    LL n, m = 0;
     cin >> n;
-    bool flag = true;
-    for (int i = 0; i <= 60; i++) {
-        if (n >> i & 1 && s[i] == '0') {
-            flag = false;
-            break;
-        }
-        if (!(n >> i & 1) && s[i] == '1') {
-            flag = false;
-            break;
-        }
+    for (int i = 0; i < (int)s.size(); i++) {
+        if (s[i] == '1') m |= (1ll << i);
     }
-    if (flag) {
-        cout << n << endl;
-        return;
-    }
-    for (int i = 60; i >= 0; i--) {
-        if (!(n >> i & 1) && s[i] == '1') break;
-        if (n >> i & 1 && (s[i] == '0' || s[i] == '?')) {
-            string t = s;
-            for (int j = 0; j < i; j++) {
-                if (t[j] == '?') t[j] = '1';
-            }
-            for (int j = i + 1; j <= 60; j++) {
-                if (t[j] == '?' && (n >> j & 1)) t[j] = '1';
-            }
-            LL val = 0;
-            for (int j = 0; j <= 60; j++) {
-                if (t[j] == '1') val |= (1ll << j);
-            }
-            res = max(res, val);
+    if (m > n) {
+        cout << -1 << endl;
+    } else {
+        for (int i = (int)s.size() - 1; i >= 0; i--) {
+            if (s[i] == '?' && (m | (1ll << i)) <= n) m |= (1ll << i);
         }
+        cout << m << endl;
     }
-    cout << res << endl;
 }
 
 int main() {
