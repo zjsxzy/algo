@@ -13,33 +13,26 @@ void solve() {
             cin >> e[i][j];
         }
     }
+    vector<int> sum(1 << n);
+    for (int s = 1; s < (1 << n); s++) {
+        for (int i = 0; i < n; i++) if (s >> i & 1) sum[s] += a[i];
+    }
+    vector dp(1 << n, vector(n, 1e9));
+    for (int i = 0; i < n; i++) dp[1 << i][i] = 0;
     LL res = 1e18;
-    for (int st = 0; st < n; st++) {
-        vector dp(n, vector(1 << n, 1e9));
-        dp[st][0] = 0;
-        for (int s = 1; s < (1 << n); s++) {
-            for (int u = 0; u < n; u++) {
-                if (s >> u & 1) {
-                    LL nodes = f[u][s], edges = g[u][s];
-                    for (int v = 0; v < n; v++) {
-                        if (e[u][v] && !(s >> v & 1) && (nodes + a[v]) * (edges + e[u][v]) < (LL)f[v][s | (1 << v)] * g[v][s | (1 << v)]) {
-                            f[v][s | (1 << v)] = nodes + a[v];
-                            g[v][s | (1 << v)] = edges + e[u][v]; 
-                        }
-                    }
+    for (int s = 1; s < (1 << n); s++) {
+        int b = __builtin_ctz(s);
+        for (int u = b; u < n; u++) {
+            if (dp[s][u] == 1e9) continue;
+            if (__builtin_popcount(s) > 2 && e[u][b]) {
+                LL t = (LL)sum[s] * (dp[s][u] + e[u][b]);
+                res = min(res, t);
+            }
+            for (int v = b; v < n; v++) {
+                if (!(s >> v & 1) && e[u][v]) {
+                    dp[s | (1 << v)][v] = min(dp[s | (1 << v)][v], dp[s][u] + e[u][v]);
                 }
             }
-        }
-        for (int s = 1; s < (1 << n); s++) {
-            for (int u = 0; u < n; u++) {
-                if (u != st && e[u][st] && __builtin_popcount(s) > 2) {
-                    LL nodes = f[u][s], edges = g[u][s];
-                    res = min(res, (nodes + a[st]) * (edges + e[u][st]));
-                }
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            if (dsu.same(st, i)) vst[i] = 1;
         }
     }
     if (res == 1e18) res = -1;
