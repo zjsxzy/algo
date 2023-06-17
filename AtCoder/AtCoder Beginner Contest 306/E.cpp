@@ -17,11 +17,11 @@ void solve() {
         x--;
 
         if (st.find(A[x]) != st.end()) {
-            st.erase(st.find(A[x]));
+            st.extract(A[x]);
             res -= A[x];
             if (!st2.empty() && *st2.rbegin() > y) {
                 int val = *st2.rbegin();
-                st2.erase(st2.find(val));
+                st2.extract(val);
                 st2.insert(y);
                 st.insert(val);
                 res += val;
@@ -30,10 +30,10 @@ void solve() {
                 res += y;
             }
         } else {
-            st2.erase(st2.find(A[x]));
-            int val = *st.begin();
-            if (y > val) {
-                st.erase(st.find(val));
+            st2.extract(A[x]);
+            if (!st.empty() && y > *st.begin()) {
+                int val = *st.begin();
+                st.extract(val);
                 res -= val;
                 st.insert(y);
                 res += y;
