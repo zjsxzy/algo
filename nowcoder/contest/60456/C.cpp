@@ -2,65 +2,32 @@
 using namespace std;
 typedef long long LL;
 
-const int m = 500;
-int g[m + 5][10];
-
 void solve() {
     int n;
     cin >> n;
-    memset(g, 0, sizeof(g));
-    for (int j = 1; j <= 8; j++) g[0][j] = 1;
+    vector<int> mx(9);
     for (int i = 0; i < n; i++) {
         int a, b;
         cin >> a >> b;
 
         if (a == 0) {
-            for (int j = m; j >= 0; j--) {
-                if (g[j][b] || g[j][b + 1]) {
-                    g[j + 1][b] = g[j + 2][b] = g[j + 3][b] = 1;
-                    g[j + 1][b + 1] = 1;
-                    // cout << j << ' ' << b << endl;
-                    break;
-                }
-            }
+            int d = max(mx[b], mx[b + 1]);
+            mx[b] = d + 3;
+            mx[b + 1] = d + 1;  
         } else if (a == 90) {
-            for (int j = m; j >= 0; j--) {
-                if (g[j][b] || g[j + 1][b + 1] || g[j + 1][b + 2]) {
-                    g[j + 1][b] = g[j + 2][b] = 1;
-                    g[j + 2][b + 1] = 1;
-                    g[j + 2][b + 2] = 1;
-                    // cout << j << ' ' << b << endl;
-                    break;
-                }
-            }
+            int d = max(mx[b], max(mx[b + 1], mx[b + 2]) - 1);
+            mx[b] = mx[b + 1] = mx[b + 2] = d + 2;
         } else if (a == 180) {
-            for (int j = m; j >= 0; j--) {
-                if (g[j + 2][b] || g[j][b + 1]) {
-                    g[j + 3][b] = 1;
-                    g[j + 1][b + 1] = g[j + 2][b + 1] = g[j + 3][b + 1] = 1;
-                    // cout << j << ' ' << b << endl;
-                    break;
-                }
-            }
+            int d = max(mx[b] - 2, mx[b + 1]);
+            mx[b] = mx[b + 1] = d + 3;
         } else if (a == 270) {
-            for (int j = m; j >= 0; j--) {
-                if (g[j][b] || g[j][b + 1] || g[j][b + 2]) {
-                    g[j + 1][b] = 1;
-                    g[j + 1][b + 1] = 1;
-                    g[j + 1][b + 2] = g[j + 1][b + 2] = 1;
-                    // cout << j << ' ' << b << endl;
-                    break;
-                }
-            }
+            int d = max(mx[b], max(mx[b + 1], mx[b + 2]));
+            mx[b] = mx[b + 1] = d + 1;
+            mx[b + 2] = d + 2;
         }
     }
-    for (int j = 1; j <= 8; j++) {
-        for (int i = m; i >= 0; i--) {
-            if (g[i][j]) {
-                cout << i << ' ';
-                break;
-            }
-        }
+    for (int i = 1; i <= 8; i++) {
+        cout << mx[i] << ' ';
     }
     cout << endl;
 }
