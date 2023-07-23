@@ -357,7 +357,7 @@ struct lazy_segtree {
 };
 
 }  // namespace atcoder
-using namespace std;
+using namespace atcoder;
 // 维护区间和
 struct S {
     LL sum, len;
