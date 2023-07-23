@@ -378,9 +378,40 @@ F composition(F f, F g) {
 F id() {
     return 0;
 }
-lazy_segtree<S, op, e, F, mapping, composition, id> seg(a);
+
+// example 1
+void solve() {
+    int n, m;
+    cin >> n >> m;
+    vector<S> a;
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        // read value of position x
+        a.push_back({x, 1});
+    }
+    lazy_segtree<S, op, e, F, mapping, composition, id> seg(a);
+    while (m--) {
+        int type;
+        cin >> type;
+        if (type == 1) {
+            int x, y, k;
+            cin >> x >> y >> k;
+            x--; y--;
+            // range [x, y] add k
+            seg.apply(x, y + 1, k);
+        } else {
+            int x, y;
+            cin >> x >> y;
+            x--; y--;
+            // ask sum of range [x, y]
+            cout << seg.prod(x, y + 1).sum << endl;
+        }
+    }
+}
 
 
+// SSRS's segment tree template
 // 左闭右开区间，E是默认值
 int f(int a, int b) {
   return max(a, b);
