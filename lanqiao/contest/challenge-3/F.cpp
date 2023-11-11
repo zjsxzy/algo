@@ -21,16 +21,13 @@ void solve() {
     LL lo = 1, hi = n * n, s;
     while (lo <= hi) {
         LL mid = (lo + hi) >> 1;
-        if (sum(mid) < k) s = mid, lo = mid + 1;
-        else hi = mid - 1;
+        if (sum(mid) >= k) s = mid, hi = mid - 1;
+        else lo = mid + 1;
     }
-    // cout << sum(2) << ' ' << sum(3) << ' ' << sum(4) << endl;
-    s++;
-    LL kk = sum(s - 1);
-    cout << s << ' ' << kk << endl;
-    LL a = k - kk;
-    cout << a << ' ' << s - a << endl;
-    // cout << endl;
+    // cout << s << endl;
+    LL r = sum(s) - k;
+    if (s > n) cout << n - r << ' ' << s - (n - r) << endl;
+    else cout << s - (r + 1) << ' ' << r + 1 << endl;
 }
 
 int main() {
