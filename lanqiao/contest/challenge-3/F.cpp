@@ -9,12 +9,11 @@ void solve() {
         if (s <= n + 1) {
             return s * (s - 1) / 2;
         } else {
-            // res += (s - n) * n;
-            // LL t = n - (s - n);
-            // res += (n - 1 + n - t) * t / 2;
-                    long long ret = 1LL * (1 + n) * n / 2;
-        long long first = n - 1, last = n - (s - (n + 1));
-        return ret + (first + last) * (first - last + 1) / 2;
+            LL res = 0;
+            res += (s - n) * n;
+            LL t = n - (s - n);
+            res += (n - 1 + n - t) * t / 2;
+            return res;
         }
     };
     LL lo = 2, hi = n * 2, s;
@@ -24,9 +23,9 @@ void solve() {
         else lo = mid + 1;
     }
     // cout << s << endl;
-    LL r = sum(s) - k;
-    if (s >= n + 1) cout << n - r << ' ' << s - (n - r) << endl;
-    else cout << s - (r + 1) << ' ' << r + 1 << endl;
+    LL a = k - sum(s - 1);
+    if (s > n) a += s - n - 1;
+    cout << a << ' ' << s - a << endl;
 }
 
 int main() {
