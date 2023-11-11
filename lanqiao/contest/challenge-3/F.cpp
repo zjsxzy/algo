@@ -6,19 +6,18 @@ void solve() {
     LL n, k;
     cin >> n >> k;
     auto sum = [&](LL s) {
-        LL res = 0;
-        if (s == 1) return res;
-        if (s <= n) {
-            res = s * (s - 1) / 2;
-            return res;
+        if (s <= n + 1) {
+            return s * (s - 1) / 2;
         } else {
-            res += (s - n) * n;
-            LL t = n - (s - n);
-            res += (n - 1 + n - t) * t / 2;
+            // res += (s - n) * n;
+            // LL t = n - (s - n);
+            // res += (n - 1 + n - t) * t / 2;
+                    long long ret = 1LL * (1 + n) * n / 2;
+        long long first = n - 1, last = n - (s - (n + 1));
+        return ret + (first + last) * (first - last + 1) / 2;
         }
-        return res;
     };
-    LL lo = 1, hi = n * n, s;
+    LL lo = 2, hi = n * 2, s;
     while (lo <= hi) {
         LL mid = (lo + hi) >> 1;
         if (sum(mid) >= k) s = mid, hi = mid - 1;
@@ -26,7 +25,7 @@ void solve() {
     }
     // cout << s << endl;
     LL r = sum(s) - k;
-    if (s > n) cout << n - r << ' ' << s - (n - r) << endl;
+    if (s >= n + 1) cout << n - r << ' ' << s - (n - r) << endl;
     else cout << s - (r + 1) << ' ' << r + 1 << endl;
 }
 
