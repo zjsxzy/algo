@@ -17,9 +17,8 @@ struct edge {
 vector<edge> adj[maxn + maxn];
 
 int dijkstra(int st, int ed) {
-    vector<vector<edge> > adj(n);
     // construct graph: adj[u].emplace_back(v, c)
-    vector<int> dist(adj.size(), inf);
+    vector<int> dist(n + n + 1, inf);
     dist[st] = 0;
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
     pq.push({0, st});
@@ -41,7 +40,7 @@ int dijkstra(int st, int ed) {
 vector<int> primes;
 
 void get_primes() {
-    vector<int> vst(n + 1);
+    vector<int> vst(10001);
     for (int i = 2; i <= 10000; i++) {
         if (!vst[i]) {
             primes.push_back(i);
@@ -60,24 +59,23 @@ int calc(int x) {
         }
     }
     if (x > 1) sum += x;
-    cout << x << ' ' << sum << endl;
     return sum % n + 1;
 }
 
 void solve() {
+    get_primes();
     cin >> n >> s >> t;
-    s--; t--;
-    for (int i = 0; i < n; i++) {
+    for (int i = 1; i <= n; i++) {
         cin >> x[i];
         int f = calc(x[i]);
-        cout << i << ' ' << x[i] << ' ' << f << endl;
         adj[i].emplace_back(n + f, 1);
         adj[n + f].emplace_back(i, 0);
         adj[i].emplace_back(f, 1);
         adj[f].emplace_back(i, 1);
     }
     int res = dijkstra(s, t);
-    cout << res << endl;
+    if (res == inf) cout << -1 << endl;
+    else cout << res << endl;
 }
 
 int main() {
