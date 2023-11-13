@@ -6,7 +6,7 @@ struct edge {
     }
 };
 int dijkstra(int st, int ed) {
-    vector<vector<edge> > adj(n);
+    // vector<vector<edge> > adj(n);
     // construct graph: adj[u].emplace_back(v, c)
     vector<int> dist(adj.size(), inf);
     dist[st] = 0;
