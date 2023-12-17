@@ -9,7 +9,7 @@ void solve() {
     for (int i = 0; i < n; i++) cin >> weight[i].first >> weight[i].second;
     sort(weight.begin(), weight.end());
     vector<pair<LL, LL>> vec;
-    LL curr = 0, res = 0, p = 0;
+    LL res = 0, p = 0;
     for (int i = 0; i < n; i++) {
         LL num = weight[i].second, cnt = 0;
         while (num > 0 && p < vec.size() && vec[p].first <= weight[i].first - k) {
@@ -24,9 +24,9 @@ void solve() {
                 num = 0;
             }
         }
-        if (num > 0 && curr < m) {
-            if (m - curr <= num) cnt += m - curr, curr = m;
-            else cnt += num, curr += num;
+        if (num > 0 && m > 0) {
+            if (m <= num) cnt += m, m = 0;
+            else cnt += num, m -= num;
         }
         // cout << weight[i].first << ' ' << cnt << ' ' << p << endl;
         res += cnt;
