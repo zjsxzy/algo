@@ -10,12 +10,10 @@ void solve() {
     vector vst(n, vector(m, 0));
     vector<int> dx = {1, -1, 0, 0};
     vector<int> dy = {0, 0, 1, -1};
-    int cnt, x, y;
-    pair<int, int> leftdown, rightup, rightdown;
+    int cnt, li, ri, lj, rj;
     function<void(int, int)> dfs = [&](int i, int j) {
-        if (j < leftdown.second || (j == leftdown.second && i > leftdown.first)) leftdown = {i, j};
-        if (i < rightup.first || (i == rightup.first && j > rightup.second)) rightup = {i, j};
-        if (make_pair(i, j) >= rightdown) rightdown = {i, j};
+        li = min(li, i); ri = max(ri, i);
+        lj = min(lj, j); rj = max(rj, j);
         vst[i][j] = true;
         cnt++;
         for (int k = 0; k < 4; k++) {
@@ -30,14 +28,10 @@ void solve() {
         for (int j = 0; j < m; j++) {
             if (s[i][j] == '.' && !vst[i][j]) {
                 cnt = 0;
-                x = i, y = j;
-                leftdown = {i, j};
-                rightup = {i, j};
-                rightdown = {i, j};
+                li = i; ri = i;
+                lj = j; rj = j;
                 dfs(i, j);
-                if (i == rightup.first && j == leftdown.second && leftdown.first == rightdown.first && rightup.second == rightdown.second) {
-                    if ((leftdown.first - i + 1) * (rightup.second - j + 1) == cnt) res++;
-                }
+                res += (ri - li + 1) * (rj - lj + 1) == cnt;
             }
         }
     }
