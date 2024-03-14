@@ -94,6 +94,7 @@ struct MinCostFlow {
         return a;
     }
 };
+MinCostFlow<int> mcmf(n + m + 2);
 
 
 #define maxV 105
