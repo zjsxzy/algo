@@ -14,25 +14,22 @@ void solve() {
         LL t = 0;
         for (int j = 0; j < 32; j++) {
             if (x >> j & 1) {
-                t += zero[j];
-                t %= mod;
+                res += zero[j] * (n - i) % mod * (1ll << j) % mod;
+                res %= mod;
             } else {
-                t += one[j];
-                t += mod;
+                res += one[j] * (n - i) % mod * (1ll << j) % mod;
+                res %= mod;
             }
         }
         for (int j = 0; j < 32; j++) {
             if (x >> j & 1) {
-                one[j] += (1ll << j) * (i + 1);
-                one[j] %= mod;
+                one[j] += i + 1;
             } else {
-                zero[j] += (1ll << j) * (i + 1);
-                zero[j] %= mod;
+                zero[j] += i + 1;
             }
         }
-        res += t * (n - i + 1) % mod;
     }
-    cout << res << endl;
+    cout << (res * 2) % mod << endl;
 }
 
 int main() {
