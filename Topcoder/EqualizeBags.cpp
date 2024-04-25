@@ -7,7 +7,7 @@ class EqualizeBags {
     string check(int N, vector <int> bags, int E) {
         int sum = 0;
         for (auto x: bags) sum += x;
-        if (sum <= E) return "impossible";
+        if (sum < E) return "impossible";
         if ((sum - E) % N != 0) return "impossible";
         int d = (sum - E) / N;
         for (auto x: bags) {
