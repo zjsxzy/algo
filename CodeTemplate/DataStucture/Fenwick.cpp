@@ -26,8 +26,9 @@ struct Fenwick{
     }
 };
 
-
-// 区间修改区间查询
+// 区间修改[l,r]增加值x
+// 区间查询[l,r]的和
+// 维护两个树状数组d和dk
 void solve() {
     int n, q;
     cin >> n >> q;
