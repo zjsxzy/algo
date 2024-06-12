@@ -28,84 +28,33 @@ struct union_find{
     }
 };
 
-const int MAXN = 100000 + 5;
-LL val[MAXN];
-struct SegTree {
-
-	LL sum[MAXN << 2], add[MAXN << 2], put[MAXN << 2];
-
-	int lson(int rt) {
-		return rt << 1;
-	}
-
-	int rson(int rt) {
-		return rt << 1 | 1;
-	}
-
-	void pushUp(int rt) {
-		sum[rt] = sum[lson(rt)] + sum[rson(rt)];
-	}
-
-	void pushDown(int rt, int m) {
-		if (m == 1) return;
-		if (put[rt] != -1) {
-			put[lson(rt)] = put[rt];
-			put[rson(rt)] = put[rt];
-			add[lson(rt)] = 0;
-			add[rson(rt)] = 0;
-			sum[lson(rt)] = put[rt] * (m - (m >> 1));
-			sum[rson(rt)] = put[rt] * (m >> 1);
-			put[rt] = -1;
-		}
-		if (add[rt] != 0) {
-			add[lson(rt)] += add[rt];
-			add[rson(rt)] += add[rt];
-			sum[lson(rt)] += add[rt] * (m - (m >> 1));
-			sum[rson(rt)] += add[rt] * (m >> 1);
-			add[rt] = 0;
-		}
-	}
-
-	void build(int l, int r, int rt) {
-		add[rt] = 0;
-		put[rt] = -1;
-		sum[rt] = 0;
-		if (l == r) {
-			sum[rt] = val[l];
-			return;
-		}
-		int mid = (l + r) >> 1;
-		build(l, mid, lson(rt));
-		build(mid + 1, r, rson(rt));
-		pushUp(rt);
-	}
-
-	void updateAdd(int L, int R, LL c, int l, int r, int rt) {
-		pushDown(rt, r - l + 1);
-		if (L <= l && r <= R) {
-			add[rt] += c;
-			sum[rt] += c * (r - l + 1);
-			return;
-		}
-		int mid = (l + r) >> 1;
-		if (L <= mid) updateAdd(L, R, c, l, mid, lson(rt));
-		if (R > mid) updateAdd(L, R, c, mid + 1, r, rson(rt));
-		pushUp(rt);
-	}
-
-	LL query(int L, int R, int l, int r, int rt) {
-		if (L <= l && r <= R) {
-			return sum[rt];
-		}
-		pushDown(rt, r - l + 1);
-		int mid = (l + r) >> 1;
-		LL res = 0;
-		if (L <= mid) res += query(L, R, l, mid, lson(rt));
-		if (mid < R) res += query(L, R, mid + 1, r, rson(rt));
-		return res;
-	}
-
-}tree;
+// index from 0
+struct Fenwick{
+    using T = LL;
+    vector<T> tree;
+    int n;
+    Fenwick() {}
+    Fenwick(int _n) {
+        n = _n;
+        tree.assign(n, 0);
+    }
+    void upd(int pos, T val) {
+        for (; pos < n; pos |= pos + 1) {
+            tree[pos] += val;
+        }
+    }
+    T get(int r) {
+        T ans = 0;
+        for (; r >= 0; r = (r & (r + 1)) - 1) {
+            ans += tree[r];
+        }
+        return ans;
+    }
+    T get(int l, int r) {
+        if (l > r) return 0;
+        return get(r) - get(l - 1);
+    }
+};
 
 void solve() {
     int n;
@@ -126,9 +75,37 @@ void solve() {
     sort(vec.rbegin(), vec.rend());
     vector<int> b(n);
     union_find dsu(n);
-    memset(val, 0, sizeof(val));
-    tree.build(1, n, 1);
     vector<LL> ans(q);
+    Fenwick c(n + 1), kc(n + 1), kkc(n + 1); // a_i, a_i * i, a_i * i * i
+    // 三个树状数组单点更新
+    auto add = [&](int p, LL x) {
+        c.upd(p, x);
+        kc.upd(p, x * p);
+        kkc.upd(p, x * p * p);
+    };
+    // 区间[l,r]增加首项伟v，公差为d的等差数列
+    auto upd = [&](int l, int r, LL v, LL d) {
+        add(l, v);
+        add(l + 1, d - v);
+        add(r + 1, -(v + d * (r - l + 1)));
+        add(r + 2, (v + d * (r - l)));
+    };
+    // 更新区间[1,len]
+    auto calc = [&](int len, int coef) {
+        if (coef == 1) upd(1, len, len, -1);
+        if (coef == -1) upd(1, len, -len, 1);
+    };
+    // 统计a数组[1,r]的区间和
+    auto get_sum = [&](LL r) {
+        LL s = (r + 1) * (r + 2) * c.get(r);
+        s -= (2 * r + 3) * kc.get(r);
+        s += kkc.get(r);
+        return s / 2;
+    };
+    // 查询区间[l,r]的和
+    auto range_sum = [&](int l, int r) {
+        return get_sum(r) - get_sum(l - 1);
+    };
     for (auto v: vec) {
         int val = v.first, idx = v.second.first;
         int l = v.second.second.first, r = v.second.second.second;
@@ -136,18 +113,16 @@ void solve() {
             idx -= q;
             b[idx] = val;
             if (idx - 1 >= 0 && b[idx - 1] != 0) {
+                calc(dsu.siz[dsu.root(idx - 1)], -1);
                 dsu.unite(idx - 1, idx);
-                int sz = dsu.siz[dsu.root(idx)];
-                tree.updateAdd(1, sz, 1, 1, n, 1);
             }
             if (idx + 1 < n && b[idx + 1] != 0) {
-                int l = dsu.siz[dsu.root(idx + 1)];
+                calc(dsu.siz[dsu.root(idx + 1)], -1);
                 dsu.unite(idx, idx + 1);
-                int r = dsu.siz[dsu.root(idx)];
-
             }
+            calc(dsu.siz[dsu.root(idx)], 1);
         } else {
-            ans[idx] = tree.query(l, r, 1, n, 1);
+            ans[idx] = range_sum(l, r);
         }
     }
     for (auto x: ans) cout << x << endl;
