@@ -1,5 +1,34 @@
 const int M = 1e9 + 7;
-const int B = 233;
+const int B = 2333;
+
+// 多次区间查询s[l..r]是否回文
+void Hash(string& s) {
+    int n = s.size();
+    bs.resize(n + 1); hash.resize(n + 1); rhash.resize(n + 1);
+    bs[0] = 1;
+    for (int i = 1; i <= n; i++) {
+        bs[i] = bs[i - 1] * B;
+    }
+    for (int i = 0; i < n; i++) {
+        // 构建字符串哈希值
+        hash[i + 1] = hash[i] * B + s[i];
+        // 构建逆序串哈希值
+        rhash[i + 1] = rhash[i] * B + s[n - i - 1];
+    }
+}
+// 查询区间seq[l..r]是否回文
+// 判断原串哈希值hash[l..r]与逆序串哈希值rhash[n-r+1..n-l+1]是否相等
+bool query(int l, int r) {
+    int n = seq.size();
+    // 从[0..n-1]改为[1..r]
+    l++, r++;
+    mint A = hash[r] - hash[l - 1] * bs[r - l + 1];
+    int L = n - r + 1, R = n - l + 1;
+    mint B = rhash[R] - rhash[L - 1] * bs[R - L + 1];
+    return A == B;
+}
+
+// 多次访问子串 sum[l..r]=sum[r]-sum[l-1]*B^(r-l+1)
 vector<LL> get_hash(string s) {
     int n = s.size();
     vector<LL> sum(n + 1);
@@ -8,7 +37,6 @@ vector<LL> get_hash(string s) {
     }
     return sum;
 }
-// 多次访问子串 sum[l..r]=sum[r]-sum[l-1]*B^(r-l+1)
 
 int ELFhash(string& s) {
     int h = 0, x = 0;
