@@ -28,6 +28,27 @@ bool query(int l, int r) {
     return A == B;
 }
 
+long long MOD = 1e9 + 7;
+long long BASE = 2333;
+
+struct HashSeq {
+    vector<__int128> P, H;
+
+    HashSeq(string &s) {
+        int n = s.size();
+        P.resize(n + 1);
+        P[0] = 1;
+        for (int i = 1; i <= n; i++) P[i] = P[i - 1] * BASE % MOD;
+        H.resize(n + 1);
+        H[0] = 0;
+        for (int i = 1; i <= n; i++) H[i] = (H[i - 1] * BASE + s[i - 1]) % MOD;
+    }
+
+    long long query(int l, int r) {
+        return (H[r] - H[l - 1] * P[r - l + 1] % MOD + MOD) % MOD;
+    }
+};
+
 // 多次访问子串 sum[l..r]=sum[r]-sum[l-1]*B^(r-l+1)
 vector<LL> get_hash(string s) {
     int n = s.size();
