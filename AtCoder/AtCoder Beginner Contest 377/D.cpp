@@ -5,38 +5,19 @@ typedef long long LL;
 void solve() {
     int n, m;
     cin >> n >> m;
-    vector<pair<int, int>> vec(n);
+    vector<int> d(m + 1);
+    d[1] = 1;
     for (int i = 0; i < n; i++) {
-        cin >> vec[i].first >> vec[i].second;
+        int l, r;
+        cin >> l >> r;
+        d[r] = max(d[r], l + 1);
     }
-    sort(vec.begin(), vec.end());
-    int l = vec[0].first, r = vec[0].second;
-    int L = 1, R;
+    for (int r = 1; r <= m; r++) {
+        d[r] = max(d[r], d[r - 1]);
+    }
     LL res = 0;
-    for (int i = 1; i < n; ) {
-        while (i < n && vec[i].first == l) {
-            r = vec[i].second;
-            i++;
-        }
-        // outside
-        if (l > L) {
-            LL len = l - L - 1;
-            LL curr = len * (len + 1) / 2 + 1;
-            res += curr;
-        }
-
-        // inside
-        LL len = r - l + 1;
-        LL curr = len * (len + 1) / 2 - 1;
-        cout << l << ' ' << r << ' ' << len << ' ' << curr << endl;
-        res += curr;
-        L = r;
-        l = vec[i].first, r = vec[i].second;
-    }
-    // last outside
-    if (m > L) {
-        LL len = m - L;
-        res += len * (len + 1) / 2 + 1;
+    for (int r = 1; r <= m; r++) {
+        res += r - d[r] + 1;
     }
     cout << res << endl;
 }
