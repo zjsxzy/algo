@@ -16,10 +16,13 @@ LL quickpow(LL a, LL x) { // a^x%mod
 }
 
 void factorial(int n) {
-    fac[0] = inv[0] = 1;
+    fac[0] = 1;
     for (int i = 1; i <= n; i++) {
         fac[i] = fac[i - 1] * i % mod;
-        inv[i] = quickpow(fac[i], mod - 2);
+    }
+    inv[n] = quickpow(fac[n], mod - 2);
+    for (int i = n - 1; i >= 0; i--) {
+        inv[i] = inv[i + 1] * (i + 1) % mod;
     }
 }
 
@@ -32,10 +35,10 @@ void solve() {
     int n, k;
     cin >> n >> k;
     if (n & 1 || k < 2) {
-        cout << 0 << endl;
+        cout << 0 << '\n';
         return;
     }
-    cout << (C(n, k) - C(n / 2, k) * quickpow(2, k) % mod + mod) % mod << endl;
+    cout << (C(n, k) - C(n / 2, k) * quickpow(2, k) % mod + mod) % mod << '\n';
 }
 
 int main() {
