@@ -8,32 +8,29 @@ int n;
 LL dp[maxn][15][2][2];
 
 LL dfs(int pos, int first, bool limit, bool lead) {
-    if (lead) first = 0;
     if (pos == n) {
-        return 1;
+        if (first) return 1;
+        return 0;
     }
     if (dp[pos][first][limit][lead] != -1) return dp[pos][first][limit][lead];
     LL res = 0;
-    int up = (limit ? num[pos] : 9);
-    if (!lead) up = min(up, first - 1);
-    for (int v = 0; v <= up; v++) {
-        res += dfs(pos + 1, lead ? v : first, limit && (v == num[pos]), lead && (v == 0));
-        // if (lead && v == 0) {
-            // res += dfs(pos + 1, lead ? v : first, limit && (v == num[pos]), true);
-        // } else {
-            // res += dfs(pos + 1, lead ? v : first, limit && (v == num[pos]), false);
-        // }
+    for (int v = 0; v <= (limit ? num[pos] : 9); v++) {
+        if (lead && v == 0) {
+            res += dfs(pos + 1, v, limit && (v == num[pos]), true);
+        } else {
+            if (lead) res += dfs(pos + 1, v, limit && (v == num[pos]), false);
+            else if (v < first) res += dfs(pos + 1, first, limit && (v == num[pos]), false);
+        }
     }
     return dp[pos][first][limit][lead] = res;
 }
 
 LL f(string s) {
-    if (s == "9") return 0;
 	memset(dp, -1, sizeof(dp));
 	n = s.size();
 	num.clear();
 	for (auto c: s) num.push_back(c - '0');
-	LL res = dfs(0, 0, true, true);
+	LL res = dfs(0, 11, true, true);
 	return res;
 }
 
